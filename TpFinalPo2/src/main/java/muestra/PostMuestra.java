@@ -1,9 +1,9 @@
 package muestra;
 
-import java.util.Arrays;
+
+
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 public class PostMuestra {
@@ -13,20 +13,76 @@ public class PostMuestra {
 	private VerificadorMuestra verificador;
 	private Ubicacion ubicacion;
 	private Date fechaDeCreacion;
-	
 	private Opinion resultadoActual;
 	
-	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
-		this.ubicacion = u;
-		this.fechaDeCreacion = new Date();
-		this.verificador = v;
-		Arrays.stream(Opinion.values()).forEach(o -> opiniones.put(o, new HashSet<Revision>()));
-		this.opiniones.get(r.getOpinion()).add(r);
-		this.resultadoActual = r.getOpinion();
+	public PostMuestra(Revision r, Ubicacion u) {
+		this.setUbicacion(u);;
+		this.setFechaDeCreacion(r.getFechaDeCreacion());;
+		this.setVerificador();
+		this.colocarClavesEnHashmap();
+		this.opinar(r);
+		getResultadoActual();
 	}
 
-	public Opinion resultadoActual() {
-		return resultadoActual;
+	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
+		this.setUbicacion(u);;
+		this.setFechaDeCreacion(r.getFechaDeCreacion());;
+		this.setVerificador(v);
+		this.colocarClavesEnHashmap();
+		this.opinar(r);
+		getResultadoActual();
+	}
+
+	
+	
+	private VerificadorMuestra getVerificador() {
+		return verificador;
+	}
+	
+	private void colocarClavesEnHashmap() {
+		this.getVerificador().colocarClavesEnHashmap();
+	}
+
+
+	public HashMap<Opinion, Set<Revision>> getOpiniones() {
+		return opiniones;
+	}
+
+
+	private void setVerificador() {
+		this.verificador = new VerificadorMuestra();
+	}
+	
+	private void setVerificador(VerificadorMuestra v) {
+		this.verificador = v;
+	}
+
+	public Ubicacion getUbicacion() {
+		return ubicacion;
+	}
+
+	private void setUbicacion(Ubicacion ubicacion) {
+		this.ubicacion = ubicacion;
+	}
+
+	public Opinion getResultadoActual() {		
+		Opinion resultado = this.getVerificador().getResultadoActual();
+		this.resultadoActual = resultado;
+		return resultado;
+	}
+
+	public Date getFechaDeCreacion() {
+		return fechaDeCreacion;
+	}
+	
+	public void setFechaDeCreacion(Date d) {
+		this.fechaDeCreacion = d;
+	}
+
+
+
+	public void opinar(Revision revision) {
+		this.getVerificador().opinar(revision);
 	}
 	
 	
