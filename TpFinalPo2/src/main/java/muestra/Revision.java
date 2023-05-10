@@ -4,8 +4,7 @@ public class Revision {
 
 	public Opinion opinion;
 
-	public Opinion opinion() {
-		// TODO Auto-generated method stub
+	public Opinion getOpinion() {
 		return null;
 	}
 

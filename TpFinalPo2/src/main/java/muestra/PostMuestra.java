@@ -1,6 +1,6 @@
 package muestra;
 
-
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,16 +14,15 @@ public class PostMuestra {
 	private Ubicacion ubicacion;
 	private Date fechaDeCreacion;
 	
-	
 	private Opinion resultadoActual;
 	
 	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
 		this.ubicacion = u;
 		this.fechaDeCreacion = new Date();
 		this.verificador = v;
-		Opinion.getOpiniones().stream().forEach(o -> opiniones.put(o, new HashSet<Revision>()));
-		this.opiniones.get(r.opinion()).add(r);
-		this.resultadoActual = r.opinion();
+		Arrays.stream(Opinion.values()).forEach(o -> opiniones.put(o, new HashSet<Revision>()));
+		this.opiniones.get(r.getOpinion()).add(r);
+		this.resultadoActual = r.getOpinion();
 	}
 
 	public Opinion resultadoActual() {

@@ -1,14 +1,11 @@
 package muestra;
 
-import java.util.List;
-
 public enum Opinion {
-	
-	;
-
-	public static List<Opinion> getOpiniones() {
-		return null;
-		// TODO Auto-generated method stub
-		
-	}
+	VINCHUCA_INFESTANTS,
+	VINCHUCA_SORDIDA,
+	VINCHUCA_GUASAYANA,
+	CHINCHE_FOLIADA,
+	PHTIA_CHINCHE,
+	IMAGEN_POCO_CLARA,
+	NINGUNA
 }
