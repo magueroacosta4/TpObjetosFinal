@@ -82,6 +82,7 @@ public class PostMuestra {
 
 	public void opinar(Revision revision) {
 		this.getVerificador().opinar(revision);
+		this.getResultadoActual();
 	}
 	
 	

@@ -1,5 +1,7 @@
 package Usuario;
 
-public class EstadoUsuario {
+public abstract class EstadoUsuario {
+
+	public abstract boolean esExperto();
 
 }

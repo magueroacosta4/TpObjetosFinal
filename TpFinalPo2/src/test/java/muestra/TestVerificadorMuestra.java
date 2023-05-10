@@ -1,6 +1,7 @@
 package muestra;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Arrays;
@@ -14,28 +15,49 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
-
-import static org.mockito.Mockito.mock;
+import Usuario.*;
 
 public class TestVerificadorMuestra {
 	
+	private VerificadorMuestra verificadorBTest;
 	private PostMuestra posteoMock;
 	private VerificadorMuestra verificadorATest;
 	private HashMap<Opinion, Set<Revision>> revisiones;
 	private Revision revisionA;
 	private Revision revisionB;
 	private Revision revisionC;
+	private EstadoPostBasico estadoPostA;
+	private EstadoPostExperto estadoPostB;
+	private EstadoBasico estadoUsuarioBasico;
+	private EstadoExperto estadoUsuarioExperto;
 	
 	@Before
 	public void setUp() {
 		posteoMock = mock(PostMuestra.class);
+		estadoPostA    = mock(EstadoPostBasico.class);
+		estadoPostB    = mock(EstadoPostExperto.class);
+		estadoUsuarioBasico = mock(EstadoBasico.class);
+		estadoUsuarioExperto = mock(EstadoExperto.class);
 		revisiones = new HashMap<Opinion, Set<Revision>>();
 		revisionA = mock(Revision.class);
 		revisionB = mock(Revision.class);
 		revisionC = mock(Revision.class);
 		
 		when(posteoMock.getOpiniones()).thenReturn(revisiones);
+		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
+		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
+		when(revisionC.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
+		
+		doNothing().when(estadoPostA).opinar(verificadorBTest, revisionA);
+		doNothing().when(estadoPostA).opinar(verificadorBTest, revisionB);
+		doNothing().when(estadoPostA).opinar(verificadorBTest, revisionC);
+		
+		doNothing().when(estadoPostB).opinar(verificadorBTest, revisionA);
+		doNothing().when(estadoPostB).opinar(verificadorBTest, revisionB);
+		doNothing().when(estadoPostB).opinar(verificadorBTest, revisionC);
 		
 		verificadorATest = new VerificadorMuestra(posteoMock);
 		verificadorATest.colocarClavesEnHashmap();
@@ -68,14 +90,25 @@ public class TestVerificadorMuestra {
 		
 		when(revisionA.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		when(revisionB.getOpinion()).thenReturn(Opinion.VINCHUCA_INFESTANTS);
-		verificadorATest.opinar(revisionA);
-		verificadorATest.opinar(revisionB);
+
+		verificadorBTest = new VerificadorMuestra(posteoMock, estadoPostA);
+		
+		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
+		
+		verificadorBTest.opinar(revisionA);
+		verificadorBTest.opinar(revisionB);
+		
+		verificadorBTest.opinarEnEstadoBasico(revisionA);
+		verificadorBTest.opinarEnEstadoBasico(revisionB);
+
 		
 		assertTrue(revisiones.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionA));
 		assertTrue(revisiones.get(Opinion.VINCHUCA_INFESTANTS).contains(revisionB));
 		
 		verify(revisionA, times(1)).getOpinion();
 		verify(revisionB, times(1)).getOpinion();
+		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionA);
+		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionB);
 	}
 	
 	@Test
@@ -84,11 +117,22 @@ public class TestVerificadorMuestra {
 		when(revisionA.getOpinion()).thenReturn(Opinion.PHTIA_CHINCHE);
 		when(revisionB.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
 		when(revisionC.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
-		verificadorATest.opinar(revisionA);
-		verificadorATest.opinar(revisionB);
-		verificadorATest.opinar(revisionC);
 		
-		Opinion resultadoDado = verificadorATest.getResultadoActual();
+		verificadorBTest = new VerificadorMuestra(posteoMock, estadoPostA);
+		
+		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
+		
+		verificadorBTest.opinar(revisionA);
+		verificadorBTest.opinar(revisionB);
+		verificadorBTest.opinar(revisionC);
+		//al ser una delegacion, es necesario colocar el metodo esperado
+		verificadorBTest.opinarEnEstadoBasico(revisionA);
+		verificadorBTest.opinarEnEstadoBasico(revisionB);
+		verificadorBTest.opinarEnEstadoBasico(revisionC);
+		
+		
+		
+		Opinion resultadoDado = verificadorBTest.getResultadoActual();
 		Opinion resultadoEsperado = Opinion.IMAGEN_POCO_CLARA;
 		
 		assertEquals(resultadoDado, resultadoEsperado);
@@ -97,6 +141,32 @@ public class TestVerificadorMuestra {
 		verify(revisionA, times(1)).getOpinion();
 		verify(revisionB, times(1)).getOpinion();
 		verify(revisionC, times(1)).getOpinion();
+		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionA);
+		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionB);
+	}
+	
+	
+	@Test
+	public void seSubeUnaMuestraYlaOpinaUnExperto_LuegoUnBasicoLoQuiereOpinarPeroNoSeSubeSuOpinion() {
+		when(revisionA.getOpinion()).thenReturn(Opinion.PHTIA_CHINCHE);
+		when(revisionB.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
+		when(estadoUsuarioBasico.esExperto()).thenReturn(true);
+		
+		
+		verificadorBTest = new VerificadorMuestra(posteoMock, estadoPostA);
+	
+		verificadorBTest.opinar(revisionA);
+		verificadorBTest.opinar(revisionB);
+		verificadorBTest.opinarEnEstadoBasico(revisionA);
+		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
+		verificadorBTest.opinarEnEstadoExperto(revisionB);
+		
+		assertTrue(revisiones.get(Opinion.PHTIA_CHINCHE).contains(revisionA));
+		assertFalse(revisiones.get(Opinion.IMAGEN_POCO_CLARA).contains(revisionB));
+		
+		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionA);
+		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionB);
+		
 	}
 	
 }
