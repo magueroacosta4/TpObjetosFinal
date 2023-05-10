@@ -147,9 +147,10 @@ public class TestVerificadorMuestra {
 	
 	
 	@Test
-	public void seSubeUnaMuestraYlaOpinaUnExperto_LuegoUnBasicoLoQuiereOpinarPeroNoSeSubeSuOpinion() {
+	public void seSubeUnaMuestraYlaOpinaUnExperto_LuegoUnBasicoLoQuiereOpinarPeroNoSeSubeSuOpinion_OtroExpertoOpinaYSiSeSube() {
 		when(revisionA.getOpinion()).thenReturn(Opinion.PHTIA_CHINCHE);
 		when(revisionB.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
+		when(revisionC.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		when(estadoUsuarioBasico.esExperto()).thenReturn(true);
 		
 		
@@ -157,15 +158,20 @@ public class TestVerificadorMuestra {
 	
 		verificadorBTest.opinar(revisionA);
 		verificadorBTest.opinar(revisionB);
+		verificadorBTest.opinar(revisionC);
 		verificadorBTest.opinarEnEstadoBasico(revisionA);
 		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
 		verificadorBTest.opinarEnEstadoExperto(revisionB);
+		when(estadoUsuarioBasico.esExperto()).thenReturn(true);
+		verificadorBTest.opinarEnEstadoExperto(revisionC);
 		
 		assertTrue(revisiones.get(Opinion.PHTIA_CHINCHE).contains(revisionA));
+		assertTrue(revisiones.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionC));
 		assertFalse(revisiones.get(Opinion.IMAGEN_POCO_CLARA).contains(revisionB));
 		
 		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionA);
 		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionB);
+		verify(estadoPostA, times(1)).opinar(verificadorBTest, revisionC);
 		
 	}
 	
