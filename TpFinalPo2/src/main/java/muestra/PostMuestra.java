@@ -14,16 +14,7 @@ public class PostMuestra {
 	private Ubicacion ubicacion;
 	private Date fechaDeCreacion;
 	
-	private Opinion resultadoActual;
-	
-	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
-		this.ubicacion = u;
-		this.fechaDeCreacion = new Date();
-		this.verificador = v;
-		Arrays.stream(Opinion.values()).forEach(o -> opiniones.put(o, new HashSet<Revision>()));
-		this.opiniones.get(r.getOpinion()).add(r);
-		this.resultadoActual = r.getOpinion();
-	}
+
 
 	public Opinion resultadoActual() {
 		return resultadoActual;
