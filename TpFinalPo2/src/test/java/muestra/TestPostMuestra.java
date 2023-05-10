@@ -2,14 +2,10 @@ package muestra;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+
 import static org.mockito.Mockito.*;
 import org.mockito.stubbing.Answer;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,10 +45,21 @@ public class TestPostMuestra {
 	}
 	
 	@Test
-	public void alCrearUnPostMuestraSeColocanTodosSusColaboradoresYseAgregaLaRevision() {
+	public void seCreaUnPostUtilizandoElConstructorQueNoRecibeUnVerficador() {
 		Date today = new Date();
 		when(revisionA.getFechaDeCreacion()).thenReturn(today);
 		when(revisionA.getOpinion()).thenReturn(Opinion.NINGUNA);
+	
+		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA);
+		
+		assertEquals(posteo.getResultadoActual(), Opinion.NINGUNA);
+		assertEquals(posteo.getUbicacion(), ubicacionA);
+		assertEquals(posteo.getFechaDeCreacion(), today);
+	}
+	@Test
+	public void alCrearUnPostMuestraSeColocanTodosSusColaboradoresYseAgregaLaRevision() {
+		Date today = new Date();
+		when(revisionA.getFechaDeCreacion()).thenReturn(today);
 		when(verificadorA.getResultadoActual()).thenReturn(Opinion.NINGUNA);		
 		
 		
@@ -63,6 +70,7 @@ public class TestPostMuestra {
 		assertEquals(posteo.getUbicacion(), ubicacionA);
 		assertEquals(posteo.getFechaDeCreacion(), today); //
 		
+		verify(revisionA, times(1)).getFechaDeCreacion();
 		verify(verificadorA, times(1)).colocarClavesEnHashmap();
 		verify(verificadorA, times(2)).getResultadoActual();
 		verify(verificadorA, times(1)).opinar(revisionA);
@@ -71,8 +79,7 @@ public class TestPostMuestra {
 	@Test
 	public void cuandoUnaMuestraSeSubeOtraPersonaLoOpinaConOpinionDistintaALaDelCreador_ElEstadoDeResultadoAcualEsElMismoQueElInicial() {
 		
-		when(revisionA.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		when(revisionB.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
+
 		when(verificadorA.getResultadoActual()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		
 		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
@@ -82,15 +89,14 @@ public class TestPostMuestra {
 		
 		assertEquals(posteo.getResultadoActual(), Opinion.VINCHUCA_GUASAYANA);
 		
-
+		verify(verificadorA, times(1)).colocarClavesEnHashmap();
+		verify(verificadorA, times(2)).getResultadoActual();
+		verify(verificadorA, times(1)).opinar(revisionA);
 	}
 	
 	@Test 
 	public void seSubeUnaMuestraConUnaOpinionPeroOtras2personasOpinanLoMismoYSeCambiaElResultadoActualPor_ImagenPocoClara() {
 	
-		when(revisionA.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		when(revisionB.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
-		when(revisionC.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
 		when(verificadorA.getResultadoActual()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
 		
 		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);
@@ -99,6 +105,10 @@ public class TestPostMuestra {
 		posteo.opinar(revisionC);
 		
 		assertEquals(posteo.getResultadoActual(), Opinion.IMAGEN_POCO_CLARA);
+		
+		verify(verificadorA, times(1)).colocarClavesEnHashmap();
+		verify(verificadorA, times(2)).getResultadoActual();
+		verify(verificadorA, times(1)).opinar(revisionA);
 		
 	}
 	

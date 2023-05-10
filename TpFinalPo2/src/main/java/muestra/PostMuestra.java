@@ -50,7 +50,7 @@ public class PostMuestra {
 
 
 	private void setVerificador() {
-		this.verificador = new VerificadorMuestra();
+		this.verificador = new VerificadorMuestra(this);
 	}
 	
 	private void setVerificador(VerificadorMuestra v) {
@@ -66,9 +66,8 @@ public class PostMuestra {
 	}
 
 	public Opinion getResultadoActual() {		
-		Opinion resultado = this.getVerificador().getResultadoActual();
-		this.resultadoActual = resultado;
-		return resultado;
+		this.resultadoActual = this.getVerificador().getResultadoActual();
+		return this.resultadoActual;
 	}
 
 	public Date getFechaDeCreacion() {
