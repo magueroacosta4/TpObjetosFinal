@@ -14,6 +14,7 @@ public class PostMuestra {
 	private Ubicacion ubicacion;
 	private Date fechaDeCreacion;
 	private Opinion resultadoActual;
+	private boolean esPostVerificado;
 	
 	public PostMuestra(Revision r, Ubicacion u) {
 		this.setUbicacion(u);;
@@ -21,7 +22,8 @@ public class PostMuestra {
 		this.setVerificador();
 		this.colocarClavesEnHashmap();
 		this.opinar(r);
-		getResultadoActual();
+		this.setEsPostVerificado(false);
+		this.actualizarResultadoActual();
 	}
 
 	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
@@ -30,9 +32,14 @@ public class PostMuestra {
 		this.setVerificador(v);
 		this.colocarClavesEnHashmap();
 		this.opinar(r);
-		getResultadoActual();
+		this.setEsPostVerificado(false);
+		this.actualizarResultadoActual();
 	}
-
+	
+	public void actualizarResultadoActual() {
+		Opinion resultadoActual = this.verificador.getResultadoActualPost();
+		this.setResultadoActual(resultadoActual);
+	}
 	
 	
 	private VerificadorMuestra getVerificador() {
@@ -66,8 +73,11 @@ public class PostMuestra {
 	}
 
 	public Opinion getResultadoActual() {		
-		this.resultadoActual = this.getVerificador().getResultadoActual();
 		return this.resultadoActual;
+	}
+	
+	public void setResultadoActual(Opinion resultadoActual) {
+		this.resultadoActual = resultadoActual;
 	}
 
 	public Date getFechaDeCreacion() {
@@ -83,6 +93,18 @@ public class PostMuestra {
 	public void opinar(Revision revision) {
 		this.getVerificador().opinar(revision);
 		this.getResultadoActual();
+	}
+
+	public void setEsPostVerificado(boolean esPostVerificado) {
+		this.esPostVerificado = esPostVerificado;
+	}
+	
+	public Boolean getEsPostVerificado() {
+		return this.esPostVerificado;
+	}
+	
+	public void verificarPost() {
+		this.setEsPostVerificado(true);;		
 	}
 	
 	

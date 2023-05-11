@@ -34,40 +34,31 @@ public class TestPostMuestra {
 		revisionC = mock(Revision.class);
 		estadoUsuarioBasico = mock(EstadoBasico.class);
 		
-		doAnswer(new Answer<Void>() {
-			public Void answer(InvocationOnMock invocation) {
-				return null;
-			}
-		}).when(verificadorA).opinar(revisionA);
-		
-		doAnswer(new Answer<Void>() {
-			public Void answer(InvocationOnMock invocation) {
-				//Arrays.stream(Opinion.values()).forEach(o -> posteoA.getOpiniones().put(o, new HashSet<Revision>()));
-				return null;
-			}
-		}).when(verificadorA).colocarClavesEnHashmap();
+		doNothing().when(verificadorA).opinar(revisionA);		
+		doNothing().when(verificadorA).colocarClavesEnHashmap();
 	}
 	
-//	@Test
-//	public void seCreaUnPostUtilizandoElConstructorQueNoRecibeUnVerficador() {
-//		Date today = new Date();
-//		when(revisionA.getFechaDeCreacion()).thenReturn(today);
-//		when(revisionA.getOpinion()).thenReturn(Opinion.NINGUNA);
-//		
-//		when(revisionA.getEstadoDelUsuarioActual().esExperto()).thenReturn(false);
-//		
-//		
-//		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA);
-//		
-//		assertEquals(posteo.getResultadoActual(), Opinion.NINGUNA);
-//		assertEquals(posteo.getUbicacion(), ubicacionA);
-//		assertEquals(posteo.getFechaDeCreacion(), today);
-//	}
+	@Test
+	public void seCreaUnPostUtilizandoElConstructorQueNoRecibeUnVerficador() {
+		Date today = new Date();
+		when(revisionA.getFechaDeCreacion()).thenReturn(today);
+		when(revisionA.getOpinion()).thenReturn(Opinion.NINGUNA);
+		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
+		
+		when(revisionA.getEstadoDelUsuarioActual().esExperto()).thenReturn(false);
+		
+		
+		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA);
+		
+		assertEquals(posteo.getResultadoActual(), Opinion.NINGUNA);
+		assertEquals(posteo.getUbicacion(), ubicacionA);
+		assertEquals(posteo.getFechaDeCreacion(), today);
+	}
 	@Test
 	public void alCrearUnPostMuestraSeColocanTodosSusColaboradoresYseAgregaLaRevision() {
 		Date today = new Date();
 		when(revisionA.getFechaDeCreacion()).thenReturn(today);
-		when(verificadorA.getResultadoActual()).thenReturn(Opinion.NINGUNA);		
+		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.NINGUNA);		
 		
 		
 		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
@@ -79,7 +70,7 @@ public class TestPostMuestra {
 		
 		verify(revisionA, times(1)).getFechaDeCreacion();
 		verify(verificadorA, times(1)).colocarClavesEnHashmap();
-		verify(verificadorA, times(3)).getResultadoActual();
+		verify(verificadorA, times(1)).getResultadoActualPost();
 		verify(verificadorA, times(1)).opinar(revisionA);
 	}
 	
@@ -87,7 +78,7 @@ public class TestPostMuestra {
 	public void cuandoUnaMuestraSeSubeOtraPersonaLoOpinaConOpinionDistintaALaDelCreador_ElEstadoDeResultadoAcualEsElMismoQueElInicial() {
 		
 
-		when(verificadorA.getResultadoActual()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
+		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		
 		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
 		
@@ -97,14 +88,14 @@ public class TestPostMuestra {
 		assertEquals(posteo.getResultadoActual(), Opinion.VINCHUCA_GUASAYANA);
 		
 		verify(verificadorA, times(1)).colocarClavesEnHashmap();
-		verify(verificadorA, times(4)).getResultadoActual();
+		verify(verificadorA, times(1)).getResultadoActualPost();
 		verify(verificadorA, times(1)).opinar(revisionA);
 	}
 	
 	@Test 
 	public void seSubeUnaMuestraConUnaOpinionPeroOtras2personasOpinanLoMismoYSeCambiaElResultadoActualPor_ImagenPocoClara() {
 	
-		when(verificadorA.getResultadoActual()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
+		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
 		
 		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);
 		
@@ -114,7 +105,7 @@ public class TestPostMuestra {
 		assertEquals(posteo.getResultadoActual(), Opinion.IMAGEN_POCO_CLARA);
 		
 		verify(verificadorA, times(1)).colocarClavesEnHashmap();
-		verify(verificadorA, times(5)).getResultadoActual();
+		verify(verificadorA, times(1)).getResultadoActualPost();
 		verify(verificadorA, times(1)).opinar(revisionA);
 		
 	}
