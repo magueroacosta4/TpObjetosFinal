@@ -10,4 +10,8 @@ public class PaginaWeb {
 		return null;
 	}
 
+	public List<PostMuestra> getMuestras() {
+		return null;
+	}
+
 }

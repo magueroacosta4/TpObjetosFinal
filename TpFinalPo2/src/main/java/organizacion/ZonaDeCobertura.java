@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import muestra.PaginaWeb;
+import muestra.PostMuestra;
 import muestra.Ubicacion;
 
 public class ZonaDeCobertura {
@@ -71,6 +72,22 @@ public class ZonaDeCobertura {
 				.getZonasDeCobertura()
 				.stream()
 				.filter(z-> z.seSolapaCon(this))
+				.toList();
+	}
+
+	public boolean tieneLaMuestra(PostMuestra unPostM) {
+		return distanciaAMuesta(unPostM) <= getRadioEnKM();
+	}
+
+	private int distanciaAMuesta(PostMuestra unPostM) {
+		return getEpicentro().distanciaA(unPostM.getUbicacion());
+	}
+
+	public List<PostMuestra> getMuestras() {
+		return paginaWeb
+				.getMuestras()
+				.stream()
+				.filter(pm -> this.tieneLaMuestra(pm))
 				.toList();
 	}
 
