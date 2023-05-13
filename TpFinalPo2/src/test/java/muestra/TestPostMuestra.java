@@ -4,10 +4,6 @@ package muestra;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
-import org.mockito.stubbing.Answer;
-
-import Usuario.EstadoBasico;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +11,6 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
 
 
 
@@ -27,7 +22,7 @@ public class TestPostMuestra {
 	PostMuestra posteoA;
 	Revision revisionB;
 	Revision revisionC;
-	private EstadoBasico estadoUsuarioBasico;
+	
 	@Before
 	public void setUp() {
 		ubicacionA = mock(Ubicacion.class);
@@ -35,10 +30,29 @@ public class TestPostMuestra {
 		revisionA = mock(Revision.class);
 		revisionB = mock(Revision.class);
 		revisionC = mock(Revision.class);
-		estadoUsuarioBasico = mock(EstadoBasico.class);
 		
 		doNothing().when(verificadorA).opinar(revisionA);		
 		doNothing().when(verificadorA).colocarClavesEnHashmap();
+	}
+	
+	@Test
+	public void seInstanciaUnPostMuestraConElConstructorQueNoRecibeUnVerificador() {
+		
+		PostMuestra spyPost = spy(PostMuestra.class);
+		
+		VerificadorMuestra verifiMock = mock(VerificadorMuestra.class);
+		
+		doAnswer(invocation -> {
+			spyPost.setVerificador(verifiMock);
+			return null;
+		}).when(spyPost).setVerificador();
+		
+		spyPost.setVerificador();
+		
+		VerificadorMuestra resultadoDado = spyPost.getVerificador();
+		VerificadorMuestra resultadoEsperado = verifiMock;
+		
+		assertEquals(resultadoDado, resultadoEsperado);
 	}
 	
 

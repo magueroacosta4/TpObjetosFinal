@@ -2,8 +2,6 @@ package muestra;
 
 
 
-import static org.mockito.Mockito.doNothing;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
@@ -17,6 +15,8 @@ public class PostMuestra {
 	private Date fechaDeCreacion;
 	private Opinion resultadoActual;
 	private boolean esPostVerificado;
+	
+	public PostMuestra() {};	
 	
 	public PostMuestra(Revision r, Ubicacion u) {
 		this.setVerificador();
@@ -37,7 +37,7 @@ public class PostMuestra {
 	}
 		
 	
-	private VerificadorMuestra getVerificador() {
+	public VerificadorMuestra getVerificador() {
 		return verificador;
 	}
 	
@@ -54,13 +54,16 @@ public class PostMuestra {
 		this.opiniones = opiniones;
 	}
 	
-	private void setVerificador() {
-		this.verificador = new VerificadorMuestra(this);
+	public void setVerificador() {
+		VerificadorMuestra ver = new VerificadorMuestra(this);
+		this.setVerificador(ver);
 	}
 	
-	private void setVerificador(VerificadorMuestra v) {
+	public void setVerificador(VerificadorMuestra v) {
 		this.verificador = v;
 	}
+	
+	
 
 	public Ubicacion getUbicacion() {
 		return ubicacion;
