@@ -2,6 +2,8 @@ package muestra;
 
 
 
+import static org.mockito.Mockito.doNothing;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
@@ -23,7 +25,6 @@ public class PostMuestra {
 		this.colocarClavesEnHashmap();
 		this.opinar(r);
 		this.setEsPostVerificado(false);
-		this.actualizarResultadoActual();
 	}
 
 	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
@@ -33,14 +34,8 @@ public class PostMuestra {
 		this.colocarClavesEnHashmap();
 		this.opinar(r);
 		this.setEsPostVerificado(false);
-		this.actualizarResultadoActual();
 	}
-	
-	public void actualizarResultadoActual() {
-		Opinion resultadoActual = this.verificador.getResultadoActualPost();
-		this.setResultadoActual(resultadoActual);
-	}
-	
+		
 	
 	private VerificadorMuestra getVerificador() {
 		return verificador;
@@ -55,7 +50,10 @@ public class PostMuestra {
 		return opiniones;
 	}
 
-
+	public void setOpiniones(HashMap<Opinion, Set<Revision>> opiniones) {
+		this.opiniones = opiniones;
+	}
+	
 	private void setVerificador() {
 		this.verificador = new VerificadorMuestra(this);
 	}
@@ -92,7 +90,6 @@ public class PostMuestra {
 
 	public void opinar(Revision revision) {
 		this.getVerificador().opinar(revision);
-		this.getResultadoActual();
 	}
 
 	public void setEsPostVerificado(boolean esPostVerificado) {
@@ -106,8 +103,12 @@ public class PostMuestra {
 	public void verificarPost() {
 		this.setEsPostVerificado(true);;		
 	}
-	
-	
+
+	public int sizeOpinion(Opinion opinion) {
+		int sizeResultadoActual = this.getOpiniones().get(opinion).size();
+		return sizeResultadoActual;
+	}
+
 	
 	
 }
