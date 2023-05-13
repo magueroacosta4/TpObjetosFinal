@@ -19,18 +19,18 @@ public class PostMuestra {
 	private boolean esPostVerificado;
 	
 	public PostMuestra(Revision r, Ubicacion u) {
-		this.setUbicacion(u);;
-		this.setFechaDeCreacion(r.getFechaDeCreacion());;
 		this.setVerificador();
-		this.colocarClavesEnHashmap();
-		this.opinar(r);
-		this.setEsPostVerificado(false);
+		this.setearTodo(r, u);
 	}
 
 	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
-		this.setUbicacion(u);;
+		this.setVerificador(v);		
+		this.setearTodo(r, u);
+	}
+	
+	public void setearTodo(Revision r, Ubicacion u) {
+		this.setUbicacion(u);
 		this.setFechaDeCreacion(r.getFechaDeCreacion());;
-		this.setVerificador(v);
 		this.colocarClavesEnHashmap();
 		this.opinar(r);
 		this.setEsPostVerificado(false);

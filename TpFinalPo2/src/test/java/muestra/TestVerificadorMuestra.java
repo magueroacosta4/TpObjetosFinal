@@ -65,8 +65,14 @@ public class TestVerificadorMuestra {
 	}
 
 	@Test
-	public void cuandoSeCreaUnVerificadorEsteTieneElPostMuestraAsociado() {
+	public void cuandoSeCreaUnVerificadorEsteTieneElPostMuestraAsociadoYLaOpinionDelUsuarioSeSube() {
+			
+			when(revisionA.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
+			when(posteoMock.getResultadoActual()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		
+			verificadorATest.opinionUsuarioQuePosteo(revisionA);
+			
+			assertEquals(posteoMock.getResultadoActual(), Opinion.VINCHUCA_GUASAYANA);		
 			assertEquals(verificadorATest.getPost(), posteoMock);
 		
 	}
@@ -417,6 +423,7 @@ public class TestVerificadorMuestra {
 		verify(posteoMock, times(0)).verificarPost();
 		
 	}
+	
 		
 	
 }

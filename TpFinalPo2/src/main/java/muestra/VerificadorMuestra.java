@@ -82,7 +82,7 @@ public class VerificadorMuestra {
 		}
 	}
 	
-	public void opinarUsuarioQuePosteo(Revision revision) {
+	public void opinionUsuarioQuePosteo(Revision revision) {
 		agregarRevisionAlPost(revision);
 		cambiarResultadoActualPost(revision.getOpinion());
 	}
