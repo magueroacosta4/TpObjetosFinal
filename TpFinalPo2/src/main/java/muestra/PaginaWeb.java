@@ -8,9 +8,9 @@ import organizacion.ZonaDeCobertura;
 
 public class PaginaWeb {
 	
-	List<ZonaDeCobertura> zonasDeCovertura = new ArrayList<ZonaDeCobertura>();
-	List<PostMuestra> posteosDeMuestras = new ArrayList<PostMuestra>();
-	List<Usuario> usuarios = new ArrayList<Usuario>();
+	private List<ZonaDeCobertura> zonasDeCovertura = new ArrayList<ZonaDeCobertura>();
+	private List<PostMuestra> posteosDeMuestras = new ArrayList<PostMuestra>();
+	private List<Usuario> usuarios = new ArrayList<Usuario>();
 	
 	public PaginaWeb() {
 		setUsuarios(new ArrayList<Usuario>());
