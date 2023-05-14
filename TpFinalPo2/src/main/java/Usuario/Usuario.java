@@ -7,7 +7,7 @@ import muestra.Muestra;
 public abstract class Usuario {
 	private EstadoUsuario estado;
 	
-	public void publicar() {
+	public void publicar(Muestra muestra) {
 		
 	}
 	
