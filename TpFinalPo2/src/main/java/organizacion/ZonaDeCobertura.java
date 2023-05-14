@@ -9,16 +9,16 @@ import muestra.Ubicacion;
 
 public class ZonaDeCobertura {
 
-	String nombre;
-	Ubicacion epicentro;
-	int radioEnKM;
-	PaginaWeb paginaWeb;
+	private String nombre;
+	private Ubicacion epicentro;
+	private int radioEnKM;
+	private PaginaWeb paginaWeb;
 	
 	public ZonaDeCobertura(String nombre, Ubicacion epicentro, int radioEnKM, PaginaWeb unaPaginaWeb) {
-		setNombre(nombre);
-		setEpicentro(epicentro);
-		setRadioEnKM(radioEnKM);
-		setPaginaWeb(unaPaginaWeb);
+		this.setNombre(nombre);
+		this.setEpicentro(epicentro);
+		this.setRadioEnKM(radioEnKM);
+		this.setPaginaWeb(unaPaginaWeb);
 	}
 
 	public String getNombre() {
