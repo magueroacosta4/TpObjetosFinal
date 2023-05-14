@@ -1,6 +1,5 @@
 package organizacion;
 
-import java.util.Arrays;
 import java.util.List;
 
 import muestra.PaginaWeb;
