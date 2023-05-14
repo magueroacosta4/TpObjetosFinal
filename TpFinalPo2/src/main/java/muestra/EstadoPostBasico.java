@@ -13,5 +13,7 @@ public class EstadoPostBasico extends EstadoDePost {
 
 	@Override
 	protected void verificarPost() {}
+
+
 	
 }

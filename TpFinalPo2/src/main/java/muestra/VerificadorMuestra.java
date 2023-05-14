@@ -34,10 +34,21 @@ public class VerificadorMuestra {
 		return opinionConMayorVoto;
 	}
 	
-	public void actualizarEstadoDePost() {
+	public void actualizarEstadoDePost(Revision revision) {
+		Opinion resultadoPostActual = this.post.getResultadoActual();
+		agregarRevisionAlPost(revision);
 		Opinion resultadoActual = this.getResultadoActualPost();
+		if (this.post.sizeOpinion(resultadoPostActual) == this.post.sizeOpinion(resultadoActual)) {
+			this.cambiarResultadoActualPost(Opinion.NO_DEFINIDO);
+		}
+		else {
 		this.post.setResultadoActual(resultadoActual);
-		this.estadoPost.verificarPost();
+		this.verificarPost();
+		}
+	}
+
+	private void agregarRevisionAlPost(Revision revision) {
+		this.post.getOpiniones().get(revision.getOpinion()).add(revision);
 	}
 	
 	public void colocarClavesEnHashmap() {
@@ -47,7 +58,8 @@ public class VerificadorMuestra {
 	
 	public void opinarEnEstadoBasico(Revision revision) {
 		this.estadoPost = revision.getEstadoDelUsuarioActual().esExperto()? this.actualizarEstadoDeVerificadorPorExperto():estadoPost;
-		this.post.getOpiniones().get(revision.getOpinion()).add(revision);
+		this.actualizarEstadoDePost(revision);
+		
 	}
 	
 	private EstadoDePost actualizarEstadoDeVerificadorPorExperto() {
@@ -58,7 +70,7 @@ public class VerificadorMuestra {
 
 	public void opinarEnEstadoExperto(Revision revision) {
 		if(revision.getEstadoDelUsuarioActual().esExperto()){
-		this.post.getOpiniones().get(revision.getOpinion()).add(revision);}
+		this.actualizarEstadoDePost(revision);}
 		else {};		
 	}
 	
@@ -66,13 +78,21 @@ public class VerificadorMuestra {
 		if(post.getEsPostVerificado()) {}
 		else {
 			estadoPost.opinar(revision);
-			this.actualizarEstadoDePost();
+			
 		}
+	}
+	
+	public void opinionUsuarioQuePosteo(Revision revision) {
+		agregarRevisionAlPost(revision);
+		cambiarResultadoActualPost(revision.getOpinion());
+	}
+
+	private void cambiarResultadoActualPost(Opinion opinion) {
+		this.post.setResultadoActual(opinion);
 	}
 
 	public void verificarPost() {
-		Opinion resultadoActual = post.getResultadoActual();
-		if(post.getOpiniones().get(resultadoActual).size() >= 2) {
+		if(post.sizeOpinion(post.getResultadoActual()) >= 2) {
 			this.post.verificarPost();
 		}		
 	}

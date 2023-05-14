@@ -16,33 +16,28 @@ public class PostMuestra {
 	private Opinion resultadoActual;
 	private boolean esPostVerificado;
 	
+	public PostMuestra() {};	
+	
 	public PostMuestra(Revision r, Ubicacion u) {
-		this.setUbicacion(u);;
-		this.setFechaDeCreacion(r.getFechaDeCreacion());;
 		this.setVerificador();
-		this.colocarClavesEnHashmap();
-		this.opinar(r);
-		this.setEsPostVerificado(false);
-		this.actualizarResultadoActual();
+		this.setearTodo(r, u);
 	}
 
 	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
-		this.setUbicacion(u);;
+		this.setVerificador(v);		
+		this.setearTodo(r, u);
+	}
+	
+	public void setearTodo(Revision r, Ubicacion u) {
+		this.setUbicacion(u);
 		this.setFechaDeCreacion(r.getFechaDeCreacion());;
-		this.setVerificador(v);
 		this.colocarClavesEnHashmap();
 		this.opinar(r);
 		this.setEsPostVerificado(false);
-		this.actualizarResultadoActual();
 	}
+		
 	
-	public void actualizarResultadoActual() {
-		Opinion resultadoActual = this.verificador.getResultadoActualPost();
-		this.setResultadoActual(resultadoActual);
-	}
-	
-	
-	private VerificadorMuestra getVerificador() {
+	public VerificadorMuestra getVerificador() {
 		return verificador;
 	}
 	
@@ -55,14 +50,20 @@ public class PostMuestra {
 		return opiniones;
 	}
 
-
-	private void setVerificador() {
-		this.verificador = new VerificadorMuestra(this);
+	public void setOpiniones(HashMap<Opinion, Set<Revision>> opiniones) {
+		this.opiniones = opiniones;
 	}
 	
-	private void setVerificador(VerificadorMuestra v) {
+	public void setVerificador() {
+		VerificadorMuestra ver = new VerificadorMuestra(this);
+		this.setVerificador(ver);
+	}
+	
+	public void setVerificador(VerificadorMuestra v) {
 		this.verificador = v;
 	}
+	
+	
 
 	public Ubicacion getUbicacion() {
 		return ubicacion;
@@ -92,7 +93,6 @@ public class PostMuestra {
 
 	public void opinar(Revision revision) {
 		this.getVerificador().opinar(revision);
-		this.getResultadoActual();
 	}
 
 	public void setEsPostVerificado(boolean esPostVerificado) {
@@ -106,8 +106,12 @@ public class PostMuestra {
 	public void verificarPost() {
 		this.setEsPostVerificado(true);;		
 	}
-	
-	
+
+	public int sizeOpinion(Opinion opinion) {
+		int sizeResultadoActual = this.getOpiniones().get(opinion).size();
+		return sizeResultadoActual;
+	}
+
 	
 	
 }
