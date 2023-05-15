@@ -1,11 +1,12 @@
 package Usuario;
 
+import java.util.List;
+
+import muestra.Opinion;
+import muestra.PostMuestra;
+
 public class Participante extends Usuario {
 
-	@Override
-	protected void confirmarEstado() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 }

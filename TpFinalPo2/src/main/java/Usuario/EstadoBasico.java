@@ -8,6 +8,9 @@ public class EstadoBasico extends EstadoUsuario {
 
 	@Override
 	public void actualizarEstado(Usuario usuario) {
-		
+		if(usuario.getPostsEnLaApp().size() >= 10 &&
+			usuario.getOpinionesEnLaApp().size() >= 20) {
+			usuario.setEstado(new EstadoExperto());
+		}
 	}
 }
