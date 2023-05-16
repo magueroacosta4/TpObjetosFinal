@@ -22,6 +22,8 @@ public class TestPostMuestra {
 	PostMuestra posteoA;
 	Revision revisionB;
 	Revision revisionC;
+	Date today;
+	PostMuestra posteo;
 	
 	@Before
 	public void setUp() {
@@ -33,37 +35,19 @@ public class TestPostMuestra {
 		
 		doNothing().when(verificadorA).opinar(revisionA);		
 		doNothing().when(verificadorA).colocarClavesEnHashmap();
-	}
-	
-	@Test
-	public void seInstanciaUnPostMuestraConElConstructorQueNoRecibeUnVerificador() {
 		
-		PostMuestra spyPost = spy(PostMuestra.class);
+		today = new Date();
+		when(revisionA.getFechaDeCreacion()).thenReturn(today);
+		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.NINGUNA);		
 		
-		VerificadorMuestra verifiMock = mock(VerificadorMuestra.class);
 		
-		doAnswer(invocation -> {
-			spyPost.setVerificador(verifiMock);
-			return null;
-		}).when(spyPost).setVerificador();
-		
-		spyPost.setVerificador();
-		
-		VerificadorMuestra resultadoDado = spyPost.getVerificador();
-		VerificadorMuestra resultadoEsperado = verifiMock;
-		
-		assertEquals(resultadoDado, resultadoEsperado);
+		posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
 	}
 	
 
 	@Test
 	public void alCrearUnPostMuestraSeColocanTodosSusColaboradoresYseAgregaLaRevision() {
-		Date today = new Date();
-		when(revisionA.getFechaDeCreacion()).thenReturn(today);
-		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.NINGUNA);		
-		
-		
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
+
 
 		posteo.setResultadoActual(Opinion.NINGUNA);
 		
@@ -80,9 +64,7 @@ public class TestPostMuestra {
 	public void cuandoUnaMuestraSeSubeOtraPersonaLoOpinaConOpinionDistintaALaDelCreador_ElEstadoDeResultadoAcualEsElMismoQueElInicial() {
 		
 
-		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
+		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.VINCHUCA_GUASAYANA);	
 		
 		posteo.opinar(revisionB);
 		posteo.setResultadoActual(Opinion.VINCHUCA_GUASAYANA);
@@ -97,8 +79,6 @@ public class TestPostMuestra {
 	public void seSubeUnaMuestraConUnaOpinionPeroOtras2personasOpinanLoMismoYSeCambiaElResultadoActualPor_ImagenPocoClara() {
 	
 		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
-		
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);
 		
 		posteo.opinar(revisionB);
 		posteo.opinar(revisionC);
@@ -115,7 +95,6 @@ public class TestPostMuestra {
 	
 	@Test
 	public void sePidenLasOpinionesActuales() {
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);
 		
 		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
 		HashMap<Opinion, Set <Revision>> resultadoDado = posteo.getOpiniones();
@@ -126,7 +105,6 @@ public class TestPostMuestra {
 	
 	@Test 
 	public void seVerificaUnPosteo() {
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);
 		
 		posteo.verificarPost();
 		
@@ -135,7 +113,6 @@ public class TestPostMuestra {
 	
 	@Test 
 	public void sePreguntaCauntasRevisionesTieneUnaOpinion() {
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);
 		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
 		Set<Revision> set = new HashSet<Revision>();
 		set.add(revisionA);

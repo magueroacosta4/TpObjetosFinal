@@ -6,13 +6,13 @@ import muestra.PostMuestra;
 
 import java.util.List;
 
-import muestra.Muestra;
+
 
 public abstract class Usuario {
 	private EstadoUsuario estado;
 	private PaginaWeb pagina;
 	
-	public void publicar(Muestra muestra) {
+	public void publicar() {
 		this.getPagina().crearPostMuestra(null, null);;
 	}
 
