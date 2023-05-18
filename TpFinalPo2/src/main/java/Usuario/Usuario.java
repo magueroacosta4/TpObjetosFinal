@@ -3,6 +3,8 @@ package Usuario;
 import muestra.Opinion;
 import muestra.PaginaWeb;
 import muestra.PostMuestra;
+import muestra.Revision;
+import muestra.Ubicacion;
 
 import java.util.List;
 
@@ -11,16 +13,20 @@ import java.util.List;
 public abstract class Usuario {
 	private EstadoUsuario estado;
 	private PaginaWeb pagina;
+	private HistorialEnApp historial;
 	
-	public void publicar() {
-		this.getPagina().crearPostMuestra(null, null);;
+	public void publicar(Revision rev, Ubicacion ubicacion) {
+		this.getPagina().crearPostMuestra(rev, ubicacion);
 	}
 
 	public void opinar(PostMuestra post, Opinion op) {
-		
+		Revision rev = new Revision(op, this.getEstado());
+		post.opinar(rev);
+		this.getHistorial().addOpinion(op);
 	}
 
 	protected List<PostMuestra> getPostsEnLaApp(){
+		
 		return null;
 	}
 
@@ -39,6 +45,10 @@ public abstract class Usuario {
 	
 	public PaginaWeb getPagina() {
 		return this.pagina;
+	}
+	
+	public HistorialEnApp getHistorial() {
+		return this.historial;
 	}
 	
 }
