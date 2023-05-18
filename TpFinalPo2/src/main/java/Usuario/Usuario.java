@@ -38,7 +38,7 @@ public abstract class Usuario {
 	}
 
 	protected int getCantOpiniones30Dias(){
-		List<LocalDate> cant;
+		List<Revision> cant;
 		LocalDate hoy = LocalDate.now();
 		cant = this.getHistorial().getOpiniones().
 				stream().
