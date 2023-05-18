@@ -3,17 +3,29 @@ package muestra;
 import java.time.LocalDate;
 
 import Usuario.EstadoUsuario;
+import Usuario.Usuario;
 
 public class Revision {
 
 	private Opinion opinion;
 	private LocalDate getFechaDeCreacion;
 	private EstadoUsuario estadoDelUsuarioActual;
+	private Usuario user;
 	
-	public Revision(Opinion o, EstadoUsuario e) {
+	public Revision(Opinion o, EstadoUsuario e, Usuario u) {
 		setFechaDeCreacion();
+		setUsuario(u);
 		setEstadoDelUsuarioActual(e);
 		setOpinion(o);
+	}
+
+	private void setUsuario(Usuario u) {
+		// TODO Auto-generated method stub
+		this.user = u;
+	}
+	
+	public Usuario getUser() {
+		return user;
 	}
 
 	public Opinion getOpinion() {
