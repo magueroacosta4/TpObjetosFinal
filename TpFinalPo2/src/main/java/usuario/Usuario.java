@@ -23,7 +23,7 @@ public abstract class Usuario {
 	}
 
 	public void opinar(PostMuestra post, Opinion op) {
-		Revision rev = new Revision(op, this.getEstado());
+		Revision rev = new Revision(op, this.getEstado(), this);
 		post.opinar(rev);
 		this.getHistorial().addOpinion(rev);
 	}
