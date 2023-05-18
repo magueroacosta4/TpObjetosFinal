@@ -1,10 +1,6 @@
 package usuario;
 
 public class EstadoExperto extends EstadoUsuario {
-	
-	public boolean esExperto() {
-		return true;
-	}
 
 	@Override
 	public void actualizarEstado(Usuario usuario) {
@@ -12,5 +8,10 @@ public class EstadoExperto extends EstadoUsuario {
 			usuario.getCantOpiniones30Dias() <= 20) {
 			usuario.setEstado(new EstadoBasico());
 		}
+	}
+
+	@Override
+	public boolean esExperto() {
+		return true;
 	}
 }
