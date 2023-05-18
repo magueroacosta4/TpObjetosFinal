@@ -4,8 +4,11 @@ package muestra;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
+import usuario.Usuario;
 
 public class PostMuestra {
 	
@@ -16,6 +19,7 @@ public class PostMuestra {
 	private LocalDate fechaDeCreacion;
 	private Optional<Opinion> resultadoActual;
 	private boolean esPostVerificado;
+	private Set<Usuario> usuariosOpinados = new HashSet<Usuario>();
 	
 	public PostMuestra(Ubicacion u) {
 		this.setVerificador();
@@ -90,8 +94,18 @@ public class PostMuestra {
 
 
 
-	public void opinar(Revision revision) {
-		this.getVerificador().opinar(revision);
+	public void opinar(Revision revision) throws Exception {
+		Usuario user = revision.getUser();
+		if(!usuarioYaOpino(user)) {
+			this.getVerificador().opinar(revision);
+			usuariosOpinados.add(user);
+		}else {
+			throw new Exception("El usuario ya opino");
+		}
+	}
+
+	private boolean usuarioYaOpino(Usuario user) {
+		return usuariosOpinados.contains(user);
 	}
 
 	public void setEsPostVerificado(boolean esPostVerificado) {
