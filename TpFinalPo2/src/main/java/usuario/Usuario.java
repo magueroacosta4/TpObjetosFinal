@@ -23,7 +23,7 @@ public abstract class Usuario {
 		this.actualizarEstado();
 	}
 
-	public void opinar(PostMuestra post, Opinion op) {
+	public void opinar(PostMuestra post, Opinion op) throws Exception {
 		Revision rev = new Revision(op, this.getEstado(), this);
 		post.opinar(rev);
 		this.getHistorial().addOpinion(rev);
