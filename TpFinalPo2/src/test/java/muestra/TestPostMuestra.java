@@ -2,17 +2,15 @@ package muestra;
 
 
 import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
-import org.mockito.stubbing.Answer;
-
-import Usuario.EstadoBasico;
-
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
 
 
 
@@ -24,7 +22,9 @@ public class TestPostMuestra {
 	PostMuestra posteoA;
 	Revision revisionB;
 	Revision revisionC;
-	private EstadoBasico estadoUsuarioBasico;
+	Date today;
+	PostMuestra posteo;
+	
 	@Before
 	public void setUp() {
 		ubicacionA = mock(Ubicacion.class);
@@ -32,46 +32,24 @@ public class TestPostMuestra {
 		revisionA = mock(Revision.class);
 		revisionB = mock(Revision.class);
 		revisionC = mock(Revision.class);
-		estadoUsuarioBasico = mock(EstadoBasico.class);
 		
-		doAnswer(new Answer<Void>() {
-			public Void answer(InvocationOnMock invocation) {
-				return null;
-			}
-		}).when(verificadorA).opinar(revisionA);
+		doNothing().when(verificadorA).opinar(revisionA);		
+		doNothing().when(verificadorA).colocarClavesEnHashmap();
 		
-		doAnswer(new Answer<Void>() {
-			public Void answer(InvocationOnMock invocation) {
-				//Arrays.stream(Opinion.values()).forEach(o -> posteoA.getOpiniones().put(o, new HashSet<Revision>()));
-				return null;
-			}
-		}).when(verificadorA).colocarClavesEnHashmap();
+		today = new Date();
+		when(revisionA.getFechaDeCreacion()).thenReturn(today);
+		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.NINGUNA);		
+		
+		
+		posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
 	}
 	
-//	@Test
-//	public void seCreaUnPostUtilizandoElConstructorQueNoRecibeUnVerficador() {
-//		Date today = new Date();
-//		when(revisionA.getFechaDeCreacion()).thenReturn(today);
-//		when(revisionA.getOpinion()).thenReturn(Opinion.NINGUNA);
-//		
-//		when(revisionA.getEstadoDelUsuarioActual().esExperto()).thenReturn(false);
-//		
-//		
-//		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA);
-//		
-//		assertEquals(posteo.getResultadoActual(), Opinion.NINGUNA);
-//		assertEquals(posteo.getUbicacion(), ubicacionA);
-//		assertEquals(posteo.getFechaDeCreacion(), today);
-//	}
+
 	@Test
 	public void alCrearUnPostMuestraSeColocanTodosSusColaboradoresYseAgregaLaRevision() {
-		Date today = new Date();
-		when(revisionA.getFechaDeCreacion()).thenReturn(today);
-		when(verificadorA.getResultadoActual()).thenReturn(Opinion.NINGUNA);		
-		
-		
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
 
+
+		posteo.setResultadoActual(Opinion.NINGUNA);
 		
 		assertEquals(posteo.getResultadoActual(), Opinion.NINGUNA);
 		assertEquals(posteo.getUbicacion(), ubicacionA);
@@ -79,7 +57,6 @@ public class TestPostMuestra {
 		
 		verify(revisionA, times(1)).getFechaDeCreacion();
 		verify(verificadorA, times(1)).colocarClavesEnHashmap();
-		verify(verificadorA, times(3)).getResultadoActual();
 		verify(verificadorA, times(1)).opinar(revisionA);
 	}
 	
@@ -87,39 +64,68 @@ public class TestPostMuestra {
 	public void cuandoUnaMuestraSeSubeOtraPersonaLoOpinaConOpinionDistintaALaDelCreador_ElEstadoDeResultadoAcualEsElMismoQueElInicial() {
 		
 
-		when(verificadorA.getResultadoActual()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);		
+		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.VINCHUCA_GUASAYANA);	
 		
 		posteo.opinar(revisionB);
-		
+		posteo.setResultadoActual(Opinion.VINCHUCA_GUASAYANA);
 		
 		assertEquals(posteo.getResultadoActual(), Opinion.VINCHUCA_GUASAYANA);
 		
 		verify(verificadorA, times(1)).colocarClavesEnHashmap();
-		verify(verificadorA, times(4)).getResultadoActual();
 		verify(verificadorA, times(1)).opinar(revisionA);
 	}
 	
 	@Test 
 	public void seSubeUnaMuestraConUnaOpinionPeroOtras2personasOpinanLoMismoYSeCambiaElResultadoActualPor_ImagenPocoClara() {
 	
-		when(verificadorA.getResultadoActual()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
-		
-		PostMuestra posteo = new PostMuestra(revisionA, ubicacionA, verificadorA);
+		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
 		
 		posteo.opinar(revisionB);
 		posteo.opinar(revisionC);
 		
+		posteo.setResultadoActual(Opinion.IMAGEN_POCO_CLARA);
+		
 		assertEquals(posteo.getResultadoActual(), Opinion.IMAGEN_POCO_CLARA);
 		
 		verify(verificadorA, times(1)).colocarClavesEnHashmap();
-		verify(verificadorA, times(5)).getResultadoActual();
-		verify(verificadorA, times(1)).opinar(revisionA);
+		verify(verificadorA, times(1)).opinar(revisionB);
+		verify(verificadorA, times(1)).opinar(revisionC);
 		
 	}
 	
-
+	@Test
+	public void sePidenLasOpinionesActuales() {
+		
+		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
+		HashMap<Opinion, Set <Revision>> resultadoDado = posteo.getOpiniones();
+		
+		assertTrue(resultadoDado.equals(map));
+		
+	}
+	
+	@Test 
+	public void seVerificaUnPosteo() {
+		
+		posteo.verificarPost();
+		
+		assertTrue(posteo.getEsPostVerificado());
+	}
+	
+	@Test 
+	public void sePreguntaCauntasRevisionesTieneUnaOpinion() {
+		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
+		Set<Revision> set = new HashSet<Revision>();
+		set.add(revisionA);
+		map.put(Opinion.CHINCHE_FOLIADA, set);
+		
+		posteo.setOpiniones(map);
+		
+		int resultadoDado = posteo.sizeOpinion(Opinion.CHINCHE_FOLIADA);
+		int resultadoEsperado = 1;
+			
+		assertEquals(resultadoDado, resultadoEsperado);
+		
+	}
 	
 	
 	

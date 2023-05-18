@@ -14,28 +14,30 @@ public class PostMuestra {
 	private Ubicacion ubicacion;
 	private Date fechaDeCreacion;
 	private Opinion resultadoActual;
+	private boolean esPostVerificado;
+	
+	public PostMuestra() {};	
 	
 	public PostMuestra(Revision r, Ubicacion u) {
-		this.setUbicacion(u);;
-		this.setFechaDeCreacion(r.getFechaDeCreacion());;
 		this.setVerificador();
-		this.colocarClavesEnHashmap();
-		this.opinar(r);
-		getResultadoActual();
+		this.setearTodo(r, u);
 	}
 
 	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
-		this.setUbicacion(u);;
+		this.setVerificador(v);		
+		this.setearTodo(r, u);
+	}
+	
+	public void setearTodo(Revision r, Ubicacion u) {
+		this.setUbicacion(u);
 		this.setFechaDeCreacion(r.getFechaDeCreacion());;
-		this.setVerificador(v);
 		this.colocarClavesEnHashmap();
 		this.opinar(r);
-		getResultadoActual();
+		this.setEsPostVerificado(false);
 	}
-
+		
 	
-	
-	private VerificadorMuestra getVerificador() {
+	public VerificadorMuestra getVerificador() {
 		return verificador;
 	}
 	
@@ -48,14 +50,20 @@ public class PostMuestra {
 		return opiniones;
 	}
 
-
-	private void setVerificador() {
-		this.verificador = new VerificadorMuestra(this);
+	public void setOpiniones(HashMap<Opinion, Set<Revision>> opiniones) {
+		this.opiniones = opiniones;
 	}
 	
-	private void setVerificador(VerificadorMuestra v) {
+	public void setVerificador() {
+		VerificadorMuestra ver = new VerificadorMuestra(this);
+		this.setVerificador(ver);
+	}
+	
+	public void setVerificador(VerificadorMuestra v) {
 		this.verificador = v;
 	}
+	
+	
 
 	public Ubicacion getUbicacion() {
 		return ubicacion;
@@ -66,8 +74,11 @@ public class PostMuestra {
 	}
 
 	public Opinion getResultadoActual() {		
-		this.resultadoActual = this.getVerificador().getResultadoActual();
 		return this.resultadoActual;
+	}
+	
+	public void setResultadoActual(Opinion resultadoActual) {
+		this.resultadoActual = resultadoActual;
 	}
 
 	public Date getFechaDeCreacion() {
@@ -82,10 +93,25 @@ public class PostMuestra {
 
 	public void opinar(Revision revision) {
 		this.getVerificador().opinar(revision);
-		this.getResultadoActual();
+	}
+
+	public void setEsPostVerificado(boolean esPostVerificado) {
+		this.esPostVerificado = esPostVerificado;
 	}
 	
+	public Boolean getEsPostVerificado() {
+		return this.esPostVerificado;
+	}
 	
+	public void verificarPost() {
+		this.setEsPostVerificado(true);;		
+	}
+
+	public int sizeOpinion(Opinion opinion) {
+		int sizeResultadoActual = this.getOpiniones().get(opinion).size();
+		return sizeResultadoActual;
+	}
+
 	
 	
 }
