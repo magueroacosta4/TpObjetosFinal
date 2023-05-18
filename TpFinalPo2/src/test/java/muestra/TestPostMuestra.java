@@ -3,6 +3,7 @@ package muestra;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
@@ -13,6 +14,8 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import usuario.Participante;
 
 
 
@@ -26,6 +29,9 @@ public class TestPostMuestra {
 	Revision revisionC;
 	LocalDate today;
 	PostMuestra posteo;
+	private Participante usuarioA;
+	private Participante usuarioB;
+	private Participante usuarioC;
 	
 	@Before
 	public void setUp() {
@@ -34,6 +40,9 @@ public class TestPostMuestra {
 		revisionA = mock(Revision.class);
 		revisionB = mock(Revision.class);
 		revisionC = mock(Revision.class);
+		usuarioA = mock(Participante.class);
+		usuarioB = mock(Participante.class);
+		usuarioC = mock(Participante.class);
 		
 		doNothing().when(verificadorA).opinar(revisionA);		
 		doNothing().when(verificadorA).opinar(revisionB);		
@@ -42,7 +51,9 @@ public class TestPostMuestra {
 		today = LocalDate.now();
 		when(revisionA.getFechaDeCreacion()).thenReturn(today);
 		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.NINGUNA);		
-		
+		when(revisionA.getUser()).thenReturn(usuarioA);
+		when(revisionB.getUser()).thenReturn(usuarioB);
+		when(revisionC.getUser()).thenReturn(usuarioC);
 		
 		posteo = new PostMuestra(ubicacionA, verificadorA);		
 	}
@@ -62,7 +73,7 @@ public class TestPostMuestra {
 	}
 	
 	@Test
-	public void cuandoUnaMuestraSeSubeOtraPersonaLoOpinaConOpinionDistintaALaDelCreador_ElEstadoDeResultadoAcualEsElMismoQueElInicial() {
+	public void cuandoUnaMuestraSeSubeOtraPersonaLoOpinaConOpinionDistintaALaDelCreador_ElEstadoDeResultadoAcualEsElMismoQueElInicial() throws Exception {
 		
 
 		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.VINCHUCA_GUASAYANA);	
@@ -77,7 +88,7 @@ public class TestPostMuestra {
 	}
 	
 	@Test 
-	public void seSubeUnaMuestraConUnaOpinionPeroOtras2personasOpinanLoMismoYSeCambiaElResultadoActualPor_ImagenPocoClara() {
+	public void seSubeUnaMuestraConUnaOpinionPeroOtras2personasOpinanLoMismoYSeCambiaElResultadoActualPor_ImagenPocoClara() throws Exception {
 	
 		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
 		
@@ -129,7 +140,7 @@ public class TestPostMuestra {
 	}
 	
 	@Test
-	public void sePreguntaCauntasRevisionesTieneLaOpinionActual() {
+	public void sePreguntaCauntasRevisionesTieneLaOpinionActual() throws Exception {
 		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
 		Set<Revision> set = new HashSet<Revision>();
 		set.add(revisionA);
@@ -152,7 +163,18 @@ public class TestPostMuestra {
 		
 	}
 	
-	
+	@Test
+	public void unUsuarioOpina_LuegoElMismoUsuarioQuiereOpinarDeNuevoPeroNoPuede() throws Exception {
+		when(revisionC.getUser()).thenReturn(usuarioB);
+		
+		
+		posteo.opinar(revisionB);
+		
+		String errorEsperado = "El usuario ya opino";
+		Exception error = assertThrows(Exception.class, ()-> posteo.opinar(revisionC));
+		
+		assertEquals(error.getMessage(), errorEsperado);
+	}
 	
 	
 	
