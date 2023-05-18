@@ -1,35 +1,35 @@
 package Usuario;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Queue;
 
-import muestra.Opinion;
-import muestra.PostMuestra;
+import muestra.Revision;
 
 public class HistorialEnApp {
-	private List<PostMuestra> posts;
-	private List<Opinion> opiniones;
+	private Queue<LocalDate> posts;
+	private Queue<Revision> opiniones;
 	
-	public void addPost(PostMuestra post) {
+	public void addPost(LocalDate post) {
 		this.getPosts().add(post);
 	}
 	
-	public void addOpinion(Opinion op) {
+	public void addOpinion(Revision op) {
 		this.getOpiniones().add(op);
 	}
 
-	public List<PostMuestra> getPosts() {
-		return posts;
+	public Queue<LocalDate> getPosts() {
+		return this.posts;
 	}
 
-	public void setPosts(List<PostMuestra> posts) {
+	public void setPosts(Queue<LocalDate> posts) {
 		this.posts = posts;
 	}
 
-	public List<Opinion> getOpiniones() {
+	public Queue<Revision> getOpiniones() {
 		return opiniones;
 	}
 
-	public void setOpiniones(List<Opinion> opiniones) {
+	public void setOpiniones(Queue<Revision> opiniones) {
 		this.opiniones = opiniones;
 	}
 }

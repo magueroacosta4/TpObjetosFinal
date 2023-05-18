@@ -6,7 +6,9 @@ import muestra.PostMuestra;
 import muestra.Revision;
 import muestra.Ubicacion;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 
@@ -17,21 +19,36 @@ public abstract class Usuario {
 	
 	public void publicar(Revision rev, Ubicacion ubicacion) {
 		this.getPagina().crearPostMuestra(rev, ubicacion);
+		this.getHistorial().addPost(LocalDate.now());
 	}
 
 	public void opinar(PostMuestra post, Opinion op) {
 		Revision rev = new Revision(op, this.getEstado());
 		post.opinar(rev);
-		this.getHistorial().addOpinion(op);
+		this.getHistorial().addOpinion(rev);
 	}
 
-	protected List<PostMuestra> getPostsEnLaApp(){
-		
-		return null;
+	protected int getCantPosts30Dias(){
+		List<LocalDate> cant;
+		LocalDate hoy = LocalDate.now();
+		cant = this.getHistorial().getPosts().
+				stream().
+				filter(p -> p.isAfter(hoy.minusDays(30))).collect(Collectors.toList());
+		return cant.size();
 	}
 
-	protected List<Opinion> getOpinionesEnLaApp(){
-		return null;
+	protected int getCantOpiniones30Dias(){
+		List<LocalDate> cant;
+		LocalDate hoy = LocalDate.now();
+		cant = this.getHistorial().getOpiniones().
+				stream().
+				filter(p -> p.getFechaDeCreacion().isAfter(hoy.minusDays(30))).
+				collect(Collectors.toList());
+		return cant.size();
+	}
+	
+	public boolean esExperto() {
+		return this.getEstado().getClass() == EstadoExperto.class;
 	}
 
 	public EstadoUsuario getEstado() {
