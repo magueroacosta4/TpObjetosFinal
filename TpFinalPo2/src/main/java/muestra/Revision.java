@@ -2,12 +2,8 @@ package muestra;
 
 import java.time.LocalDate;
 
-<<<<<<< HEAD
 import usuario.EstadoUsuario;
-=======
-import Usuario.EstadoUsuario;
-import Usuario.Usuario;
->>>>>>> branch 'Branch-Prueba' of https://github.com/Mauro-asd/TpObjetosFinal.git
+import usuario.Usuario;
 
 public class Revision {
 

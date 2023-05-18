@@ -10,6 +10,7 @@ import org.junit.Test;
 import usuario.EstadoBasico;
 import usuario.EstadoExperto;
 import usuario.EstadoUsuario;
+import usuario.Participante;
 
 public class TestRevision {
 	
@@ -17,10 +18,12 @@ public class TestRevision {
 	EstadoUsuario basico;
 	Opinion opinion;
 	Revision revision;
+	Participante user;
 	
 	@Before
 	public void setUp() {
 		experto = mock(EstadoExperto.class);
+		user = mock(Participante.class);
 		basico  = mock(EstadoBasico.class);
 		opinion = Opinion.VINCHUCA_INFESTANTS;
 	}
@@ -29,7 +32,7 @@ public class TestRevision {
 	public void cuandoSeCreaUnaRevisionEsteTieneUnaFecha_UnaOpinion() {
 		LocalDate today = LocalDate.now();
 		
-		revision = new Revision(opinion, basico);
+		revision = new Revision(opinion, basico, user);
 		
 		assertEquals(revision.getOpinion(), opinion);
 		assertEquals(revision.getEstadoDelUsuarioActual(), basico);
