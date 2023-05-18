@@ -2,6 +2,9 @@ package muestra;
 
 import java.time.LocalDate;
 
+import usuario.EstadoUsuario;
+import usuario.Usuario;
+
 public class Revision {
 
 	private Opinion opinion;
