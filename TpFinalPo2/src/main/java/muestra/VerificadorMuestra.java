@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 
 public class VerificadorMuestra {
@@ -35,14 +36,19 @@ public class VerificadorMuestra {
 	}
 	
 	public void actualizarEstadoDePost(Revision revision) {
-		Opinion resultadoPostActual = this.post.getResultadoActual();
+		Opinion op = revision.getOpinion();
+		Optional<Opinion> resultadoPostActual = this.post.getResultadoActual();
 		agregarRevisionAlPost(revision);
 		Opinion resultadoActual = this.getResultadoActualPost();
-		if (this.post.sizeOpinion(resultadoPostActual) == this.post.sizeOpinion(resultadoActual)) {
-			this.cambiarResultadoActualPost(Opinion.NO_DEFINIDO);
+		boolean verificacion1 = resultadoPostActual.isPresent()?
+				this.post.sizeOpinion(resultadoPostActual.get()) == this.post.sizeOpinion(op):
+					false;
+		boolean verificacion2 = resultadoPostActual.isPresent()? resultadoPostActual.get()==resultadoActual:false;
+		if (verificacion1 && verificacion2) {
+			this.cambiarResultadoActualPost(Optional.empty());
 		}
 		else {
-		this.post.setResultadoActual(resultadoActual);
+		this.cambiarResultadoActualPost(Optional.of(resultadoActual));
 		this.verificarPost();
 		}
 	}
@@ -84,15 +90,15 @@ public class VerificadorMuestra {
 	
 	public void opinionUsuarioQuePosteo(Revision revision) {
 		agregarRevisionAlPost(revision);
-		cambiarResultadoActualPost(revision.getOpinion());
+		cambiarResultadoActualPost(Optional.of(revision.getOpinion()));
 	}
 
-	private void cambiarResultadoActualPost(Opinion opinion) {
+	private void cambiarResultadoActualPost(Optional<Opinion> opinion) {
 		this.post.setResultadoActual(opinion);
 	}
 
 	public void verificarPost() {
-		if(post.sizeOpinion(post.getResultadoActual()) >= 2) {
+		if(post.sizeOpinionResultadoActual() >= 2) {
 			this.post.verificarPost();
 		}		
 	}

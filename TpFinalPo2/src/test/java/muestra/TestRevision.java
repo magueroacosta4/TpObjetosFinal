@@ -3,8 +3,7 @@ package muestra;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-import java.util.Date;
-
+import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +27,7 @@ public class TestRevision {
 	
 	@Test
 	public void cuandoSeCreaUnaRevisionEsteTieneUnaFecha_UnaOpinion() {
-		Date today = new Date();
+		LocalDate today = LocalDate.now();
 		
 		revision = new Revision(opinion, basico);
 		

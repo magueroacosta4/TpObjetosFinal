@@ -39,7 +39,7 @@ public class PaginaWeb {
 	}
 	
 	public void crearPostMuestra(Revision r, Ubicacion u) {
-		PostMuestra posteo = new PostMuestra(r, u);
+		PostMuestra posteo = new PostMuestra(u);
 		getMuestras().add(posteo);
 	}
 

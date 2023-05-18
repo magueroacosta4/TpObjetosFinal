@@ -2,8 +2,9 @@ package muestra;
 
 
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 
 public class PostMuestra {
@@ -12,27 +13,25 @@ public class PostMuestra {
 			new HashMap<Opinion, Set<Revision>>();
 	private VerificadorMuestra verificador;
 	private Ubicacion ubicacion;
-	private Date fechaDeCreacion;
-	private Opinion resultadoActual;
+	private LocalDate fechaDeCreacion;
+	private Optional<Opinion> resultadoActual;
 	private boolean esPostVerificado;
 	
-	public PostMuestra() {};	
-	
-	public PostMuestra(Revision r, Ubicacion u) {
+	public PostMuestra(Ubicacion u) {
 		this.setVerificador();
-		this.setearTodo(r, u);
+		this.setearTodo(u);
 	}
 
-	public PostMuestra(Revision r, Ubicacion u, VerificadorMuestra v) {
+	public PostMuestra(Ubicacion u, VerificadorMuestra v) {
 		this.setVerificador(v);		
-		this.setearTodo(r, u);
+		this.setearTodo(u);
 	}
 	
-	public void setearTodo(Revision r, Ubicacion u) {
+	public void setearTodo(Ubicacion u) {
 		this.setUbicacion(u);
-		this.setFechaDeCreacion(r.getFechaDeCreacion());;
+		this.setFechaDeCreacion(LocalDate.now());;
 		this.colocarClavesEnHashmap();
-		this.opinar(r);
+		this.resultadoActual = Optional.empty();
 		this.setEsPostVerificado(false);
 	}
 		
@@ -73,19 +72,19 @@ public class PostMuestra {
 		this.ubicacion = ubicacion;
 	}
 
-	public Opinion getResultadoActual() {		
+	public Optional<Opinion> getResultadoActual() {		
 		return this.resultadoActual;
 	}
 	
-	public void setResultadoActual(Opinion resultadoActual) {
+	public void setResultadoActual(Optional<Opinion> resultadoActual) {
 		this.resultadoActual = resultadoActual;
 	}
 
-	public Date getFechaDeCreacion() {
+	public LocalDate getFechaDeCreacion() {
 		return fechaDeCreacion;
 	}
 	
-	public void setFechaDeCreacion(Date d) {
+	public void setFechaDeCreacion(LocalDate d) {
 		this.fechaDeCreacion = d;
 	}
 
@@ -110,6 +109,10 @@ public class PostMuestra {
 	public int sizeOpinion(Opinion opinion) {
 		int sizeResultadoActual = this.getOpiniones().get(opinion).size();
 		return sizeResultadoActual;
+	}
+
+	public int sizeOpinionResultadoActual() {
+		return sizeOpinion(resultadoActual.get());		
 	}
 
 	

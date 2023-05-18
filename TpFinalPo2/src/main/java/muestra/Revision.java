@@ -1,13 +1,13 @@
 package muestra;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import Usuario.EstadoUsuario;
 
 public class Revision {
 
 	private Opinion opinion;
-	private Date getFechaDeCreacion;
+	private LocalDate getFechaDeCreacion;
 	private EstadoUsuario estadoDelUsuarioActual;
 	
 	public Revision(Opinion o, EstadoUsuario e) {
@@ -20,11 +20,11 @@ public class Revision {
 		return opinion;
 	}
 	
-	public Date getFechaDeCreacion() {
+	public LocalDate getFechaDeCreacion() {
 		return getFechaDeCreacion;
 	}
 	public void setFechaDeCreacion() {
-		this.getFechaDeCreacion = new Date();
+		this.getFechaDeCreacion = LocalDate.now();
 	}
 	
 	public EstadoUsuario getEstadoDelUsuarioActual() {
