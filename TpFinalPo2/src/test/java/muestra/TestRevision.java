@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import Usuario.EstadoBasico;
-import Usuario.EstadoExperto;
-import Usuario.EstadoUsuario;
+import usuario.EstadoBasico;
+import usuario.EstadoExperto;
+import usuario.EstadoUsuario;
 
 public class TestRevision {
 	

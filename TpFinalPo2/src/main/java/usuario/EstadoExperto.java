@@ -1,4 +1,4 @@
-package Usuario;
+package usuario;
 
 public class EstadoExperto extends EstadoUsuario {
 	

@@ -1,4 +1,4 @@
-package Usuario;
+package usuario;
 
 public abstract class EstadoUsuario {
 	

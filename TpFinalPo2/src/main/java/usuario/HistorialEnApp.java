@@ -1,4 +1,4 @@
-package Usuario;
+package usuario;
 
 import java.time.LocalDate;
 import java.util.Queue;

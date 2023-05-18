@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import Usuario.Usuario;
 import organizacion.ZonaDeCobertura;
+import usuario.Usuario;
 
 public class PaginaWebTest {
 	private PaginaWeb unaPagina;
