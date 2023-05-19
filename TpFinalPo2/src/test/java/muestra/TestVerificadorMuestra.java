@@ -289,7 +289,7 @@ public class TestVerificadorMuestra {
 	public void seSubeUnaMuestraYLaOpinanDosExpertosConDistintaOpinion_AlSerLaMismaOpinionElResultadoDeLaMuestraEsNoDefinido() {
 		when(revisionA.getOpinion()).thenReturn(Opinion.CHINCHE_FOLIADA);
 		when(revisionB.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		
+		when(posteoMock.getOpiniones()).thenReturn(revisiones);
 		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
 		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
 
@@ -302,11 +302,10 @@ public class TestVerificadorMuestra {
 		
 		verificadorBTest.setEstadoPost(estadoPostB);
 		
-		when(posteoMock.getResultadoActual()).thenReturn(Optional.empty());
+		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA));
 		
 		verificadorBTest.opinar(revisionB);
 		verificadorBTest.opinarEnEstadoExperto(revisionB);
-		
 		
 		when(posteoMock.getEsPostVerificado()).thenReturn(false);// el post fue opinado por 3 expertos pero 2 coincidieron en su opinion, por lo tanto se verifica el post
 		
@@ -425,6 +424,7 @@ public class TestVerificadorMuestra {
 		
 	}
 	
+
 		
 	
 }

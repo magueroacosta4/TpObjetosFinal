@@ -31,8 +31,8 @@ public class VerificadorMuestra {
 	}
 	
 	public Opinion getResultadoActualPost() {		
-		Opinion opinionConMayorVoto = Arrays.stream(Opinion.values()).max(Comparator.comparingInt(o-> post.getOpiniones().get(o).size())).get();		
-		return opinionConMayorVoto;
+		Optional<Opinion> opinionConMayorVoto = Arrays.stream(Opinion.values()).max(Comparator.comparingInt(o-> post.sizeOpinion(o)));		
+		return opinionConMayorVoto.get();
 	}
 	
 	public void actualizarEstadoDePost(Revision revision) {
