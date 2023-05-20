@@ -51,7 +51,7 @@ public class TestVerificadorMuestra {
 		when(revisionC.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
 		when(posteoMock.getEsPostVerificado()).thenReturn(false);// el post recien se crea y por lo tanto no esta verificado
 		when(posteoMock.getResultadoActual()).thenReturn(Optional.empty());
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(1);
+		when(posteoMock.getOpiniones()).thenReturn(revisiones);
 		
 		doNothing().when(estadoPostA).opinar(revisionA);
 		doNothing().when(estadoPostA).opinar(revisionB);
@@ -164,11 +164,15 @@ public class TestVerificadorMuestra {
 		verificadorBTest.opinar(revisionA);
 		verificadorBTest.opinarEnEstadoBasico(revisionA);
 		
-		verificadorBTest.opinar(revisionB);		
+		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.PHTIA_CHINCHE));
+		verificadorBTest.opinar(revisionB);			
 		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
 		verificadorBTest.opinarEnEstadoExperto(revisionB);
+		
 		when(estadoUsuarioBasico.esExperto()).thenReturn(true);
 		verificadorBTest.opinarEnEstadoExperto(revisionC);
+		
+		when(posteoMock.getResultadoActual()).thenReturn(Optional.empty());
 		
 		assertTrue(revisiones.get(Opinion.PHTIA_CHINCHE).contains(revisionA));
 		assertTrue(revisiones.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionC));
@@ -227,23 +231,25 @@ public class TestVerificadorMuestra {
 		when(revisionC.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
 		
 		
-		when(estadoUsuarioExperto.esExperto()).thenReturn(true);
-		
+		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
 	
 		verificadorBTest.opinar(revisionA);
 		verificadorBTest.opinarEnEstadoBasico(revisionA);		
 		
 		verificadorBTest.opinar(revisionB);
-		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
 		verificadorBTest.opinarEnEstadoBasico(revisionB);
 		
+		when(estadoUsuarioExperto.esExperto()).thenReturn(true);
 		verificadorBTest.opinar(revisionC);
 		verificadorBTest.opinarEnEstadoBasico(revisionC);
 		
 		verificadorBTest.setEstadoPost(estadoPostB);
 		
-		assertEquals(revisiones.get(Opinion.IMAGEN_POCO_CLARA).size(), 0);
-		assertEquals(verificadorBTest.getResultadoActualPost(), Opinion.VINCHUCA_GUASAYANA);
+		Opinion resultadoDado = verificadorBTest.getResultadoActualPost();
+		int tamanioImagenPocoClara = revisiones.get(Opinion.IMAGEN_POCO_CLARA).size();
+		
+		assertEquals(tamanioImagenPocoClara, 0);
+		assertEquals(resultadoDado, Opinion.VINCHUCA_GUASAYANA);
 		assertTrue(revisiones.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionC));
 		
 		verify(estadoPostA, times(1)).opinar(revisionA);
@@ -307,6 +313,7 @@ public class TestVerificadorMuestra {
 		verificadorBTest.opinar(revisionB);
 		verificadorBTest.opinarEnEstadoExperto(revisionB);
 		
+		when(posteoMock.getResultadoActual()).thenReturn(Optional.empty());
 		when(posteoMock.getEsPostVerificado()).thenReturn(false);// el post fue opinado por 3 expertos pero 2 coincidieron en su opinion, por lo tanto se verifica el post
 		
 		assertEquals(posteoMock.getResultadoActual(), Optional.empty());
@@ -338,19 +345,19 @@ public class TestVerificadorMuestra {
 		
 		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA));
 		verificadorBTest.setEstadoPost(estadoPostB);
-		
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(1);
+
 
 		verificadorBTest.opinar(revisionB);
 		verificadorBTest.opinarEnEstadoExperto(revisionB);
 		
-		when(posteoMock.getResultadoActual()).thenReturn(Optional.empty());
-		
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(2);
+		when(posteoMock.getResultadoActual())
+		.thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA))
+		.thenReturn(Optional.of(Opinion.VINCHUCA_GUASAYANA));
+
 		
 		verificadorBTest.opinar(revisionC);		
 		verificadorBTest.opinarEnEstadoExperto(revisionC);
-		
+
 		when(posteoMock.getEsPostVerificado()).thenReturn(true);// el post fue opinado por 3 expertos pero 2 coincidieron en su opinion, por lo tanto se verifica el post
 		
 		assertEquals(revisiones.get(Opinion.VINCHUCA_GUASAYANA).size(), 2);
@@ -382,15 +389,12 @@ public class TestVerificadorMuestra {
 		verificadorBTest.opinar(revisionA);
 		verificadorBTest.opinarEnEstadoBasico(revisionA);		
 		
+		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA));
 		verificadorBTest.setEstadoPost(estadoPostB);
-
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(2);
 		
 		verificadorBTest.opinar(revisionB);
 		verificadorBTest.opinarEnEstadoExperto(revisionB);
-		
-		
-		
+		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA));
 		
 		verificadorBTest.opinar(revisionC);
 	
@@ -404,24 +408,6 @@ public class TestVerificadorMuestra {
 		verify(estadoPostB, times(1)).opinar(revisionB);
 		verify(estadoPostB, times(1)).opinar(revisionC);	
 		verify(posteoMock, times(1)).verificarPost();
-	}
-	
-	@Test
-	public void seVerificaUnPostMuestra() {
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(2);
-		verificadorBTest.verificarPost();
-		
-		verify(posteoMock, times(1)).verificarPost();
-		
-	}
-	
-	@Test
-	public void seIntentaVerificarUnPostMuestra_PeroNoCumpleConElCriterioPorLoQueNoSeVerfica() {
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(1);
-		verificadorBTest.verificarPost();
-		
-		verify(posteoMock, times(0)).verificarPost();
-		
 	}
 	
 

@@ -2,9 +2,12 @@ package muestra;
 
 import java.util.Arrays;
 import java.util.Comparator;
-
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+
+import usuario.EstadoUsuario;
 
 
 public class VerificadorMuestra {
@@ -31,7 +34,7 @@ public class VerificadorMuestra {
 	}
 	
 	public Opinion getResultadoActualPost() {		
-		Optional<Opinion> opinionConMayorVoto = Arrays.stream(Opinion.values()).max(Comparator.comparingInt(o-> post.sizeOpinion(o)));		
+		Optional<Opinion> opinionConMayorVoto = Arrays.stream(Opinion.values()).max(Comparator.comparingInt(o-> this.sizeOpinion(o)));		
 		return opinionConMayorVoto.get();
 	}
 	
@@ -41,10 +44,10 @@ public class VerificadorMuestra {
 		agregarRevisionAlPost(revision);
 		Opinion resultadoActual = this.getResultadoActualPost();
 		boolean verificacion1 = resultadoPostActual.isPresent()?
-				this.post.sizeOpinion(resultadoPostActual.get()) == this.post.sizeOpinion(op):
+				this.sizeOpinion(resultadoPostActual.get()) == this.sizeOpinion(op):
 					false;
 		boolean verificacion2 = resultadoPostActual.isPresent()? resultadoPostActual.get()==resultadoActual:false;
-		if (verificacion1 && verificacion2) {
+		if (verificacion1 && !verificacion2) {
 			this.cambiarResultadoActualPost(Optional.empty());
 		}
 		else {
@@ -63,19 +66,24 @@ public class VerificadorMuestra {
 	
 	
 	public void opinarEnEstadoBasico(Revision revision) {
-		this.estadoPost = revision.getEstadoDelUsuarioActual().esExperto()? this.actualizarEstadoDeVerificadorPorExperto():estadoPost;
+		this.estadoPost = getEstadoDeUsuarioAlMomentoDeOpinar(revision).esExperto()? this.actualizarEstadoDeVerificadorPorExperto():estadoPost;
 		this.actualizarEstadoDePost(revision);
 		
 	}
+
+	private EstadoUsuario getEstadoDeUsuarioAlMomentoDeOpinar(Revision revision) {
+		EstadoUsuario estadoUsuario = revision.getEstadoDelUsuarioActual();
+		return estadoUsuario;
+	}
 	
 	private EstadoDePost actualizarEstadoDeVerificadorPorExperto() {
-		EstadoDePost estado = new EstadoPostExperto(this);
+		estadoPost = new EstadoPostExperto(this);
 		this.colocarClavesEnHashmap();
-		return estado;
+		return estadoPost;
 	}
 
 	public void opinarEnEstadoExperto(Revision revision) {
-		if(revision.getEstadoDelUsuarioActual().esExperto()){
+		if(getEstadoDeUsuarioAlMomentoDeOpinar(revision).esExperto()){
 		this.actualizarEstadoDePost(revision);}
 		else {};		
 	}
@@ -98,8 +106,20 @@ public class VerificadorMuestra {
 	}
 
 	public void verificarPost() {
-		if(post.sizeOpinionResultadoActual() >= 2) {
+		if(this.sizeOpinionResultadoActual() >= 2) {
 			this.post.verificarPost();
 		}		
+	}
+	
+	public int sizeOpinion(Opinion opinion) {
+		HashMap<Opinion, Set<Revision>> opiniones = this.post.getOpiniones();
+		int sizeResultadoActual = opiniones.get(opinion).size();
+		return sizeResultadoActual;
+	}
+
+	public int sizeOpinionResultadoActual() {
+		Optional<Opinion> op = this.post.getResultadoActual();
+		int sizeOp = op.isPresent()?sizeOpinion(op.get()):0;
+		return sizeOp;		
 	}
 }

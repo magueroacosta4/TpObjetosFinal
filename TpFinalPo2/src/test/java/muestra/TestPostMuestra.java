@@ -123,46 +123,7 @@ public class TestPostMuestra {
 		assertTrue(posteo.getEsPostVerificado());
 	}
 	
-	@Test 
-	public void sePreguntaCauntasRevisionesTieneUnaOpinion() {
-		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
-		Set<Revision> set = new HashSet<Revision>();
-		set.add(revisionA);
-		map.put(Opinion.CHINCHE_FOLIADA, set);
-		
-		posteo.setOpiniones(map);
-		
-		int resultadoDado = posteo.sizeOpinion(Opinion.CHINCHE_FOLIADA);
-		int resultadoEsperado = 1;
-			
-		assertEquals(resultadoDado, resultadoEsperado);
-		
-	}
-	
-	@Test
-	public void sePreguntaCauntasRevisionesTieneLaOpinionActual() throws Exception {
-		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
-		Set<Revision> set = new HashSet<Revision>();
-		set.add(revisionA);
-		map.put(Opinion.CHINCHE_FOLIADA, set);
-		
-		
-		doAnswer(invocation -> {
-			posteo.setResultadoActual(Optional.of(Opinion.CHINCHE_FOLIADA));
-			return null;
-		}).when(verificadorA).opinar(revisionA);;
-		
-		posteo.setOpiniones(map);
-		posteo.opinar(revisionA);
 
-		
-		int resultadoDado = posteo.sizeOpinionResultadoActual();
-		int resultadoEsperado = 1;
-			
-		assertEquals(resultadoDado, resultadoEsperado);
-		
-	}
-	
 	@Test
 	public void unUsuarioOpina_LuegoElMismoUsuarioQuiereOpinarDeNuevoPeroNoPuede() throws Exception {
 		when(revisionC.getUser()).thenReturn(usuarioB);

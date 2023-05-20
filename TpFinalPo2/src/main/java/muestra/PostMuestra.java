@@ -120,14 +120,7 @@ public class PostMuestra {
 		this.setEsPostVerificado(true);;		
 	}
 
-	public int sizeOpinion(Opinion opinion) {
-		int sizeResultadoActual = this.getOpiniones().get(opinion).size();
-		return sizeResultadoActual;
-	}
 
-	public int sizeOpinionResultadoActual() {
-		return sizeOpinion(resultadoActual.get());		
-	}
 
 	
 	
