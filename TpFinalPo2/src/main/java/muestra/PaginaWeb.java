@@ -38,9 +38,15 @@ public class PaginaWeb {
 		return posteosDeMuestras;
 	}
 	
-	public void crearPostMuestra(Revision r, Ubicacion u) {
+	public void crearPostMuestra(Revision r, Ubicacion u) throws Exception {
 		PostMuestra posteo = new PostMuestra(u);
 		getMuestras().add(posteo);
+		posteo.opinar(r);
+	}
+	
+	public void crearPostMuestra(Revision r, PostMuestra post) throws Exception {
+		getMuestras().add(post);
+		post.opinar(r);
 	}
 
 	public List<Usuario> getUsuarios() {

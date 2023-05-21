@@ -70,7 +70,7 @@ public class ZonaDeCoberturaTest {
 		otraZonaDeC = mock(ZonaDeCobertura.class);
 		when(otraZonaDeC.getEpicentro()).thenReturn(otraUbicacion);
 		when(otraZonaDeC.getRadioEnKM()).thenReturn(100);
-		when(unaUbicacion.distanciaA(otraUbicacion)).thenReturn(100);
+		when(unaUbicacion.distanciaA(otraUbicacion)).thenReturn(100f);
 		
 		assertTrue(unaZdC.seSolapaCon(otraZonaDeC));
 		verify(otraZonaDeC, times(1)).getEpicentro();
@@ -79,7 +79,7 @@ public class ZonaDeCoberturaTest {
 		
 		// si la distancia es mayor a la suma de sus radios entonces no se solapan
 		
-		when(unaUbicacion.distanciaA(otraUbicacion)).thenReturn(120);
+		when(unaUbicacion.distanciaA(otraUbicacion)).thenReturn(120f);
 		
 		assertFalse(unaZdC.seSolapaCon(otraZonaDeC));
 		verify(otraZonaDeC, times(2)).getEpicentro();
@@ -119,14 +119,14 @@ public class ZonaDeCoberturaTest {
 	@Test
 	public void unaZonaTieneUnaMuestraEnSuAreaSiLaDistanciaAEstaDesdeElEpicentroEsMenorOIgualAlRadio() {
 		Ubicacion ubiPost = mock(Ubicacion.class);
-		when(unaUbicacion.distanciaA(ubiPost)).thenReturn(10);
+		when(unaUbicacion.distanciaA(ubiPost)).thenReturn(10f);
 		unPostM = mock(PostMuestra.class);
 		when(unPostM.getUbicacion()).thenReturn(ubiPost);
 		
 		// en este caso el radio es igual a la distancia a la muestra
 		assertTrue(unaZdC.tieneLaMuestra(unPostM));
 		
-		when(unaUbicacion.distanciaA(ubiPost)).thenReturn(11);
+		when(unaUbicacion.distanciaA(ubiPost)).thenReturn(11f);
 		// en este caso la distancia a la muestra es mayor al radio
 		assertFalse(unaZdC.tieneLaMuestra(unPostM));
 	}
@@ -134,10 +134,10 @@ public class ZonaDeCoberturaTest {
 	@Test
 	public void unaZonaSabeCualesSonLasMuestasQueEstanEnSuRadio() {
 		when(unaPaginaWeb.getMuestras()).thenReturn(muestrasWeb);
-		when(unaUbicacion.distanciaA(ubipm1)).thenReturn(11);
-		when(unaUbicacion.distanciaA(ubipm2)).thenReturn(10);
-		when(unaUbicacion.distanciaA(ubipm3)).thenReturn(6);
-		when(unaUbicacion.distanciaA(ubipm4)).thenReturn(99);
+		when(unaUbicacion.distanciaA(ubipm1)).thenReturn(11f);
+		when(unaUbicacion.distanciaA(ubipm2)).thenReturn(10f);
+		when(unaUbicacion.distanciaA(ubipm3)).thenReturn(6f);
+		when(unaUbicacion.distanciaA(ubipm4)).thenReturn(99f);
 		
 		// en este caso la zona tiene en su rango las muestras pm2 y pm3
 		List<PostMuestra> muestrasDeLaZona = Arrays.asList(pm2, pm3);
