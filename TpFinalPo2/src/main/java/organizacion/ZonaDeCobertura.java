@@ -58,7 +58,7 @@ public class ZonaDeCobertura {
 			distanciaAZona(zonaDeCobertura) <= sumaDeRadios(zonaDeCobertura);
 	}
 
-	private int distanciaAZona(ZonaDeCobertura zonaDeCobertura) {
+	private float distanciaAZona(ZonaDeCobertura zonaDeCobertura) {
 		return epicentro.distanciaA(zonaDeCobertura.getEpicentro());
 	}
 
@@ -78,7 +78,7 @@ public class ZonaDeCobertura {
 		return distanciaAMuesta(unPostM) <= getRadioEnKM();
 	}
 
-	private int distanciaAMuesta(PostMuestra unPostM) {
+	private float distanciaAMuesta(PostMuestra unPostM) {
 		return getEpicentro().distanciaA(unPostM.getUbicacion());
 	}
 

@@ -1,8 +1,11 @@
 package muestra;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import org.junit.Before;
@@ -37,6 +40,15 @@ public class PaginaWebTest {
 		assertTrue(unaPagina.getUsuarios().contains(unUsuario));
 	}
 	
-	// hay que hacer que las muestras se agregen directamente y no
-			// se creen dentro de la pagina
+	@Test
+	public void unaPaginaWebCreaUnPostMuestra() throws Exception {
+		Revision unaRevision = mock(Revision.class);
+		PostMuestra unPostMuestra = mock(PostMuestra.class);
+		
+		assertTrue(unaPagina.getMuestras().isEmpty());
+		
+		unaPagina.crearPostMuestra(unaRevision, unPostMuestra);
+		
+		assertTrue(unaPagina.getMuestras().contains(unPostMuestra));
+	}
 }
