@@ -13,7 +13,6 @@ public class ParticipanteEspecialista extends Usuario {
 	
 	@Override
 	public void actualizarEstado() {
-		this.setEstado(this.getEstado());
 	}
 
 }

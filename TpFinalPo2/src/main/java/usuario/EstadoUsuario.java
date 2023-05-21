@@ -1,6 +1,6 @@
 package usuario;
 
-public abstract class EstadoUsuario {
+public abstract interface EstadoUsuario {
 	
 	public abstract void actualizarEstado(Usuario usuario);
 	

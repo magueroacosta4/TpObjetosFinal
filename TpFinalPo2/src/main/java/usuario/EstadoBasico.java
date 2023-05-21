@@ -1,6 +1,6 @@
 package usuario;
 
-public class EstadoBasico extends EstadoUsuario {
+public class EstadoBasico implements EstadoUsuario {
 	
 	@Override
 	public void actualizarEstado(Usuario usuario) {
