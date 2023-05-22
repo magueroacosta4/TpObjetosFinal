@@ -70,7 +70,7 @@ public abstract class Usuario {
 		return this.pagina;
 	}
 	
-	protected void setPagina(PaginaWeb pagina) {
+	public void setPagina(PaginaWeb pagina) {
 		this.pagina = pagina;
 	}
 	
@@ -78,7 +78,7 @@ public abstract class Usuario {
 		return this.historial;
 	}
 	
-	protected void setHistorial(HistorialEnApp historial) {
+	public void setHistorial(HistorialEnApp historial) {
 		this.historial = historial;
 	}
 	
