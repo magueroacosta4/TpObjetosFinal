@@ -90,4 +90,24 @@ public class ZonaDeCobertura {
 				.toList();
 	}
 
+	public void suscribirAValidacion(Organizacion organizacion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void suscribirACarga(Organizacion organizacion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deuscribirDeValidacion(Organizacion organizacion) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deuscribirDeCarga(Organizacion organizacion) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
