@@ -1,12 +1,10 @@
 package usuario;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import org.junit.*;
 
 import java.time.LocalDate;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import muestra.Opinion;
 import muestra.PaginaWeb;
@@ -25,7 +23,7 @@ public class ParticipanteTest {
 	private HistorialEnApp historial;
 	private PostMuestra post;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		participante = new Participante(pag);
 		estadoB = mock(EstadoBasico.class);

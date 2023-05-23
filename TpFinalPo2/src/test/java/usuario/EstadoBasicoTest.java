@@ -1,17 +1,15 @@
 package usuario;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.*;
 
 public class EstadoBasicoTest {
 	private EstadoBasico estadoB;
 	private Participante participante;
 	private EstadoExperto estadoE;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		estadoB = new EstadoBasico();
 		participante = mock(Participante.class);
