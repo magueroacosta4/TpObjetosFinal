@@ -49,8 +49,7 @@ public class TestPostMuestra {
 		doNothing().when(verificadorA).colocarClavesEnHashmap();
 		
 		today = LocalDate.now();
-		when(revisionA.getFechaDeCreacion()).thenReturn(today);
-		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.NINGUNA);		
+		when(revisionA.getFechaDeCreacion()).thenReturn(today);	
 		when(revisionA.getUser()).thenReturn(usuarioA);
 		when(revisionB.getUser()).thenReturn(usuarioB);
 		when(revisionC.getUser()).thenReturn(usuarioC);
@@ -74,10 +73,6 @@ public class TestPostMuestra {
 	
 	@Test
 	public void cuandoUnaMuestraSeSubeOtraPersonaLoOpinaConOpinionDistintaALaDelCreador_ElEstadoDeResultadoAcualEsElMismoQueElInicial() throws Exception {
-		
-
-		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.VINCHUCA_GUASAYANA);	
-		
 		posteo.opinar(revisionB);
 		posteo.setResultadoActual(Optional.of(Opinion.VINCHUCA_GUASAYANA));
 		
@@ -89,9 +84,6 @@ public class TestPostMuestra {
 	
 	@Test 
 	public void seSubeUnaMuestraConUnaOpinionPeroOtras2personasOpinanLoMismoYSeCambiaElResultadoActualPor_ImagenPocoClara() throws Exception {
-	
-		when(verificadorA.getResultadoActualPost()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
-		
 		posteo.opinar(revisionB);
 		posteo.opinar(revisionC);
 		
@@ -138,7 +130,56 @@ public class TestPostMuestra {
 	}
 	
 	
+
+	@Test 
+	public void sePreguntaCauntasRevisionesTieneUnaOpinion() {
+		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
+		Set<Revision> set = new HashSet<Revision>();
+		set.add(revisionA);
+		map.put(Opinion.CHINCHE_FOLIADA, set);
+		
+		posteo.setOpiniones(map);
+		
+		int resultadoDado = posteo.sizeOpinion(Opinion.CHINCHE_FOLIADA);
+		int resultadoEsperado = 1;
+			
+		assertEquals(resultadoDado, resultadoEsperado);
+		
+	}
 	
+	@Test
+	public void sePreguntaCauntasRevisionesTieneLaOpinionActual() throws Exception {
+		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
+		Set<Revision> set = new HashSet<Revision>();
+
+		
+		
+		doAnswer(invocation -> {
+			set.add(revisionA);
+			map.put(Opinion.CHINCHE_FOLIADA, set);
+			posteo.setResultadoActual(Optional.of(Opinion.CHINCHE_FOLIADA));
+			return null;
+		}).when(verificadorA).opinar(revisionA);;
+		
+		posteo.setOpiniones(map);
+		posteo.opinar(revisionA);
+
+		int resultadoDado = posteo.sizeOpinionResultadoActual();
+		int resultadoEsperado = 1;
+			
+		assertEquals(resultadoDado, resultadoEsperado);		
+	}
 	
+	@Test
+	public void sePreguntaCauntasRevisionesTieneLaOpinionActual_AlSerEmptyDaCero() throws Exception {
+		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
+		
+		posteo.setOpiniones(map);
+
+		int resultadoDado = posteo.sizeOpinionResultadoActual();
+		int resultadoEsperado = 0;
+			
+		assertEquals(resultadoDado, resultadoEsperado);		
+	}
 	
 }

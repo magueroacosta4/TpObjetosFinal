@@ -33,27 +33,39 @@ public class VerificadorMuestra {
 		return post;
 	}
 	
-	public Opinion getResultadoActualPost() {		
-		Optional<Opinion> opinionConMayorVoto = Arrays.stream(Opinion.values()).max(Comparator.comparingInt(o-> this.sizeOpinion(o)));		
-		return opinionConMayorVoto.get();
-	}
+
 	
 	public void actualizarEstadoDePost(Revision revision) {
 		Opinion op = revision.getOpinion();
-		Optional<Opinion> resultadoPostActual = this.post.getResultadoActual();
 		agregarRevisionAlPost(revision);
-		Opinion resultadoActual = this.getResultadoActualPost();
-		boolean verificacion1 = resultadoPostActual.isPresent()?
-				this.sizeOpinion(resultadoPostActual.get()) == this.sizeOpinion(op):
-					false;
-		boolean verificacion2 = resultadoPostActual.isPresent()? resultadoPostActual.get()==resultadoActual:false;
-		if (verificacion1 && !verificacion2) {
+		Opinion opinionConMasVotos = this.opinionConMayorVoto();
+		boolean tienenMismaCantVotos = laOpinionActualTieneLaMismaCantidadDeVotosQueLaOpinion(op);
+		boolean sonLaMismaOpinion = laOpinionActualDelPostEsLaMismaQue(opinionConMasVotos);
+		if (tienenMismaCantVotos && !sonLaMismaOpinion) {
 			this.cambiarResultadoActualPost(Optional.empty());
 		}
 		else {
-		this.cambiarResultadoActualPost(Optional.of(resultadoActual));
+		this.cambiarResultadoActualPost(Optional.of(opinionConMasVotos));
 		this.verificarPost();
 		}
+	}
+	
+	public Opinion opinionConMayorVoto() {		
+		Optional<Opinion> opinionConMayorVoto = Arrays.stream(Opinion.values()).max(Comparator.comparingInt(o-> post.sizeOpinion(o)));		
+		return opinionConMayorVoto.get();
+	}
+
+	private boolean laOpinionActualDelPostEsLaMismaQue(Opinion op) {
+		Optional<Opinion> opActual = post.getResultadoActual();
+		boolean resultado = false;
+		if (opActual.isPresent()) {
+			resultado = op.equals(opActual.get());
+		}
+		return resultado;
+	}
+
+	private boolean laOpinionActualTieneLaMismaCantidadDeVotosQueLaOpinion(Opinion op) {
+		return 	this.post.sizeOpinionResultadoActual() == this.post.sizeOpinion(op);
 	}
 
 	private void agregarRevisionAlPost(Revision revision) {
@@ -78,6 +90,7 @@ public class VerificadorMuestra {
 	
 	private EstadoDePost actualizarEstadoDeVerificadorPorExperto() {
 		estadoPost = new EstadoPostExperto(this);
+		this.post.setResultadoActual(Optional.empty());
 		this.colocarClavesEnHashmap();
 		return estadoPost;
 	}
@@ -105,21 +118,14 @@ public class VerificadorMuestra {
 		this.post.setResultadoActual(opinion);
 	}
 
-	public void verificarPost() {
-		if(this.sizeOpinionResultadoActual() >= 2) {
+	public void verificarPostSiEsPostDeExpertos() {
+		if(this.post.sizeOpinionResultadoActual() >= 2) {
 			this.post.verificarPost();
 		}		
 	}
 	
-	public int sizeOpinion(Opinion opinion) {
-		HashMap<Opinion, Set<Revision>> opiniones = this.post.getOpiniones();
-		int sizeResultadoActual = opiniones.get(opinion).size();
-		return sizeResultadoActual;
+	public void verificarPost() {
+		estadoPost.verificarPost();
 	}
 
-	public int sizeOpinionResultadoActual() {
-		Optional<Opinion> op = this.post.getResultadoActual();
-		int sizeOp = op.isPresent()?sizeOpinion(op.get()):0;
-		return sizeOp;		
-	}
 }

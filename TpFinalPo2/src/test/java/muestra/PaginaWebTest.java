@@ -30,7 +30,7 @@ public class PaginaWebTest {
 	}
 	
 	@Test
-	public void unaPaginaWebPuedeAgregarUsuariosZonas() {
+	public void unaPaginaWebPuedeAgregarUsuariosYZonas() {
 		ZonaDeCobertura unaZonaDeC = mock(ZonaDeCobertura.class);
 		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
 		assertTrue(unaPagina.getZonasDeCobertura().contains(unaZonaDeC));
@@ -51,4 +51,8 @@ public class PaginaWebTest {
 		
 		assertTrue(unaPagina.getMuestras().contains(unPostMuestra));
 	}
+	
+	// ESTE TEST SE TIENE QUE HACER CUANDO FER HAGA LOS NOTIFY
+	//@Test
+	//public void unaPaginaWebCreaUnPostMuestra_YAvisaATodasLasZonasQueLaContengan() throws Exception {}
 }

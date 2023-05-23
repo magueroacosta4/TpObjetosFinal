@@ -110,4 +110,15 @@ public class ZonaDeCobertura {
 		
 	}
 
+	public boolean contieneAlPost(PostMuestra post) {
+		//
+		//
+		// PREGUNTA SI EL POST DADO PERTENECE AL AREA DE LA ZONA
+		//
+		//
+		return false; // despues cambia el retorno
+	}
+
+
+
 }

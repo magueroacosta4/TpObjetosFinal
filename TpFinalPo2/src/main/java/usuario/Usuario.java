@@ -24,6 +24,11 @@ public abstract class Usuario {
 	}
 
 	public void opinar(PostMuestra post, Opinion op) throws Exception {
+		//
+		//
+		// HACE QUE LA OPINION LO HAGA LA PAGINA WEB ---> getPagina().opinarPostMuestra()
+		// ES PARA QUE SE PUEDAN EJECUTAR TODOS LOS METODOS DEL OBSERVER
+		//
 		Revision rev = new Revision(op, this.getEstado(), this);
 		post.opinar(rev);
 		this.getHistorial().addOpinion(rev);

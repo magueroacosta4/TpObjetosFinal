@@ -13,7 +13,7 @@ public class EstadoPostExperto extends EstadoDePost {
 	
 	@Override
 	public void verificarPost() {
-		verificador.verificarPost();
+		verificador.verificarPostSiEsPostDeExpertos();
 	}
 	
 }

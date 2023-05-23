@@ -2,6 +2,7 @@ package muestra;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import organizacion.ZonaDeCobertura;
 import usuario.Usuario;
@@ -41,12 +42,18 @@ public class PaginaWeb {
 	public void crearPostMuestra(Revision r, Ubicacion u) throws Exception {
 		PostMuestra posteo = new PostMuestra(u);
 		getMuestras().add(posteo);
-		posteo.opinar(r);
+		opinarPostMuestra(r, posteo);
 	}
 	
 	public void crearPostMuestra(Revision r, PostMuestra post) throws Exception {
 		getMuestras().add(post);
+		opinarPostMuestra(r, post);
+	}
+	
+	public void opinarPostMuestra(Revision r, PostMuestra post) throws Exception {
 		post.opinar(r);
+		Stream<ZonaDeCobertura> zonasConElPost = zonasDeCovertura.stream().filter(z -> z.contieneAlPost(post));
+		zonasConElPost.forEach(z->z.notifyAll());;
 	}
 
 	public List<Usuario> getUsuarios() {

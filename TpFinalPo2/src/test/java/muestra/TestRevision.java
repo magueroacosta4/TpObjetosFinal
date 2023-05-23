@@ -29,7 +29,7 @@ public class TestRevision {
 	}
 	
 	@Test
-	public void cuandoSeCreaUnaRevisionEsteTieneUnaFecha_UnaOpinion() {
+	public void cuandoSeCreaUnaRevisionEsteTieneUnaFecha_UnaOpinion_YUnUsuario() {
 		LocalDate today = LocalDate.now();
 		
 		revision = new Revision(opinion, basico, user);
@@ -37,5 +37,6 @@ public class TestRevision {
 		assertEquals(revision.getOpinion(), opinion);
 		assertEquals(revision.getEstadoDelUsuarioActual(), basico);
 		assertEquals(revision.getFechaDeCreacion(), today);
+		assertEquals(revision.getUser(), user);
 	}
 }

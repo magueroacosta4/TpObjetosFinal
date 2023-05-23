@@ -22,7 +22,8 @@ public class PostMuestra {
 	private Set<Usuario> usuariosOpinados = new HashSet<Usuario>();
 	
 	public PostMuestra(Ubicacion u) {
-		this.setVerificador();
+		VerificadorMuestra ver = new VerificadorMuestra(this);
+		this.setVerificador(ver);
 		this.setearTodo(u);
 	}
 
@@ -53,14 +54,6 @@ public class PostMuestra {
 		return opiniones;
 	}
 
-	public void setOpiniones(HashMap<Opinion, Set<Revision>> opiniones) {
-		this.opiniones = opiniones;
-	}
-	
-	public void setVerificador() {
-		VerificadorMuestra ver = new VerificadorMuestra(this);
-		this.setVerificador(ver);
-	}
 	
 	public void setVerificador(VerificadorMuestra v) {
 		this.verificador = v;
@@ -120,8 +113,20 @@ public class PostMuestra {
 		this.setEsPostVerificado(true);;		
 	}
 
+	public int sizeOpinion(Opinion opinion) {
+		int sizeResultadoActual = opiniones.get(opinion).size();
+		return sizeResultadoActual;
+	}
 
+	public int sizeOpinionResultadoActual() {
+		Optional<Opinion> op = this.resultadoActual;
+		int sizeOp = op.isPresent()?sizeOpinion(op.get()):0;
+		return sizeOp;		
+	}
 
-	
-	
+	public void setOpiniones(HashMap<Opinion, Set<Revision>> map) {
+		this.opiniones = map;		
+	}
+		
+
 }

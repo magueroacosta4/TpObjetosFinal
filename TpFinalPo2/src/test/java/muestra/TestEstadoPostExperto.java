@@ -43,11 +43,11 @@ public class TestEstadoPostExperto {
 	}
 	
 	@Test
-	public void unEstadoDePostBasicoVerificaElPost() {
+	public void unEstadoDePostExpertoVerificaElPost() {
 		
 		estadoTest.verificarPost();
 		
-		verify(verifiMock, times(1)).verificarPost();
+		verify(verifiMock, times(1)).verificarPostSiEsPostDeExpertos();
 		
 	}
 	
