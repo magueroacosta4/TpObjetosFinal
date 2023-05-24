@@ -3,6 +3,7 @@ package usuario;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
 
 public class EstadoBasicoTest {
 	private EstadoBasico estadoB;
@@ -18,8 +19,8 @@ public class EstadoBasicoTest {
 	
 	@Test
 	public void seActualizaElEstadoDelUsuarioAExpertoTest() {
-		when(participante.getCantOpiniones30Dias()).thenReturn(23);
-		when(participante.getCantPosts30Dias()).thenReturn(14);
+		when(participante.opinionesUltimos30Dias()).thenReturn(23);
+		when(participante.postsUltimos30Dias()).thenReturn(14);
 		
 		estadoB.actualizarEstado(participante);
 		
@@ -28,14 +29,14 @@ public class EstadoBasicoTest {
 	
 	@Test
 	public void noSeActualizaElEstadoDeUsuarioTest() {
-		when(participante.getCantOpiniones30Dias()).thenReturn(16);
-		when(participante.getCantPosts30Dias()).thenReturn(14);
+		when(participante.opinionesUltimos30Dias()).thenReturn(16);
+		when(participante.postsUltimos30Dias()).thenReturn(14);
 		
 		estadoB.actualizarEstado(participante);
 		
 		verify(participante, never()).setEstado(estadoE);
 		
-		when(participante.getCantPosts30Dias()).thenReturn(1);
+		when(participante.postsUltimos30Dias()).thenReturn(1);
 
 		estadoB.actualizarEstado(participante);
 

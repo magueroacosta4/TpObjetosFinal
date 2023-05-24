@@ -4,8 +4,8 @@ public class EstadoExperto implements EstadoUsuario {
 
 	@Override
 	public void actualizarEstado(Usuario usuario) {
-		if(usuario.getCantPosts30Dias() <= 10 &&
-			usuario.getCantOpiniones30Dias() <= 20) {
+		if(usuario.postsUltimos30Dias() <= 10 &&
+			usuario.opinionesUltimos30Dias() <= 20) {
 			usuario.setEstado(new EstadoBasico());
 		}
 	}

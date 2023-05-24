@@ -3,8 +3,7 @@ package usuario;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import org.junit.*;
-
-import java.time.LocalDate;
+import org.junit.jupiter.api.BeforeEach;
 
 import muestra.Opinion;
 import muestra.PaginaWeb;
@@ -46,7 +45,7 @@ public class ParticipanteTest {
 		participante.publicar(rev, ubi);
 		
 		verify(pag).crearPostMuestra(rev, ubi);
-		verify(historial).addPost(LocalDate.now());
+		verify(historial).addPost();
 		verify(estadoB).actualizarEstado(participante);
 	}
 	
@@ -57,5 +56,24 @@ public class ParticipanteTest {
 		
 		
 		verify(estadoB).actualizarEstado(participante);
+	}
+	
+	@Test
+	public void esExpertoSiCumpleRequerimientosTest() {
+		when(historial.getCantOpiniones30Dias()).thenReturn(20);
+		when(historial.getCantPosts30Dias()).thenReturn(12);
+		when(estadoE.esExperto()).thenReturn(true);
+		when(estadoB.esExperto()).thenReturn(false);
+		
+		participante.setEstado(estadoE);
+		
+		assertEquals(participante.opinionesUltimos30Dias(), 20);
+		assertEquals(participante.postsUltimos30Dias(), 12);
+		assertTrue(participante.esExperto());
+		
+		participante.setEstado(estadoB);
+		
+		assertFalse(participante.esExperto());
+		
 	}
 }

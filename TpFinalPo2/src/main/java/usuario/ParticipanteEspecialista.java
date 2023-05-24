@@ -13,6 +13,14 @@ public class ParticipanteEspecialista extends Usuario {
 	
 	@Override
 	public void actualizarEstado() {
+		//No hace nada, nunca puede cambiar el estado de este usuario
 	}
 
+	@Override
+	public void setEstado(EstadoUsuario estado) {
+		if(estado.esExperto()) {
+			this.estado = estado;
+		}
+	}
+	
 }

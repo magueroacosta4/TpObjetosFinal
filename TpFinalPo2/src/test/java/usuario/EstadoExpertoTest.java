@@ -3,6 +3,7 @@ package usuario;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
 
 public class EstadoExpertoTest {
 	private EstadoExperto estadoE;
@@ -18,8 +19,8 @@ public class EstadoExpertoTest {
 	
 	@Test
 	public void seActualizaElEstadoDeUsuarioABasico() {
-		when(participante.getCantOpiniones30Dias()).thenReturn(5);
-		when(participante.getCantPosts30Dias()).thenReturn(4);
+		when(participante.opinionesUltimos30Dias()).thenReturn(5);
+		when(participante.postsUltimos30Dias()).thenReturn(4);
 		
 		estadoE.actualizarEstado(participante);
 		
@@ -28,8 +29,8 @@ public class EstadoExpertoTest {
 	
 	@Test
 	public void noSeActualizaElEstadoDeUsuarioABasico() {
-		when(participante.getCantOpiniones30Dias()).thenReturn(23);
-		when(participante.getCantPosts30Dias()).thenReturn(14);
+		when(participante.opinionesUltimos30Dias()).thenReturn(23);
+		when(participante.postsUltimos30Dias()).thenReturn(14);
 		
 		estadoE.actualizarEstado(participante);
 		
