@@ -21,7 +21,7 @@ public class ParticipanteEspecialistaTest {
 	
 	@Test
 	public void elEstadoDeEspecialistaNoCambiaTest() {
-		partEsp.setEstado(estadoB);
+		partEsp.setearEstado(estadoB);
 		partEsp.actualizarEstado();
 		
 		verify(estadoB, never()).actualizarEstado(partEsp);

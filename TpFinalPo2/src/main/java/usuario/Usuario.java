@@ -8,7 +8,7 @@ import muestra.Ubicacion;
 
 
 public abstract class Usuario {
-	protected EstadoUsuario estado;
+	private EstadoUsuario estado;
 	private PaginaWeb pagina;
 	private HistorialEnApp historial;
 	

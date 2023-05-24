@@ -6,7 +6,7 @@ public class ParticipanteEspecialista extends Usuario {
 	
 	public ParticipanteEspecialista(PaginaWeb pag) {
 		super();
-		this.setEstado(new EstadoExperto());
+		this.setearEstado(new EstadoExperto());
 		this.setPagina(pag);
 		this.setHistorial(new HistorialEnApp());
 	}
@@ -16,10 +16,9 @@ public class ParticipanteEspecialista extends Usuario {
 		//No hace nada, nunca puede cambiar el estado de este usuario
 	}
 
-	@Override
-	public void setEstado(EstadoUsuario estado) {
+	public void setearEstado(EstadoUsuario estado) {
 		if(estado.esExperto()) {
-			this.estado = estado;
+			this.setEstado(estado);
 		}
 	}
 	
