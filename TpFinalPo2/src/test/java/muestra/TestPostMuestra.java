@@ -57,12 +57,18 @@ public class TestPostMuestra {
 		posteo = new PostMuestra(ubicacionA, verificadorA);		
 	}
 	
-
+	@Test
+	public void alCrearUnPostMuestraConElConstructorDeParametroUbicacionSeColocanTodosSusColaboradores() {
+		
+		posteo = new PostMuestra(ubicacionA);
+		
+		assertEquals(posteo.getResultadoActual(), Optional.empty());
+		assertEquals(posteo.getUbicacion(), ubicacionA);
+		assertEquals(posteo.getFechaDeCreacion(), today); //
+	}
+	
 	@Test
 	public void alCrearUnPostMuestraSeColocanTodosSusColaboradores() {
-
-
-		posteo.setResultadoActual(Optional.empty());
 		
 		assertEquals(posteo.getResultadoActual(), Optional.empty());
 		assertEquals(posteo.getUbicacion(), ubicacionA);

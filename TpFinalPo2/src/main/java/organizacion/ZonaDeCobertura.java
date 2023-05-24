@@ -119,6 +119,22 @@ public class ZonaDeCobertura {
 		return false; // despues cambia el retorno
 	}
 
+	public void ejecutarFuncionalidadValidacionASuscriptores() {
+		// 
+		// ES EL METODO POR EL CUAL SE LES AVISA A LOS SUSCRIPTORES QUE EJECTUTEN LA FUNCIONALIDAD
+		// DE VALIDACION
+		// 
+		
+	}
+
+	public void ejecutarFuncionalidadDeCargaASuscriptores() {
+		// 
+		// ES EL METODO POR EL CUAL SE LES AVISA A LOS SUSCRIPTORES QUE EJECTUTEN LA FUNCIONALIDAD
+		// DE CARGA
+		// 
+
+	}
+
 
 
 }

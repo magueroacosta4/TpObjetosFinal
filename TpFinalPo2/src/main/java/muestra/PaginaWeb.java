@@ -39,21 +39,30 @@ public class PaginaWeb {
 		return posteosDeMuestras;
 	}
 	
-	public void crearPostMuestra(Revision r, Ubicacion u) throws Exception {
+	public void crearPostMuestra(Revision r, Ubicacion u){
 		PostMuestra posteo = new PostMuestra(u);
 		getMuestras().add(posteo);
-		opinarPostMuestra(r, posteo);
+		zonasQueContienenElPost(posteo)
+		.forEach(z -> z.ejecutarFuncionalidadDeCargaASuscriptores());
+	}
+
+	private Stream<ZonaDeCobertura> zonasQueContienenElPost(PostMuestra posteo) {
+		Stream<ZonaDeCobertura> zonas = zonasDeCovertura.stream().filter(z -> z.contieneAlPost(posteo));
+		return zonas;
 	}
 	
-	public void crearPostMuestra(Revision r, PostMuestra post) throws Exception {
+	public void crearPostMuestra(Revision r, PostMuestra post){
 		getMuestras().add(post);
-		opinarPostMuestra(r, post);
+		zonasQueContienenElPost(post)
+		.forEach(z -> z.ejecutarFuncionalidadDeCargaASuscriptores());
 	}
 	
 	public void opinarPostMuestra(Revision r, PostMuestra post) throws Exception {
 		post.opinar(r);
-		Stream<ZonaDeCobertura> zonasConElPost = zonasDeCovertura.stream().filter(z -> z.contieneAlPost(post));
-		zonasConElPost.forEach(z->z.notifyAll());;
+		if(post.getEsPostVerificado()) {
+		zonasQueContienenElPost(post)
+		.forEach(z->z.ejecutarFuncionalidadValidacionASuscriptores());
+		}
 	}
 
 	public List<Usuario> getUsuarios() {

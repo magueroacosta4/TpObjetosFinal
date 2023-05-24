@@ -14,12 +14,20 @@ import usuario.Usuario;
 
 public class PaginaWebTest {
 	private PaginaWeb unaPagina;
+	private ZonaDeCobertura unaZonaDeC;
+	private Revision unaRevision;
+	private PostMuestra unPostMuestra;
+	
 	
 	@Before
 	public void setUp() {
 		unaPagina = new PaginaWeb();
+		unaZonaDeC = mock(ZonaDeCobertura.class);
+		unaRevision = mock(Revision.class);
+		unPostMuestra = mock(PostMuestra.class);
 	}
-
+	
+	
 	@Test
 	public void unaPaginaNuevaNoTieneMuestrasNiZonasNiUsuarios() {
 		assertEquals(unaPagina.getZonasDeCobertura(), new ArrayList<ZonaDeCobertura>());
@@ -29,7 +37,7 @@ public class PaginaWebTest {
 	
 	@Test
 	public void unaPaginaWebPuedeAgregarUsuariosYZonas() {
-		ZonaDeCobertura unaZonaDeC = mock(ZonaDeCobertura.class);
+
 		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
 		assertTrue(unaPagina.getZonasDeCobertura().contains(unaZonaDeC));
 		
@@ -39,9 +47,7 @@ public class PaginaWebTest {
 	}
 	
 	@Test
-	public void unaPaginaWebCreaUnPostMuestra() throws Exception {
-		Revision unaRevision = mock(Revision.class);
-		PostMuestra unPostMuestra = mock(PostMuestra.class);
+	public void unaPaginaWebCreaUnPostMuestra() {
 		
 		assertTrue(unaPagina.getMuestras().isEmpty());
 		
@@ -50,7 +56,58 @@ public class PaginaWebTest {
 		assertTrue(unaPagina.getMuestras().contains(unPostMuestra));
 	}
 	
-	// ESTE TEST SE TIENE QUE HACER CUANDO FER HAGA LOS NOTIFY
-	//@Test
-	//public void unaPaginaWebCreaUnPostMuestra_YAvisaATodasLasZonasQueLaContengan() throws Exception {}
+	@Test
+	public void unaPaginaWebCreaUnPostMuestraUtilizandoElMetodoQueInstanciaUnPostMuestra() {
+		
+		assertTrue(unaPagina.getMuestras().isEmpty());
+		
+		Ubicacion ubicacion = new Ubicacion(3, 4);		
+		unaPagina.crearPostMuestra(unaRevision, ubicacion);
+		
+		assertEquals(unaPagina.getMuestras().size(), 1);
+		
+	}
+
+	@Test
+	public void unaPaginaWebCreaUnPostMuestra_YAvisaATodasLasZonasQueLaContengan() throws Exception {
+
+		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
+		
+		doNothing().when(unaZonaDeC).ejecutarFuncionalidadDeCargaASuscriptores();
+		when(unaZonaDeC.contieneAlPost(unPostMuestra)).thenReturn(true);
+		
+		unaPagina.crearPostMuestra(unaRevision, unPostMuestra);
+		
+		assertTrue(!unaPagina.getMuestras().isEmpty());
+		assertTrue(unaPagina.getMuestras().contains(unPostMuestra));
+		verify(unaZonaDeC, times(1)).ejecutarFuncionalidadDeCargaASuscriptores();
+	}
+	
+	@Test
+	public void unUsuarioOpinaYSeVerificaElPost_YAvisaATodasLasZonasQueLaContengan() throws Exception {
+
+		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
+		
+		doNothing().when(unaZonaDeC).ejecutarFuncionalidadValidacionASuscriptores();
+		when(unaZonaDeC.contieneAlPost(unPostMuestra)).thenReturn(true);
+		when(unPostMuestra.getEsPostVerificado()).thenReturn(true);
+		
+		unaPagina.opinarPostMuestra(unaRevision, unPostMuestra);
+		
+		verify(unaZonaDeC, times(1)).ejecutarFuncionalidadValidacionASuscriptores();
+	}
+	
+	@Test
+	public void unUsuarioOpina_AlNoEstarVerificadoElPostLaPaginaNoAvisaATodasLasZonasQueLaContengan() throws Exception {
+
+		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
+		
+		doNothing().when(unaZonaDeC).ejecutarFuncionalidadValidacionASuscriptores();
+		when(unaZonaDeC.contieneAlPost(unPostMuestra)).thenReturn(true);
+		when(unPostMuestra.getEsPostVerificado()).thenReturn(false);
+		
+		unaPagina.opinarPostMuestra(unaRevision, unPostMuestra);
+		
+		verify(unaZonaDeC, times(0)).ejecutarFuncionalidadValidacionASuscriptores();
+	}
 }
