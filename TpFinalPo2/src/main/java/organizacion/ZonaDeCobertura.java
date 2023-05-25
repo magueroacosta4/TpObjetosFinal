@@ -13,23 +13,23 @@ public class ZonaDeCobertura {
 	private Ubicacion epicentro;
 	private int radioEnKM;
 	private PaginaWeb paginaWeb;
-	private HashSet<Organizacion> subscritosAValidacion;
-	private HashSet<Organizacion> subscritosACarga;
+	private HashSet<ObserverZona> subscritosAValidacion;
+	private HashSet<ObserverZona> subscritosACarga;
 	
 	public ZonaDeCobertura(String nombre, Ubicacion epicentro, int radioEnKM, PaginaWeb unaPaginaWeb) {
 		setNombre(nombre);
 		setEpicentro(epicentro);
 		setRadioEnKM(radioEnKM);
 		setPaginaWeb(unaPaginaWeb);
-		setSubscritosACarga(new HashSet<Organizacion>());
-		setSubscritosAValidacion(new HashSet<Organizacion>());
+		setSubscritosACarga(new HashSet<ObserverZona>());
+		setSubscritosAValidacion(new HashSet<ObserverZona>());
 	}
 	
-	private void setSubscritosACarga(HashSet<Organizacion> subscritosACarga) {
+	private void setSubscritosACarga(HashSet<ObserverZona> subscritosACarga) {
 		this.subscritosACarga = subscritosACarga;
 	}
 	
-	private void setSubscritosAValidacion(HashSet<Organizacion> subscritosAValidacion) {
+	private void setSubscritosAValidacion(HashSet<ObserverZona> subscritosAValidacion) {
 		this.subscritosAValidacion = subscritosAValidacion;
 	}
 
@@ -103,36 +103,36 @@ public class ZonaDeCobertura {
 				.toList();
 	}
 
-	public void suscribirAValidacion(Organizacion organizacion) {
-		getSubscritosAValidacion().add(organizacion);
+	public void suscribirAValidacion(ObserverZona observer) {
+		getSubscritosAValidacion().add(observer);
 	}
 
-	public HashSet<Organizacion> getSubscritosAValidacion() {
+	public HashSet<ObserverZona> getSubscritosAValidacion() {
 		return subscritosAValidacion;
 	}
 	
-	public HashSet<Organizacion> getSubscritosACarga() {
+	public HashSet<ObserverZona> getSubscritosACarga() {
 		return subscritosACarga;
 	}
 
-	public void suscribirACarga(Organizacion organizacion) {
-		getSubscritosACarga().add(organizacion);
+	public void suscribirACarga(ObserverZona observer) {
+		getSubscritosACarga().add(observer);
 	}
 
-	public void desuscribirDeValidacion(Organizacion organizacion) {
-		getSubscritosAValidacion().remove(organizacion);
+	public void desuscribirDeValidacion(ObserverZona observer) {
+		getSubscritosAValidacion().remove(observer);
 	}
 
-	public void desuscribirDeCarga(Organizacion organizacion) {
-		getSubscritosACarga().remove(organizacion);
+	public void desuscribirDeCarga(ObserverZona observer) {
+		getSubscritosACarga().remove(observer);
 	}
 
 	public void notificarValidacionDeMuestra(PostMuestra postMuestra) {
-		getSubscritosAValidacion().forEach(o -> o.ejecutarFuncionalidadValidacion(this, postMuestra));
+		getSubscritosAValidacion().forEach(o -> o.actualizarPorValidacion(this, postMuestra));
 	}
 
 	public void notificarCargaDeMuestra(PostMuestra posteo) {
-		getSubscritosACarga().forEach(o -> o.ejecutarFuncionalidadCarga(this, posteo));
+		getSubscritosACarga().forEach(o -> o.actualizarPorCarga(this, posteo));
 	}
 
 }

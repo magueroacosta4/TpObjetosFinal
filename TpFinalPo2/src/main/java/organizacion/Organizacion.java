@@ -6,7 +6,7 @@ import muestra.PaginaWeb;
 import muestra.PostMuestra;
 import muestra.Ubicacion;
 
-public class Organizacion {
+public class Organizacion implements ObserverZona {
 
 	private Ubicacion ubicacion;
 	private TipoOrganizacion tipo;
@@ -80,11 +80,11 @@ public class Organizacion {
 		setFuncionalidadValidacion(Optional.of(funcionalidadExterna));
 	}
 
-	public void ejecutarFuncionalidadValidacion(ZonaDeCobertura unaZonaDeCobertura, PostMuestra unPostMuestra) {
+	public void actualizarPorValidacion(ZonaDeCobertura unaZonaDeCobertura, PostMuestra unPostMuestra) {
 		getFuncionalidadValidacion().ifPresent(f -> f.nuevoEvento(this, unaZonaDeCobertura, unPostMuestra));
 	}
 	
-	public void ejecutarFuncionalidadCarga(ZonaDeCobertura unaZonaDeCobertura, PostMuestra unPostMuestra) {
+	public void actualizarPorCarga(ZonaDeCobertura unaZonaDeCobertura, PostMuestra unPostMuestra) {
 		getFuncionalidadCarga().ifPresent(f -> f.nuevoEvento(this, unaZonaDeCobertura, unPostMuestra));
 	}
 

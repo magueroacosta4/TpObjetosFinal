@@ -85,13 +85,13 @@ public class OrganizacionTest {
 		// las ejecuciones reciben la zona de cobertura y la muestra involucados.
 		ZonaDeCobertura unaZonaDeCobertura = mock(ZonaDeCobertura.class);
 		PostMuestra unPostMuestra = mock(PostMuestra.class);
-		unaOrga.ejecutarFuncionalidadCarga(unaZonaDeCobertura, unPostMuestra);
+		unaOrga.actualizarPorCarga(unaZonaDeCobertura, unPostMuestra);
 		
 		verify(funcionalidadCarga, never()).nuevoEvento(orgaAsist, unaZonaDeCobertura, unPostMuestra);
 		
 		unaOrga.definirFuncionalidadCarga(funcionalidadCarga);
 		
-		unaOrga.ejecutarFuncionalidadCarga(unaZonaDeCobertura, unPostMuestra);
+		unaOrga.actualizarPorCarga(unaZonaDeCobertura, unPostMuestra);
 		
 		verify(funcionalidadCarga).nuevoEvento(unaOrga, unaZonaDeCobertura, unPostMuestra);
 	}
@@ -102,12 +102,12 @@ public class OrganizacionTest {
 		ZonaDeCobertura unaZonaDeCobertura = mock(ZonaDeCobertura.class);
 		PostMuestra unPostMuestra = mock(PostMuestra.class);
 		
-		unaOrga.ejecutarFuncionalidadValidacion(unaZonaDeCobertura, unPostMuestra);
+		unaOrga.actualizarPorValidacion(unaZonaDeCobertura, unPostMuestra);
 		verify(funcionalidadVerificacion, never()).nuevoEvento(orgaAsist, unaZonaDeCobertura, unPostMuestra);
 		
 		unaOrga.definirFuncionalidadValidacion(funcionalidadVerificacion);
 		
-		unaOrga.ejecutarFuncionalidadValidacion(unaZonaDeCobertura, unPostMuestra);
+		unaOrga.actualizarPorValidacion(unaZonaDeCobertura, unPostMuestra);
 		
 		verify(funcionalidadVerificacion).nuevoEvento(unaOrga, unaZonaDeCobertura, unPostMuestra);
 	}
