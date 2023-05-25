@@ -3,6 +3,7 @@ package muestra;
 
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -45,8 +46,8 @@ public class PostMuestra {
 		return verificador;
 	}
 	
-	private void colocarClavesEnHashmap() {
-		this.getVerificador().colocarClavesEnHashmap();
+	public void colocarClavesEnHashmap() {
+		Arrays.stream(Opinion.values()).forEach(o -> this.getOpiniones().put(o, new HashSet<Revision>()));
 	}
 
 

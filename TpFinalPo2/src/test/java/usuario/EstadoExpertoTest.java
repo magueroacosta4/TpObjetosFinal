@@ -3,7 +3,6 @@ package usuario;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import org.junit.*;
-import org.junit.jupiter.api.BeforeEach;
 
 public class EstadoExpertoTest {
 	private EstadoExperto estadoE;

@@ -3,8 +3,6 @@ package usuario;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import org.junit.*;
-import org.junit.jupiter.api.BeforeEach;
-
 import muestra.Opinion;
 import muestra.PaginaWeb;
 import muestra.PostMuestra;

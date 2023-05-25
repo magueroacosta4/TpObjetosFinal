@@ -2,11 +2,7 @@ package muestra;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-
 import usuario.EstadoUsuario;
 
 
@@ -72,9 +68,6 @@ public class VerificadorMuestra {
 		this.post.getOpiniones().get(revision.getOpinion()).add(revision);
 	}
 	
-	public void colocarClavesEnHashmap() {
-		Arrays.stream(Opinion.values()).forEach(o -> post.getOpiniones().put(o, new HashSet<Revision>()));
-	}
 	
 	
 	public void opinarEnEstadoBasico(Revision revision) {
@@ -91,7 +84,7 @@ public class VerificadorMuestra {
 	private EstadoDePost actualizarEstadoDeVerificadorPorExperto() {
 		estadoPost = new EstadoPostExperto(this);
 		this.post.setResultadoActual(Optional.empty());
-		this.colocarClavesEnHashmap();
+		this.post.colocarClavesEnHashmap();
 		return estadoPost;
 	}
 

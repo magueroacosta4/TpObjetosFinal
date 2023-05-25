@@ -46,7 +46,6 @@ public class TestPostMuestra {
 		
 		doNothing().when(verificadorA).opinar(revisionA);		
 		doNothing().when(verificadorA).opinar(revisionB);		
-		doNothing().when(verificadorA).colocarClavesEnHashmap();
 		
 		today = LocalDate.now();
 		when(revisionA.getFechaDeCreacion()).thenReturn(today);	
@@ -67,14 +66,14 @@ public class TestPostMuestra {
 		assertEquals(posteo.getFechaDeCreacion(), today); //
 	}
 	
+	
 	@Test
 	public void alCrearUnPostMuestraSeColocanTodosSusColaboradores() {
 		
 		assertEquals(posteo.getResultadoActual(), Optional.empty());
 		assertEquals(posteo.getUbicacion(), ubicacionA);
 		assertEquals(posteo.getFechaDeCreacion(), today); //
-		
-		verify(verificadorA, times(1)).colocarClavesEnHashmap();
+		assertEquals(posteo.getOpiniones().size(), 8);
 	}
 	
 	@Test
@@ -84,7 +83,6 @@ public class TestPostMuestra {
 		
 		assertEquals(posteo.getResultadoActual().get(), Opinion.VINCHUCA_GUASAYANA);
 		
-		verify(verificadorA, times(1)).colocarClavesEnHashmap();
 		verify(verificadorA, times(1)).opinar(revisionB);
 	}
 	
@@ -97,7 +95,6 @@ public class TestPostMuestra {
 		
 		assertEquals(posteo.getResultadoActual().get(), Opinion.IMAGEN_POCO_CLARA);
 		
-		verify(verificadorA, times(1)).colocarClavesEnHashmap();
 		verify(verificadorA, times(1)).opinar(revisionB);
 		verify(verificadorA, times(1)).opinar(revisionC);
 		
@@ -106,10 +103,9 @@ public class TestPostMuestra {
 	@Test
 	public void sePidenLasOpinionesActuales() {
 		
-		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
 		HashMap<Opinion, Set <Revision>> resultadoDado = posteo.getOpiniones();
 		
-		assertTrue(resultadoDado.equals(map));
+		assertEquals(resultadoDado.size(), 8);
 		
 	}
 	
