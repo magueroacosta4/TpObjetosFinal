@@ -13,7 +13,8 @@ public abstract class Usuario {
 	private HistorialEnApp historial;
 	
 	public void publicar(Revision rev, Ubicacion ubicacion) throws Exception {
-		this.getPagina().crearPostMuestra(rev, ubicacion);
+		PostMuestra post = this.getPagina().crearPostMuestra(rev, ubicacion);
+		getPagina().opinarPostMuestra(rev, post);
 		this.getHistorial().addPost();
 		this.actualizarEstado();
 	}
@@ -25,7 +26,7 @@ public abstract class Usuario {
 		// ES PARA QUE SE PUEDAN EJECUTAR TODOS LOS METODOS DEL OBSERVER
 		//
 		Revision rev = new Revision(op, this.getEstado(), this);
-		post.opinar(rev);
+		getPagina().opinarPostMuestra(rev, post);
 		this.getHistorial().addOpinion(rev);
 		this.actualizarEstado();
 	}
