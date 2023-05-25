@@ -1,5 +1,6 @@
 package organizacion;
 
+import java.util.HashSet;
 import java.util.List;
 
 import muestra.PaginaWeb;
@@ -12,12 +13,24 @@ public class ZonaDeCobertura {
 	private Ubicacion epicentro;
 	private int radioEnKM;
 	private PaginaWeb paginaWeb;
+	private HashSet<Organizacion> subscritosAValidacion;
+	private HashSet<Organizacion> subscritosACarga;
 	
 	public ZonaDeCobertura(String nombre, Ubicacion epicentro, int radioEnKM, PaginaWeb unaPaginaWeb) {
-		this.setNombre(nombre);
-		this.setEpicentro(epicentro);
-		this.setRadioEnKM(radioEnKM);
-		this.setPaginaWeb(unaPaginaWeb);
+		setNombre(nombre);
+		setEpicentro(epicentro);
+		setRadioEnKM(radioEnKM);
+		setPaginaWeb(unaPaginaWeb);
+		setSubscritosACarga(new HashSet<Organizacion>());
+		setSubscritosAValidacion(new HashSet<Organizacion>());
+	}
+	
+	private void setSubscritosACarga(HashSet<Organizacion> subscritosACarga) {
+		this.subscritosACarga = subscritosACarga;
+	}
+	
+	private void setSubscritosAValidacion(HashSet<Organizacion> subscritosAValidacion) {
+		this.subscritosAValidacion = subscritosAValidacion;
 	}
 
 	public String getNombre() {
@@ -91,50 +104,35 @@ public class ZonaDeCobertura {
 	}
 
 	public void suscribirAValidacion(Organizacion organizacion) {
-		// TODO Auto-generated method stub
-		
+		getSubscritosAValidacion().add(organizacion);
+	}
+
+	public HashSet<Organizacion> getSubscritosAValidacion() {
+		return subscritosAValidacion;
+	}
+	
+	public HashSet<Organizacion> getSubscritosACarga() {
+		return subscritosACarga;
 	}
 
 	public void suscribirACarga(Organizacion organizacion) {
-		// TODO Auto-generated method stub
-		
+		getSubscritosACarga().add(organizacion);
 	}
 
-	public void deuscribirDeValidacion(Organizacion organizacion) {
-		// TODO Auto-generated method stub
-		
+	public void desuscribirDeValidacion(Organizacion organizacion) {
+		getSubscritosAValidacion().remove(organizacion);
 	}
 
-	public void deuscribirDeCarga(Organizacion organizacion) {
-		// TODO Auto-generated method stub
-		
+	public void desuscribirDeCarga(Organizacion organizacion) {
+		getSubscritosACarga().remove(organizacion);
 	}
 
-	public boolean contieneAlPost(PostMuestra post) {
-		//
-		//
-		// PREGUNTA SI EL POST DADO PERTENECE AL AREA DE LA ZONA
-		//
-		//
-		return false; // despues cambia el retorno
+	public void notificarValidacionDeMuestra(PostMuestra postMuestra) {
+		getSubscritosAValidacion().forEach(o -> o.ejecutarFuncionalidadValidacion(this, postMuestra));
 	}
 
-	public void ejecutarFuncionalidadValidacionASuscriptores() {
-		// 
-		// ES EL METODO POR EL CUAL SE LES AVISA A LOS SUSCRIPTORES QUE EJECTUTEN LA FUNCIONALIDAD
-		// DE VALIDACION
-		// 
-		
+	public void notificarCargaDeMuestra(PostMuestra posteo) {
+		getSubscritosACarga().forEach(o -> o.ejecutarFuncionalidadCarga(this, posteo));
 	}
-
-	public void ejecutarFuncionalidadDeCargaASuscriptores() {
-		// 
-		// ES EL METODO POR EL CUAL SE LES AVISA A LOS SUSCRIPTORES QUE EJECTUTEN LA FUNCIONALIDAD
-		// DE CARGA
-		// 
-
-	}
-
-
 
 }

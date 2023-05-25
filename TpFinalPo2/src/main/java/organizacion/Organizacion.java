@@ -97,10 +97,10 @@ public class Organizacion {
 	}
 
 	public void desuscribirseDeValidacionEn(ZonaDeCobertura unaZona) {
-		unaZona.deuscribirDeValidacion(this);
+		unaZona.desuscribirDeValidacion(this);
 	}
 	
 	public void desuscribirseDeCargaEn(ZonaDeCobertura unaZona) {
-		unaZona.deuscribirDeCarga(this);
+		unaZona.desuscribirDeCarga(this);
 	}
 }

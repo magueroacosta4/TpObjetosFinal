@@ -43,25 +43,25 @@ public class PaginaWeb {
 		PostMuestra posteo = new PostMuestra(u);
 		getMuestras().add(posteo);
 		zonasQueContienenElPost(posteo)
-		.forEach(z -> z.ejecutarFuncionalidadDeCargaASuscriptores());
+		.forEach(z -> z.notificarCargaDeMuestra(posteo));
 	}
 
 	private Stream<ZonaDeCobertura> zonasQueContienenElPost(PostMuestra posteo) {
-		Stream<ZonaDeCobertura> zonas = zonasDeCovertura.stream().filter(z -> z.contieneAlPost(posteo));
+		Stream<ZonaDeCobertura> zonas = zonasDeCovertura.stream().filter(z -> z.tieneLaMuestra(posteo));
 		return zonas;
 	}
 	
 	public void crearPostMuestra(Revision r, PostMuestra post){
 		getMuestras().add(post);
 		zonasQueContienenElPost(post)
-		.forEach(z -> z.ejecutarFuncionalidadDeCargaASuscriptores());
+		.forEach(z -> z.notificarCargaDeMuestra(post));
 	}
 	
 	public void opinarPostMuestra(Revision r, PostMuestra post) throws Exception {
 		post.opinar(r);
 		if(post.getEsPostVerificado()) {
 		zonasQueContienenElPost(post)
-		.forEach(z->z.ejecutarFuncionalidadValidacionASuscriptores());
+		.forEach(z->z.notificarValidacionDeMuestra(post));
 		}
 	}
 

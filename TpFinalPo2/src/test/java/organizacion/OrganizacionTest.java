@@ -148,14 +148,14 @@ public class OrganizacionTest {
 	public void unaOrganizacionSePuedeDesuscribirDeLaCargaDeMuestrasDeUnaZona() {
 		unaOrga.desuscribirseDeCargaEn(unaZona);
 		
-		verify(unaZona).deuscribirDeCarga(unaOrga);
+		verify(unaZona).desuscribirDeCarga(unaOrga);
 	}
 	
 	@Test
 	public void unaOrganizacionSePuedeDesuscribirDeLaValidacionDeMuestrasDeUnaZona() {
 		unaOrga.desuscribirseDeValidacionEn(unaZona);
 		
-		verify(unaZona).deuscribirDeValidacion(unaOrga);
+		verify(unaZona).desuscribirDeValidacion(unaOrga);
 	}
 	
 	@Test
@@ -164,7 +164,7 @@ public class OrganizacionTest {
 		
 		unaOrga.desuscribirseDeCargaEn(unaZona);
 		
-		verify(unaZona, times(2)).deuscribirDeCarga(unaOrga);
+		verify(unaZona, times(2)).desuscribirDeCarga(unaOrga);
 	}
 	
 	@Test
@@ -173,6 +173,6 @@ public class OrganizacionTest {
 		
 		unaOrga.desuscribirseDeValidacionEn(unaZona);
 		
-		verify(unaZona, times(2)).deuscribirDeValidacion(unaOrga);
+		verify(unaZona, times(2)).desuscribirDeValidacion(unaOrga);
 	}
 }

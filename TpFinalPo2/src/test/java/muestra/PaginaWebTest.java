@@ -73,14 +73,14 @@ public class PaginaWebTest {
 
 		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
 		
-		doNothing().when(unaZonaDeC).ejecutarFuncionalidadDeCargaASuscriptores();
-		when(unaZonaDeC.contieneAlPost(unPostMuestra)).thenReturn(true);
+		doNothing().when(unaZonaDeC).notificarCargaDeMuestra(unPostMuestra);
+		when(unaZonaDeC.tieneLaMuestra(unPostMuestra)).thenReturn(true);
 		
 		unaPagina.crearPostMuestra(unaRevision, unPostMuestra);
 		
 		assertTrue(!unaPagina.getMuestras().isEmpty());
 		assertTrue(unaPagina.getMuestras().contains(unPostMuestra));
-		verify(unaZonaDeC, times(1)).ejecutarFuncionalidadDeCargaASuscriptores();
+		verify(unaZonaDeC, times(1)).notificarCargaDeMuestra(unPostMuestra);
 	}
 	
 	@Test
@@ -88,13 +88,13 @@ public class PaginaWebTest {
 
 		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
 		
-		doNothing().when(unaZonaDeC).ejecutarFuncionalidadValidacionASuscriptores();
-		when(unaZonaDeC.contieneAlPost(unPostMuestra)).thenReturn(true);
+		doNothing().when(unaZonaDeC).notificarValidacionDeMuestra(unPostMuestra);
+		when(unaZonaDeC.tieneLaMuestra(unPostMuestra)).thenReturn(true);
 		when(unPostMuestra.getEsPostVerificado()).thenReturn(true);
 		
 		unaPagina.opinarPostMuestra(unaRevision, unPostMuestra);
 		
-		verify(unaZonaDeC, times(1)).ejecutarFuncionalidadValidacionASuscriptores();
+		verify(unaZonaDeC, times(1)).notificarValidacionDeMuestra(unPostMuestra);
 	}
 	
 	@Test
@@ -102,12 +102,12 @@ public class PaginaWebTest {
 
 		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
 		
-		doNothing().when(unaZonaDeC).ejecutarFuncionalidadValidacionASuscriptores();
-		when(unaZonaDeC.contieneAlPost(unPostMuestra)).thenReturn(true);
+		doNothing().when(unaZonaDeC).notificarValidacionDeMuestra(unPostMuestra);
+		when(unaZonaDeC.tieneLaMuestra(unPostMuestra)).thenReturn(true);
 		when(unPostMuestra.getEsPostVerificado()).thenReturn(false);
 		
 		unaPagina.opinarPostMuestra(unaRevision, unPostMuestra);
 		
-		verify(unaZonaDeC, times(0)).ejecutarFuncionalidadValidacionASuscriptores();
+		verify(unaZonaDeC, times(0)).notificarValidacionDeMuestra(unPostMuestra);
 	}
 }

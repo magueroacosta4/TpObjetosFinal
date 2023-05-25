@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,6 +27,7 @@ public class ZonaDeCoberturaTest {
 	private PostMuestra unPostM, pm1, pm2, pm3, pm4;
 	private List<PostMuestra> muestrasWeb;
 	private Ubicacion ubipm1, ubipm2, ubipm3, ubipm4;
+	private Organizacion unaOrganizacion, unaOrganizacion2, unaOrganizacion3, unaOrganizacion4;
 	
 	@Before
 	public void setUp() {
@@ -50,6 +52,10 @@ public class ZonaDeCoberturaTest {
 		
 		muestrasWeb = Arrays.asList(pm1, pm2, pm3, pm4);
 		unaZdC = new ZonaDeCobertura("Zona 0", unaUbicacion, 10, unaPaginaWeb);
+		unaOrganizacion = mock(Organizacion.class);
+		unaOrganizacion2 = mock(Organizacion.class);
+		unaOrganizacion3 = mock(Organizacion.class);
+		unaOrganizacion4 = mock(Organizacion.class);
 	}
 	
 	@Test
@@ -153,6 +159,100 @@ public class ZonaDeCoberturaTest {
 		verify(pm3, times(1)).getUbicacion();
 		verify(pm4, times(1)).getUbicacion();
 		verify(unaPaginaWeb, times(1)).getMuestras();
+	}
+	
+	@Test
+	public void unaZonaInicialmenteNoTieneNiSubscriptosAValidacionNiACargaDeMuestras() {
+		assertTrue(unaZdC.getSubscritosACarga().isEmpty());
+		assertTrue(unaZdC.getSubscritosAValidacion().isEmpty());
+	}
+	
+	@Test
+	public void unaZonaPuedeSuscribirAUnaOrganizacionAlEventoDeCargaDeMuestras() {
+		unaZdC.suscribirACarga(unaOrganizacion);
+		assertTrue(unaZdC.getSubscritosACarga().contains(unaOrganizacion));
+	}
+	
+	@Test
+	public void unaZonaPuedeSuscribirAUnaOrganizacionAlEventoDeValidacionDeMuestras() {
+		unaZdC.suscribirAValidacion(unaOrganizacion);
+		assertTrue(unaZdC.getSubscritosAValidacion().contains(unaOrganizacion));
+	}
+	
+	@Test
+	public void unaZonaPuedeDesuscribirAUnaOrganizacionAlEventoDeCargaDeMuestras() {
+		unaZdC.suscribirACarga(unaOrganizacion);
+		unaZdC.desuscribirDeCarga(unaOrganizacion);
+		assertFalse(unaZdC.getSubscritosACarga().contains(unaOrganizacion));
+	}
+	
+	@Test
+	public void unaZonaPuedeDesuscribirAUnaOrganizacionAlEventoDeValidacionDeMuestras() {
+		unaZdC.suscribirAValidacion(unaOrganizacion);
+		unaZdC.desuscribirDeValidacion(unaOrganizacion);
+		assertFalse(unaZdC.getSubscritosAValidacion().contains(unaOrganizacion));
+	}
+	
+	@Test
+	public void unaZonaPuedeNotificarDeLaCargaDeUnaMuestraSoloASusSubscriptores() {
+		unaZdC.suscribirACarga(unaOrganizacion);
+		unaZdC.suscribirACarga(unaOrganizacion2);
+		unaZdC.suscribirACarga(unaOrganizacion3);
+		unaZdC.notificarCargaDeMuestra(unPostM);
+		
+		verify(unaOrganizacion).ejecutarFuncionalidadCarga(unaZdC, unPostM);
+		verify(unaOrganizacion2).ejecutarFuncionalidadCarga(unaZdC, unPostM);
+		verify(unaOrganizacion3).ejecutarFuncionalidadCarga(unaZdC, unPostM);
+		verify(unaOrganizacion4, never()).ejecutarFuncionalidadCarga(otraZonaDeC, unPostM);
+	}
+	
+	@Test
+	public void unaZonaPuedeNotificarDeLaValidacionDeUnaMuestraSoloASusSubscriptores() {
+		unaZdC.suscribirAValidacion(unaOrganizacion);
+		unaZdC.suscribirAValidacion(unaOrganizacion2);
+		unaZdC.suscribirAValidacion(unaOrganizacion3);
+		unaZdC.notificarValidacionDeMuestra(unPostM);
+		
+		verify(unaOrganizacion).ejecutarFuncionalidadValidacion(unaZdC, unPostM);
+		verify(unaOrganizacion2).ejecutarFuncionalidadValidacion(unaZdC, unPostM);
+		verify(unaOrganizacion3).ejecutarFuncionalidadValidacion(unaZdC, unPostM);
+		verify(unaOrganizacion4, never()).ejecutarFuncionalidadValidacion(unaZdC, unPostM);
+	}
+	
+	@Test
+	public void unaZonaNoNotificaDeLaValidacionDeUnaMuestraASusExsubscriptores() {
+		unaZdC.suscribirAValidacion(unaOrganizacion);
+		
+		unaZdC.suscribirAValidacion(unaOrganizacion2);
+		unaZdC.desuscribirDeValidacion(unaOrganizacion2);
+		
+		unaZdC.suscribirAValidacion(unaOrganizacion3);
+		unaZdC.desuscribirDeValidacion(unaOrganizacion3);
+		
+		unaZdC.notificarValidacionDeMuestra(unPostM);
+		
+		verify(unaOrganizacion).ejecutarFuncionalidadValidacion(unaZdC, unPostM);
+		verify(unaOrganizacion2, never()).ejecutarFuncionalidadValidacion(unaZdC, unPostM);
+		verify(unaOrganizacion3, never()).ejecutarFuncionalidadValidacion(unaZdC, unPostM);
+		verify(unaOrganizacion4, never()).ejecutarFuncionalidadValidacion(unaZdC, unPostM);
+	}
+	
+	@Test
+	public void unaZonaNoNotificaDeLaCargaDeUnaMuestraASusExsubscriptores() {
+		unaZdC.suscribirACarga(unaOrganizacion);
+		
+		unaZdC.suscribirACarga(unaOrganizacion2);
+		unaZdC.desuscribirDeCarga(unaOrganizacion2);
+		
+		unaZdC.suscribirACarga(unaOrganizacion3);
+		unaZdC.desuscribirDeCarga(unaOrganizacion3);
+		
+		unaZdC.notificarCargaDeMuestra(unPostM);
+		
+		verify(unaOrganizacion).ejecutarFuncionalidadCarga(unaZdC, unPostM);
+		verify(unaOrganizacion2, never()).ejecutarFuncionalidadCarga(unaZdC, unPostM);
+		verify(unaOrganizacion3, never()).ejecutarFuncionalidadCarga(unaZdC, unPostM);
+		verify(unaOrganizacion4, never()).ejecutarFuncionalidadCarga(unaZdC, unPostM);
 	}
 	
 }
