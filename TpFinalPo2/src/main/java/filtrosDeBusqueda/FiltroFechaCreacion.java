@@ -15,7 +15,7 @@ public class FiltroFechaCreacion extends FiltrosBusqueda {
 	
 	@Override
 	protected void aplicarCriterioDeFiltro(List<PostMuestra> resultadoBusqueda, PostMuestra post) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
