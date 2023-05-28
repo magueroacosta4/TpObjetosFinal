@@ -31,11 +31,11 @@ public abstract class Usuario {
 		this.actualizarEstado();
 	}
 
-	protected int postsUltimos30Dias(){
+	public int postsUltimos30Dias(){
 		return this.getHistorial().getCantPosts30Dias();
 	}
 
-	protected int opinionesUltimos30Dias(){
+	public int opinionesUltimos30Dias(){
 		return this.getHistorial().getCantOpiniones30Dias();
 	}
 	
