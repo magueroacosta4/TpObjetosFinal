@@ -14,5 +14,10 @@ public class EstadoPostExperto extends EstadoDePost {
 	@Override
 	public void verificarPost() {
 		this.getPost().verificarPost();
+	}
+
+	@Override
+	public boolean esVerificado() {
+		return false;
 	}	
 }

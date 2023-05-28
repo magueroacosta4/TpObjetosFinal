@@ -39,12 +39,11 @@ public class PaginaWeb {
 		return posteosDeMuestras;
 	}
 	
-	public PostMuestra crearPostMuestra(Revision r, Ubicacion u){
-		PostMuestra posteo = new PostMuestra(u);
+	public void crearPostMuestra(Revision r, Ubicacion u){
+		PostMuestra posteo = new PostMuestra(u, r);
 		getMuestras().add(posteo);
 		zonasQueContienenElPost(posteo)
 		.forEach(z -> z.notificarCargaDeMuestra(posteo));
-		return posteo;
 	}
 
 	private Stream<ZonaDeCobertura> zonasQueContienenElPost(PostMuestra posteo) {

@@ -21,7 +21,7 @@ public class VerificadorMuestra {
 	
 
 	
-	public void actualizarEstadoDePost(Revision revision) {
+	private void actualizarEstadoDePost(Revision revision) {
 		Opinion op = revision.getOpinion();
 		agregarRevisionAlPost(revision);
 		Opinion opinionConMasVotos = this.opinionConMayorVoto();
@@ -55,7 +55,7 @@ public class VerificadorMuestra {
 	}
 
 	private void agregarRevisionAlPost(Revision revision) {
-		this.post.getOpiniones().get(revision.getOpinion()).add(revision);
+		this.post.agregarRevision(revision);
 	}
 	
 	

@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import organizacion.ZonaDeCobertura;
+import usuario.Participante;
 import usuario.Usuario;
 
 public class PaginaWebTest {
@@ -58,6 +59,10 @@ public class PaginaWebTest {
 	
 	@Test
 	public void unaPaginaWebCreaUnPostMuestraUtilizandoElMetodoQueInstanciaUnPostMuestra() {
+		
+		when(unaRevision.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
+		when(unaRevision.getUser()).thenReturn(new Participante(unaPagina));
+		
 		
 		assertTrue(unaPagina.getMuestras().isEmpty());
 		

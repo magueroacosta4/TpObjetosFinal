@@ -74,6 +74,21 @@ public class TestVerificadorMuestra {
 		verificadorBTest = new VerificadorMuestra(posteoMock);
 		verificadorATest = new VerificadorMuestra(posteoMock);
 		
+		doAnswer(invocacion -> {
+			opinionesInicial.get(revisionA.getOpinion()).add(revisionA);
+			return null;
+		}).when(posteoMock).agregarRevision(revisionA);		
+		
+		doAnswer(invocacion -> {
+			opinionesInicial.get(revisionB.getOpinion()).add(revisionB);
+			return null;
+		}).when(posteoMock).agregarRevision(revisionB);	
+
+		doAnswer(invocacion -> {
+			opinionesInicial.get(revisionC.getOpinion()).add(revisionC);
+			return null;
+		}).when(posteoMock).agregarRevision(revisionC);	
+		
 		
 		doAnswer(invocacion -> {
 			Arrays.stream(Opinion.values()).forEach(o -> opinionesInicial.put(o, new HashSet<Revision>()));

@@ -19,20 +19,29 @@ public class PostMuestra {
 	private Ubicacion ubicacion;
 	private LocalDate fechaDeCreacion;
 	private Optional<Opinion> resultadoActual;
-	private Set<Usuario> usuariosOpinados = new HashSet<Usuario>();
+	private Set<Usuario> usuariosQueYaOpinaron = new HashSet<Usuario>();
 	private EstadoDePost estadoPost;
+	private Usuario usuarioCreador;
 	
-	public PostMuestra(Ubicacion u) {
+	public PostMuestra(Ubicacion ubicacion, Revision revision) {
 		VerificadorMuestra ver = new VerificadorMuestra(this);
 		this.setVerificador(ver);
-		this.setearTodo(u);
+		this.setearTodo(ubicacion);
 		this.estadoPost = new EstadoPostBasico(this);
+		this.usuarioCreador = revision.getUser();	
+		this.setResultadoActual(Optional.of(revision.getOpinion()));	
 	}
 
-	public PostMuestra(Ubicacion u, VerificadorMuestra v, EstadoDePost estadoDePost) {
+	public PostMuestra(Ubicacion u, VerificadorMuestra v, EstadoDePost estadoDePost, Revision revision) {
 		this.setVerificador(v);		
 		this.setearTodo(u);
 		this.estadoPost = estadoDePost;
+		this.usuarioCreador = revision.getUser();	
+		this.setResultadoActual(Optional.of(revision.getOpinion()));
+	}
+	
+	public Usuario getUsuarioCreador() {
+		return usuarioCreador;
 	}
 	
 	public void setearTodo(Ubicacion u) {
@@ -101,14 +110,14 @@ public class PostMuestra {
 		Usuario user = revision.getUser();
 		if(!usuarioYaOpino(user)) {
 			this.getEstadoDePost().opinar(revision, verificador);
-			usuariosOpinados.add(user);
+			usuariosQueYaOpinaron.add(user);
 		}else {
 			throw new Exception("El usuario ya opino");
 		}
 	}
 
 	private boolean usuarioYaOpino(Usuario user) {
-		return usuariosOpinados.contains(user);
+		return usuariosQueYaOpinaron.contains(user);
 	}
 	
 	
@@ -132,6 +141,10 @@ public class PostMuestra {
 
 	public void setOpiniones(HashMap<Opinion, Set<Revision>> map) {
 		this.opiniones = map;		
+	}
+
+	public void agregarRevision(Revision revision) {
+		opiniones.get(revision.getOpinion()).add(revision);	
 	}
 		
 

@@ -57,16 +57,20 @@ public class TestPostMuestra {
 		when(revisionA.getUser()).thenReturn(usuarioA);
 		when(revisionB.getUser()).thenReturn(usuarioB);
 		when(revisionC.getUser()).thenReturn(usuarioC);
+		when(revisionA.getOpinion()).thenReturn(Opinion.VINCHUCA_SORDIDA);
+		when(revisionB.getOpinion()).thenReturn(Opinion.VINCHUCA_INFESTANTS);
+		when(revisionC.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		
-		posteo = new PostMuestra(ubicacionA, verificadorA, estadoPostBasico);		
+		
+		posteo = new PostMuestra(ubicacionA, verificadorA, estadoPostBasico, revisionA);		
 	}
 	
 	@Test
 	public void alCrearUnPostMuestraConElConstructorDeParametroUbicacionSeColocanTodosSusColaboradores() {
 		
-		posteo = new PostMuestra(ubicacionA);
+		posteo = new PostMuestra(ubicacionA, revisionB);
 		
-		assertEquals(posteo.getResultadoActual(), Optional.empty());
+		assertEquals(posteo.getResultadoActual(), Optional.of(Opinion.VINCHUCA_INFESTANTS));
 		assertEquals(posteo.getUbicacion(), ubicacionA);
 		assertEquals(posteo.getFechaDeCreacion(), today); //
 	}
@@ -75,7 +79,7 @@ public class TestPostMuestra {
 	@Test
 	public void alCrearUnPostMuestraSeColocanTodosSusColaboradores() {
 		
-		assertEquals(posteo.getResultadoActual(), Optional.empty());
+		assertEquals(posteo.getResultadoActual(), Optional.of(Opinion.VINCHUCA_SORDIDA));
 		assertEquals(posteo.getUbicacion(), ubicacionA);
 		assertEquals(posteo.getFechaDeCreacion(), today); //
 		assertEquals(posteo.getOpiniones().size(), 8);
@@ -211,9 +215,6 @@ public class TestPostMuestra {
 	
 	@Test
 	public void sePreguntaCauntasRevisionesTieneLaOpinionActual_AlSerEmptyDaCero() throws Exception {
-		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
-		
-		posteo.setOpiniones(map);
 
 		int resultadoDado = posteo.sizeOpinionResultadoActual();
 		int resultadoEsperado = 0;

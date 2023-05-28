@@ -16,7 +16,7 @@ public abstract class EstadoDePost {
 
 	protected abstract void verificarPost();
 
-	public boolean esVerificado() {return false;};
+	public abstract boolean esVerificado();
 
 
 }

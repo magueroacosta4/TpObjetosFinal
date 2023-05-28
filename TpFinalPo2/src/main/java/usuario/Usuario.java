@@ -13,8 +13,7 @@ public abstract class Usuario {
 	private HistorialEnApp historial;
 	
 	public void publicar(Revision rev, Ubicacion ubicacion) throws Exception {
-		PostMuestra post = this.getPagina().crearPostMuestra(rev, ubicacion);
-		getPagina().opinarPostMuestra(rev, post);
+		this.getPagina().crearPostMuestra(rev, ubicacion);
 		this.getHistorial().addPost();
 		this.actualizarEstado();
 	}

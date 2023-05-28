@@ -17,6 +17,13 @@ public class EstadoPostBasico extends EstadoDePost {
 		
 	}
 
+	@Override
+	public boolean esVerificado() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
 
 	
 }
