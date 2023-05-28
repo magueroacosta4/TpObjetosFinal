@@ -9,20 +9,10 @@ import usuario.EstadoUsuario;
 public class VerificadorMuestra {
 	
 	private PostMuestra post;
-	private EstadoDePost estadoPost;
+	
 	
 	public VerificadorMuestra(PostMuestra posteoAsociado) {
 		this.post = posteoAsociado;
-		this.estadoPost = new EstadoPostBasico(this);
-	}
-	
-	public VerificadorMuestra(PostMuestra posteoAsociado, EstadoDePost estadoPost) {
-		this.post = posteoAsociado;
-		this.setEstadoPost(estadoPost);
-	}
-	
-	public void setEstadoPost(EstadoDePost estadoPost) {
-		this.estadoPost = estadoPost;
 	}
 	
 	public PostMuestra getPost() {
@@ -71,7 +61,9 @@ public class VerificadorMuestra {
 	
 	
 	public void opinarEnEstadoBasico(Revision revision) {
-		this.estadoPost = getEstadoDeUsuarioAlMomentoDeOpinar(revision).esExperto()? this.actualizarEstadoDeVerificadorPorExperto():estadoPost;
+		if(getEstadoDeUsuarioAlMomentoDeOpinar(revision).esExperto()){
+			this.actualizarEstadoDeVerificadorPorExperto();
+		}
 		this.actualizarEstadoDePost(revision);
 		
 	}
@@ -81,11 +73,11 @@ public class VerificadorMuestra {
 		return estadoUsuario;
 	}
 	
-	private EstadoDePost actualizarEstadoDeVerificadorPorExperto() {
-		estadoPost = new EstadoPostExperto(this);
+	private void actualizarEstadoDeVerificadorPorExperto() {
+		EstadoPostExperto estado = new EstadoPostExperto(post);
+		this.post.setEstadoPost(estado);
 		this.post.setResultadoActual(Optional.empty());
 		this.post.colocarClavesEnHashmap();
-		return estadoPost;
 	}
 
 	public void opinarEnEstadoExperto(Revision revision) {
@@ -94,13 +86,6 @@ public class VerificadorMuestra {
 		else {};		
 	}
 	
-	public void opinar(Revision revision) {
-		if(post.getEsPostVerificado()) {}
-		else {
-			estadoPost.opinar(revision);
-			
-		}
-	}
 	
 	public void opinionUsuarioQuePosteo(Revision revision) {
 		agregarRevisionAlPost(revision);
@@ -110,15 +95,9 @@ public class VerificadorMuestra {
 	private void cambiarResultadoActualPost(Optional<Opinion> opinion) {
 		this.post.setResultadoActual(opinion);
 	}
-
-	public void verificarPostSiEsPostDeExpertos() {
-		if(this.post.sizeOpinionResultadoActual() >= 2) {
-			this.post.verificarPost();
-		}		
-	}
 	
 	public void verificarPost() {
-		estadoPost.verificarPost();
+		this.post.getEstadoDePost().verificarPost();
 	}
 
 }

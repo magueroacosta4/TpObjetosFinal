@@ -85,12 +85,13 @@ public class PaginaWebTest {
 	
 	@Test
 	public void unUsuarioOpinaYSeVerificaElPost_YAvisaATodasLasZonasQueLaContengan() throws Exception {
-
+		EstadoPostVerificado estadoVerificado = mock(EstadoPostVerificado.class);
 		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
 		
 		doNothing().when(unaZonaDeC).notificarValidacionDeMuestra(unPostMuestra);
 		when(unaZonaDeC.tieneLaMuestra(unPostMuestra)).thenReturn(true);
-		when(unPostMuestra.getEsPostVerificado()).thenReturn(true);
+		when(unPostMuestra.getEstadoDePost()).thenReturn(estadoVerificado);
+		when(estadoVerificado.esVerificado()).thenReturn(true);
 		
 		unaPagina.opinarPostMuestra(unaRevision, unPostMuestra);
 		
@@ -99,12 +100,13 @@ public class PaginaWebTest {
 	
 	@Test
 	public void unUsuarioOpina_AlNoEstarVerificadoElPostLaPaginaNoAvisaATodasLasZonasQueLaContengan() throws Exception {
-
+		EstadoPostBasico estadoPost = mock(EstadoPostBasico.class);
 		unaPagina.agregarZonaDeCobertura(unaZonaDeC);
 		
 		doNothing().when(unaZonaDeC).notificarValidacionDeMuestra(unPostMuestra);
 		when(unaZonaDeC.tieneLaMuestra(unPostMuestra)).thenReturn(true);
-		when(unPostMuestra.getEsPostVerificado()).thenReturn(false);
+		when(unPostMuestra.getEstadoDePost()).thenReturn(estadoPost);
+		when(estadoPost.esVerificado()).thenReturn(false);
 		
 		unaPagina.opinarPostMuestra(unaRevision, unPostMuestra);
 		

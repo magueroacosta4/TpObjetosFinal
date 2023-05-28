@@ -14,30 +14,32 @@ public class TestEstadoPostExperto {
 	Revision revisionMock;
 	VerificadorMuestra verifiMock;
 	EstadoPostExperto estadoTest;
+	private PostMuestra post;
 	
 	@Before
 	public void setUp() {
 		revisionMock = mock(Revision.class);
 		verifiMock = mock(VerificadorMuestra.class);
+		post = mock(PostMuestra.class);
 		
 		doNothing().when(verifiMock).opinarEnEstadoExperto(revisionMock);
 		
-		estadoTest = new EstadoPostExperto(verifiMock);
+		estadoTest = new EstadoPostExperto(post);
 	}
 	
 	@Test
 	public void seInstanciaUnEstadoPostExpertoYSeRevisaSiSeColocaronTodosSusColaboradoresInternos() {
 		
-		VerificadorMuestra resultadoEsperado = verifiMock;
-		VerificadorMuestra resultadoDado = estadoTest.getVerificador();
+		PostMuestra resultadoEsperado = post;
+		PostMuestra resultadoDado = estadoTest.getPost();
 		
 		assertEquals(resultadoDado, resultadoEsperado);
 		
 	}
 	
 	@Test
-	public void seUtilizaUnEstadoPostBasicoParaOpinar() {
-		estadoTest.opinar(revisionMock);
+	public void seUtilizaUnEstadoPostExpertoParaOpinar() {
+		estadoTest.opinar(revisionMock, verifiMock);
 		
 		verify(verifiMock, times(1)).opinarEnEstadoExperto(revisionMock);
 	}
@@ -47,7 +49,7 @@ public class TestEstadoPostExperto {
 		
 		estadoTest.verificarPost();
 		
-		verify(verifiMock, times(1)).verificarPostSiEsPostDeExpertos();
+		verify(post, times(1)).verificarPost();
 		
 	}
 	

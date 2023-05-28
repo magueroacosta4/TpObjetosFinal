@@ -60,7 +60,7 @@ public class PaginaWeb {
 	
 	public void opinarPostMuestra(Revision r, PostMuestra post) throws Exception {
 		post.opinar(r);
-		if(post.getEsPostVerificado()) {
+		if(post.getEstadoDePost().esVerificado()) {
 		zonasQueContienenElPost(post)
 		.forEach(z->z.notificarValidacionDeMuestra(post));
 		}

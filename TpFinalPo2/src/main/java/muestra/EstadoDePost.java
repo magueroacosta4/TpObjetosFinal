@@ -2,22 +2,21 @@ package muestra;
 
 public abstract class EstadoDePost {
 	
-	protected VerificadorMuestra verificador;
-	
-	public EstadoDePost(VerificadorMuestra verificador) {
-		this.setVerificador(verificador);
+	protected PostMuestra post;
+
+	public EstadoDePost(PostMuestra post) {
+		this.post = post;
 	}
 	
-	public void setVerificador(VerificadorMuestra verificador) {
-		this.verificador = verificador;
-	}
-	
-	public VerificadorMuestra getVerificador() {
-		return this.verificador;
+	public PostMuestra getPost() {
+		return post;
 	}
 
-	public abstract void opinar(Revision revision) ;
+	public abstract void opinar(Revision revision, VerificadorMuestra verificadorMuestra) ;
 
 	protected abstract void verificarPost();
+
+	public boolean esVerificado() {return false;};
+
 
 }

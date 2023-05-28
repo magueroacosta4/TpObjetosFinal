@@ -1,22 +1,24 @@
 package muestra;
 
-public class EstadoPostBasico extends EstadoDePost {
+public class EstadoPostVerificado extends EstadoDePost {
 
-	public EstadoPostBasico(PostMuestra post) {
+	public EstadoPostVerificado(PostMuestra post) {
 		super(post);
 	}
 
 	@Override
 	public void opinar(Revision revision, VerificadorMuestra verificador) {
-		verificador.opinarEnEstadoBasico(revision);
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	protected void verificarPost() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
 	
+	@Override
+	public boolean esVerificado() {return true;}
+
 }

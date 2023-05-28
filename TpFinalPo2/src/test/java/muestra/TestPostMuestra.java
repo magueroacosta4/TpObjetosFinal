@@ -32,6 +32,8 @@ public class TestPostMuestra {
 	private Participante usuarioA;
 	private Participante usuarioB;
 	private Participante usuarioC;
+	private EstadoDePost estadoPostBasico;
+	private EstadoDePost estadoPostExperto;
 	
 	@Before
 	public void setUp() {
@@ -43,9 +45,12 @@ public class TestPostMuestra {
 		usuarioA = mock(Participante.class);
 		usuarioB = mock(Participante.class);
 		usuarioC = mock(Participante.class);
+		estadoPostBasico = mock(EstadoPostBasico.class);
+		estadoPostExperto = mock(EstadoPostExperto.class);
 		
-		doNothing().when(verificadorA).opinar(revisionA);		
-		doNothing().when(verificadorA).opinar(revisionB);		
+		doNothing().when(estadoPostBasico).opinar(revisionA, verificadorA);		
+		doNothing().when(estadoPostBasico).opinar(revisionB, verificadorA);		
+		doNothing().when(estadoPostBasico).opinar(revisionC, verificadorA);		
 		
 		today = LocalDate.now();
 		when(revisionA.getFechaDeCreacion()).thenReturn(today);	
@@ -53,7 +58,7 @@ public class TestPostMuestra {
 		when(revisionB.getUser()).thenReturn(usuarioB);
 		when(revisionC.getUser()).thenReturn(usuarioC);
 		
-		posteo = new PostMuestra(ubicacionA, verificadorA);		
+		posteo = new PostMuestra(ubicacionA, verificadorA, estadoPostBasico);		
 	}
 	
 	@Test
@@ -74,6 +79,8 @@ public class TestPostMuestra {
 		assertEquals(posteo.getUbicacion(), ubicacionA);
 		assertEquals(posteo.getFechaDeCreacion(), today); //
 		assertEquals(posteo.getOpiniones().size(), 8);
+		assertEquals(posteo.getEstadoDePost(), estadoPostBasico);
+		assertEquals(posteo.getVerificador(), verificadorA);
 	}
 	
 	@Test
@@ -83,7 +90,7 @@ public class TestPostMuestra {
 		
 		assertEquals(posteo.getResultadoActual().get(), Opinion.VINCHUCA_GUASAYANA);
 		
-		verify(verificadorA, times(1)).opinar(revisionB);
+		verify(estadoPostBasico, times(1)).opinar(revisionB, verificadorA);
 	}
 	
 	@Test 
@@ -95,8 +102,8 @@ public class TestPostMuestra {
 		
 		assertEquals(posteo.getResultadoActual().get(), Opinion.IMAGEN_POCO_CLARA);
 		
-		verify(verificadorA, times(1)).opinar(revisionB);
-		verify(verificadorA, times(1)).opinar(revisionC);
+		verify(estadoPostBasico, times(1)).opinar(revisionB, verificadorA);
+		verify(estadoPostBasico, times(1)).opinar(revisionC, verificadorA);
 		
 	}
 	
@@ -110,12 +117,42 @@ public class TestPostMuestra {
 	}
 	
 	@Test 
-	public void seVerificaUnPosteo() {
+	public void seVerificaUnPosteo() throws Exception {
+		doAnswer(invocation -> {
+			posteo.getOpiniones().get(Opinion.VINCHUCA_GUASAYANA).add(revisionB);
+			posteo.setEstadoPost(estadoPostExperto);
+			return null;
+		}).when(estadoPostBasico).opinar(revisionB, verificadorA);
+		
+		doAnswer(invocation -> {
+			posteo.getOpiniones().get(Opinion.VINCHUCA_GUASAYANA).add(revisionC);
+			posteo.setResultadoActual(Optional.of(Opinion.VINCHUCA_GUASAYANA));
+			return null;
+		}).when(estadoPostExperto).opinar(revisionC, verificadorA);
+		
+		posteo.opinar(revisionB);
+		
+		posteo.opinar(revisionC);
 		
 		posteo.verificarPost();
+		boolean resultado = posteo.getEstadoDePost().esVerificado();
 		
-		assertTrue(posteo.getEsPostVerificado());
+		assertTrue(resultado);
 	}
+	
+	@Test 
+	public void seVerificaUnPosteo_EsteNoSeVerificaPorQueNoHayOpiniones() throws Exception {
+	
+		posteo.opinar(revisionB);
+		
+		posteo.opinar(revisionC);
+		
+		posteo.verificarPost();
+		boolean resultado = posteo.getEstadoDePost().equals(estadoPostBasico);
+		
+		assertTrue(resultado);
+	}
+	
 	
 
 	@Test
@@ -161,7 +198,7 @@ public class TestPostMuestra {
 			map.put(Opinion.CHINCHE_FOLIADA, set);
 			posteo.setResultadoActual(Optional.of(Opinion.CHINCHE_FOLIADA));
 			return null;
-		}).when(verificadorA).opinar(revisionA);;
+		}).when(estadoPostBasico).opinar(revisionA, verificadorA);;
 		
 		posteo.setOpiniones(map);
 		posteo.opinar(revisionA);

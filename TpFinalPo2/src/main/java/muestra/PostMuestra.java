@@ -19,18 +19,20 @@ public class PostMuestra {
 	private Ubicacion ubicacion;
 	private LocalDate fechaDeCreacion;
 	private Optional<Opinion> resultadoActual;
-	private boolean esPostVerificado;
 	private Set<Usuario> usuariosOpinados = new HashSet<Usuario>();
+	private EstadoDePost estadoPost;
 	
 	public PostMuestra(Ubicacion u) {
 		VerificadorMuestra ver = new VerificadorMuestra(this);
 		this.setVerificador(ver);
 		this.setearTodo(u);
+		this.estadoPost = new EstadoPostBasico(this);
 	}
 
-	public PostMuestra(Ubicacion u, VerificadorMuestra v) {
+	public PostMuestra(Ubicacion u, VerificadorMuestra v, EstadoDePost estadoDePost) {
 		this.setVerificador(v);		
 		this.setearTodo(u);
+		this.estadoPost = estadoDePost;
 	}
 	
 	public void setearTodo(Ubicacion u) {
@@ -38,9 +40,16 @@ public class PostMuestra {
 		this.setFechaDeCreacion(LocalDate.now());;
 		this.colocarClavesEnHashmap();
 		this.resultadoActual = Optional.empty();
-		this.setEsPostVerificado(false);
 	}
 		
+	
+	public EstadoDePost getEstadoDePost() {
+		return estadoPost;
+	}
+	
+	public void setEstadoPost(EstadoDePost estadoPost) {
+		this.estadoPost = estadoPost;
+	}
 	
 	public VerificadorMuestra getVerificador() {
 		return verificador;
@@ -91,7 +100,7 @@ public class PostMuestra {
 	public void opinar(Revision revision) throws Exception {
 		Usuario user = revision.getUser();
 		if(!usuarioYaOpino(user)) {
-			this.getVerificador().opinar(revision);
+			this.getEstadoDePost().opinar(revision, verificador);
 			usuariosOpinados.add(user);
 		}else {
 			throw new Exception("El usuario ya opino");
@@ -101,17 +110,13 @@ public class PostMuestra {
 	private boolean usuarioYaOpino(Usuario user) {
 		return usuariosOpinados.contains(user);
 	}
-
-	public void setEsPostVerificado(boolean esPostVerificado) {
-		this.esPostVerificado = esPostVerificado;
-	}
 	
-	public Boolean getEsPostVerificado() {
-		return this.esPostVerificado;
-	}
 	
 	public void verificarPost() {
-		this.setEsPostVerificado(true);;		
+		if(this.sizeOpinionResultadoActual() >= 2)
+		{EstadoPostVerificado estado = new EstadoPostVerificado(this);
+		this.setEstadoPost(estado);
+		}		
 	}
 
 	public int sizeOpinion(Opinion opinion) {

@@ -2,18 +2,17 @@ package muestra;
 
 public class EstadoPostExperto extends EstadoDePost {
 	
-	public EstadoPostExperto(VerificadorMuestra verificador) {
-		super(verificador);
+	public EstadoPostExperto(PostMuestra post) {
+		super(post);
 	}
-	
+
 	@Override
-	public void opinar(Revision revision) {
+	public void opinar(Revision revision, VerificadorMuestra verificador) {
 		verificador.opinarEnEstadoExperto(revision);
 	}
 	
 	@Override
 	public void verificarPost() {
-		verificador.verificarPostSiEsPostDeExpertos();
-	}
-	
+		this.getPost().verificarPost();
+	}	
 }
