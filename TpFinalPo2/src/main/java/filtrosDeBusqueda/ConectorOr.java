@@ -7,6 +7,11 @@ import muestra.PostMuestra;
 
 public class ConectorOr extends ConectoresBusqueda {
 
+	public ConectorOr(FiltroDeBusqueda primerFil, FiltroDeBusqueda segundoFil) {
+		this.setPrimerFiltro(primerFil);
+		this.setSegundoFiltro(segundoFil);
+	}
+
 	@Override
 	public List<PostMuestra> filtrar(List<PostMuestra> postsAFiltrar) {
 		List <PostMuestra> primerFiltro = new ArrayList<PostMuestra>();
