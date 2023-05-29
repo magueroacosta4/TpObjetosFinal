@@ -8,7 +8,6 @@ import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -65,6 +64,7 @@ public class TestPostMuestra {
 		posteo = new PostMuestra(ubicacionA, verificadorA, estadoPostBasico, revisionA);		
 	}
 	
+	
 	@Test
 	public void alCrearUnPostMuestraConElConstructorDeParametroUbicacionSeColocanTodosSusColaboradores() {
 		
@@ -85,6 +85,11 @@ public class TestPostMuestra {
 		assertEquals(posteo.getOpiniones().size(), 8);
 		assertEquals(posteo.getEstadoDePost(), estadoPostBasico);
 		assertEquals(posteo.getVerificador(), verificadorA);
+	}
+	
+	@Test
+	public void sePideElCreadorDelPost() {
+		assertEquals(posteo.getUsuarioCreador(), usuarioA);
 	}
 	
 	@Test
@@ -122,14 +127,16 @@ public class TestPostMuestra {
 	
 	@Test 
 	public void seVerificaUnPosteo() throws Exception {
+		
+		when(revisionB.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		doAnswer(invocation -> {
-			posteo.getOpiniones().get(Opinion.VINCHUCA_GUASAYANA).add(revisionB);
+			posteo.agregarRevision(revisionB);
 			posteo.setEstadoPost(estadoPostExperto);
 			return null;
 		}).when(estadoPostBasico).opinar(revisionB, verificadorA);
 		
 		doAnswer(invocation -> {
-			posteo.getOpiniones().get(Opinion.VINCHUCA_GUASAYANA).add(revisionC);
+			posteo.agregarRevision(revisionC);
 			posteo.setResultadoActual(Optional.of(Opinion.VINCHUCA_GUASAYANA));
 			return null;
 		}).when(estadoPostExperto).opinar(revisionC, verificadorA);
@@ -145,11 +152,14 @@ public class TestPostMuestra {
 	}
 	
 	@Test 
-	public void seVerificaUnPosteo_EsteNoSeVerificaPorQueNoHayOpiniones() throws Exception {
-	
+	public void seVerificaUnPosteo_EsteNoSeVerificaPorQueLasOpininionesSonDistintas() throws Exception {
+		doAnswer(invocation -> {
+			posteo.agregarRevision(revisionB);
+			return null;
+		}).when(estadoPostBasico).opinar(revisionB, verificadorA);
+		
 		posteo.opinar(revisionB);
 		
-		posteo.opinar(revisionC);
 		
 		posteo.verificarPost();
 		boolean resultado = posteo.getEstadoDePost().equals(estadoPostBasico);
@@ -176,46 +186,42 @@ public class TestPostMuestra {
 
 	@Test 
 	public void sePreguntaCauntasRevisionesTieneUnaOpinion() {
-		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
-		Set<Revision> set = new HashSet<Revision>();
-		set.add(revisionA);
-		map.put(Opinion.CHINCHE_FOLIADA, set);
 		
-		posteo.setOpiniones(map);
-		
-		int resultadoDado = posteo.sizeOpinion(Opinion.CHINCHE_FOLIADA);
+		int resultadoDado = posteo.sizeOpinionResultadoActual();
 		int resultadoEsperado = 1;
 			
 		assertEquals(resultadoDado, resultadoEsperado);
-		
 	}
 	
 	@Test
 	public void sePreguntaCauntasRevisionesTieneLaOpinionActual() throws Exception {
-		HashMap<Opinion, Set <Revision>> map = new HashMap<Opinion, Set <Revision>>();
-		Set<Revision> set = new HashSet<Revision>();
-
-		
+	
 		
 		doAnswer(invocation -> {
-			set.add(revisionA);
-			map.put(Opinion.CHINCHE_FOLIADA, set);
-			posteo.setResultadoActual(Optional.of(Opinion.CHINCHE_FOLIADA));
+			posteo.agregarRevision(revisionB);
+			posteo.setResultadoActual(Optional.of(Opinion.VINCHUCA_INFESTANTS));
 			return null;
-		}).when(estadoPostBasico).opinar(revisionA, verificadorA);;
+		}).when(estadoPostBasico).opinar(revisionB, verificadorA);;
 		
-		posteo.setOpiniones(map);
-		posteo.opinar(revisionA);
+		posteo.opinar(revisionB);
 
 		int resultadoDado = posteo.sizeOpinionResultadoActual();
 		int resultadoEsperado = 1;
 			
-		assertEquals(resultadoDado, resultadoEsperado);		
+		assertEquals(resultadoDado, resultadoEsperado);
+		verify(estadoPostBasico, times(1)).opinar(revisionB, verificadorA);
 	}
 	
 	@Test
 	public void sePreguntaCauntasRevisionesTieneLaOpinionActual_AlSerEmptyDaCero() throws Exception {
-
+		
+		doAnswer(invocation -> {
+			posteo.agregarRevision(revisionB);
+			posteo.setResultadoActual(Optional.empty());
+			return null;
+		}).when(estadoPostBasico).opinar(revisionB, verificadorA);
+		posteo.opinar(revisionB);
+		
 		int resultadoDado = posteo.sizeOpinionResultadoActual();
 		int resultadoEsperado = 0;
 			

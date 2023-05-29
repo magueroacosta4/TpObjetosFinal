@@ -26,7 +26,7 @@ public class PostMuestra {
 	public PostMuestra(Ubicacion ubicacion, Revision revision) {
 		VerificadorMuestra ver = new VerificadorMuestra(this);
 		this.setVerificador(ver);
-		this.setearTodo(ubicacion);
+		this.setearTodo(ubicacion, revision);
 		this.estadoPost = new EstadoPostBasico(this);
 		this.usuarioCreador = revision.getUser();	
 		this.setResultadoActual(Optional.of(revision.getOpinion()));	
@@ -34,21 +34,24 @@ public class PostMuestra {
 
 	public PostMuestra(Ubicacion u, VerificadorMuestra v, EstadoDePost estadoDePost, Revision revision) {
 		this.setVerificador(v);		
-		this.setearTodo(u);
+		this.setearTodo(u, revision);
 		this.estadoPost = estadoDePost;
 		this.usuarioCreador = revision.getUser();	
 		this.setResultadoActual(Optional.of(revision.getOpinion()));
+
 	}
 	
 	public Usuario getUsuarioCreador() {
 		return usuarioCreador;
 	}
 	
-	public void setearTodo(Ubicacion u) {
+	public void setearTodo(Ubicacion u, Revision r) {
 		this.setUbicacion(u);
 		this.setFechaDeCreacion(LocalDate.now());;
 		this.colocarClavesEnHashmap();
 		this.resultadoActual = Optional.empty();
+		usuariosQueYaOpinaron.add(r.getUser());
+		agregarRevision(r);
 	}
 		
 	
