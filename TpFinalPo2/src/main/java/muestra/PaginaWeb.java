@@ -39,8 +39,8 @@ public class PaginaWeb {
 		return posteosDeMuestras;
 	}
 	
-	public void crearPostMuestra(Revision r, Ubicacion u){
-		PostMuestra posteo = new PostMuestra(u, r);
+	public void crearPostMuestra(Revision r, Ubicacion u, String foto){
+		PostMuestra posteo = new PostMuestra(u, r, foto);
 		getMuestras().add(posteo);
 		zonasQueContienenElPost(posteo)
 		.forEach(z -> z.notificarCargaDeMuestra(posteo));

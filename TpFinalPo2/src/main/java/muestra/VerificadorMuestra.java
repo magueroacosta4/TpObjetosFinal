@@ -3,7 +3,6 @@ package muestra;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
-import usuario.EstadoUsuario;
 
 
 public class VerificadorMuestra {
@@ -21,12 +20,12 @@ public class VerificadorMuestra {
 	
 
 	
-	private void actualizarEstadoDePost(Revision revision) {
+	void actualizarEstadoDePost(Revision revision) {
 		Opinion op = revision.getOpinion();
 		agregarRevisionAlPost(revision);
 		Opinion opinionConMasVotos = this.opinionConMayorVoto();
 		boolean tienenMismaCantVotos = laOpinionActualTieneLaMismaCantidadDeVotosQueLaOpinion(op);
-		boolean sonLaMismaOpinion = laOpinionActualDelPostEsLaMismaQue(opinionConMasVotos);
+		boolean sonLaMismaOpinion = laOpinionActualDelPostEsLaMismaQue(op);
 		if (tienenMismaCantVotos && !sonLaMismaOpinion) {
 			this.cambiarResultadoActualPost(Optional.empty());
 		}
@@ -58,39 +57,6 @@ public class VerificadorMuestra {
 		this.post.agregarRevision(revision);
 	}
 	
-	
-	
-	public void opinarEnEstadoBasico(Revision revision) {
-		if(getEstadoDeUsuarioAlMomentoDeOpinar(revision).esExperto()){
-			this.actualizarEstadoDeVerificadorPorExperto();
-		}
-		this.actualizarEstadoDePost(revision);
-		
-	}
-
-	private EstadoUsuario getEstadoDeUsuarioAlMomentoDeOpinar(Revision revision) {
-		EstadoUsuario estadoUsuario = revision.getEstadoDelUsuarioActual();
-		return estadoUsuario;
-	}
-	
-	private void actualizarEstadoDeVerificadorPorExperto() {
-		EstadoPostExperto estado = new EstadoPostExperto(post);
-		this.post.setEstadoPost(estado);
-		this.post.setResultadoActual(Optional.empty());
-		this.post.colocarClavesEnHashmap();
-	}
-
-	public void opinarEnEstadoExperto(Revision revision) {
-		if(getEstadoDeUsuarioAlMomentoDeOpinar(revision).esExperto()){
-		this.actualizarEstadoDePost(revision);}
-		else {};		
-	}
-	
-	
-	public void opinionUsuarioQuePosteo(Revision revision) {
-		agregarRevisionAlPost(revision);
-		cambiarResultadoActualPost(Optional.of(revision.getOpinion()));
-	}
 
 	private void cambiarResultadoActualPost(Optional<Opinion> opinion) {
 		this.post.setResultadoActual(opinion);

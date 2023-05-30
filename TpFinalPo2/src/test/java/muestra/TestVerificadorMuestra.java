@@ -1,7 +1,6 @@
 package muestra;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Optional;
@@ -60,14 +59,7 @@ public class TestVerificadorMuestra {
 		when(estadoPostC.esVerificado()).thenReturn(true);
 		
 		doNothing().when(estadoPostA).verificarPost();
-		doNothing().when(estadoPostA).opinar(revisionA, verificadorATest);
-		doNothing().when(estadoPostA).opinar(revisionB, verificadorATest);
-		doNothing().when(estadoPostA).opinar(revisionC, verificadorATest);
-		
-		doNothing().when(estadoPostB).verificarPost();
-		doNothing().when(estadoPostB).opinar(revisionA, verificadorBTest);
-		doNothing().when(estadoPostB).opinar(revisionB, verificadorBTest);
-		doNothing().when(estadoPostB).opinar(revisionC, verificadorBTest);
+
 		
 		doNothing().when(posteoMock).verificarPost();
 		
@@ -90,22 +82,13 @@ public class TestVerificadorMuestra {
 		}).when(posteoMock).agregarRevision(revisionC);	
 		
 		
-		doAnswer(invocacion -> {
-			Arrays.stream(Opinion.values()).forEach(o -> opinionesInicial.put(o, new HashSet<Revision>()));
-			return null;
-		}).when(posteoMock).colocarClavesEnHashmap();
+
 	}
 
-	@Test
-	public void cuandoSeCreaUnVerificadorEsteTieneElPostMuestraAsociadoYLaOpinionDelUsuarioSeSube() {
-			
-			when(revisionA.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-			when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.VINCHUCA_GUASAYANA));
+	@Test 
+	public void seInstanciaUnVerificadorConUnPostoDentro() {
 		
-			verificadorATest.opinionUsuarioQuePosteo(revisionA);
-			
-			assertEquals(posteoMock.getResultadoActual().get(), Opinion.VINCHUCA_GUASAYANA);		
-			assertEquals(verificadorATest.getPost(), posteoMock);
+		assertEquals(verificadorATest.getPost(), posteoMock);
 		
 	}
 	
@@ -121,29 +104,7 @@ public class TestVerificadorMuestra {
 		assertTrue(opinionesInicial.values().stream().allMatch(s->s.equals(resultadoEsperadoB)));
 		
 	}
-	
-	@Test
-	public void cuandoSeLlamaA_opinar_EsteColocaEnElHashMapRevisionesLaRevisionEnLaOpinionClave() {
-		
-		when(revisionA.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		when(revisionB.getOpinion()).thenReturn(Opinion.VINCHUCA_INFESTANTS);
 
-		
-		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
-		
-
-		verificadorBTest.opinarEnEstadoBasico(revisionA);
-		
-
-		verificadorBTest.opinarEnEstadoBasico(revisionB);
-
-		
-		assertTrue(opinionesInicial.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionA));
-		assertTrue(opinionesInicial.get(Opinion.VINCHUCA_INFESTANTS).contains(revisionB));
-		
-		verify(revisionA, times(2)).getOpinion();
-		verify(revisionB, times(2)).getOpinion();
-	}
 	
 	@Test
 	public void cuandoSeLlamaA_resultadoActual_EsteDevuelveLaOpinionConMayorVoto() {
@@ -158,11 +119,9 @@ public class TestVerificadorMuestra {
 		
 		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
 		
-		verificadorBTest.opinarEnEstadoBasico(revisionA);
-		
-		verificadorBTest.opinarEnEstadoBasico(revisionB);
-		
-		verificadorBTest.opinarEnEstadoBasico(revisionC);		
+		verificadorATest.actualizarEstadoDePost(revisionA);
+		verificadorATest.actualizarEstadoDePost(revisionB);
+		verificadorATest.actualizarEstadoDePost(revisionC);
 		
 		Opinion resultadoDado = verificadorBTest.opinionConMayorVoto();
 		Opinion resultadoEsperado = Opinion.IMAGEN_POCO_CLARA;
@@ -176,223 +135,61 @@ public class TestVerificadorMuestra {
 	
 	
 	@Test
-	public void seSubeUnaMuestraYlaOpinaUnExperto_LuegoUnBasicoLoQuiereOpinarPeroNoSeSubeSuOpinion_LuegoOtroExpertoOpinaYSeSubeSuOpinion() {
+	public void seSubeUnaMuestraYLaOpinanDosPersonasConDiferentesOpiniones() {
 		when(revisionA.getOpinion()).thenReturn(Opinion.PHTIA_CHINCHE);
 		when(revisionB.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
-		when(revisionC.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		
 		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
-		when(revisionC.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
+		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
 		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(0).thenReturn(1);
 		when(posteoMock.sizeOpinion(Opinion.PHTIA_CHINCHE)).thenReturn(1);
-		when(posteoMock.sizeOpinion(Opinion.VINCHUCA_GUASAYANA)).thenReturn(1);
+		when(posteoMock.sizeOpinion(Opinion.IMAGEN_POCO_CLARA)).thenReturn(1);
 		
-		when(estadoUsuarioExperto.esExperto()).thenReturn(true);
-		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
 		
-	
-		verificadorBTest.opinarEnEstadoBasico(revisionA);
+		verificadorATest.actualizarEstadoDePost(revisionA);
 		
-		when(posteoMock.getEstadoDePost()).thenReturn(estadoPostB);
-
-		verificadorBTest.opinarEnEstadoExperto(revisionB);
-		
-		verificadorBTest.opinarEnEstadoExperto(revisionC);
+		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.PHTIA_CHINCHE)).thenReturn(Optional.empty());
+		verificadorATest.actualizarEstadoDePost(revisionB);
 		
 		assertTrue(opinionesInicial.get(Opinion.PHTIA_CHINCHE).contains(revisionA));
-		assertTrue(opinionesInicial.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionC));
-		assertFalse(opinionesInicial.get(Opinion.IMAGEN_POCO_CLARA).contains(revisionB));
-		
-		verify(revisionA, times(2)).getOpinion();
-		verify(revisionB, never()).getOpinion();
-		verify(revisionC, times(2)).getOpinion();
-		
-	}
-	
-	
-	@Test
-	public void seSubeUnaMuestraYlaOpinanDosBasicosConLaMismaOpinion_LuegoOpinaUnExpertoYSePriorizaSuOpinionYSeBorranLasOpinionesDeBasicos() {
-		when(revisionA.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
-		when(revisionB.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
-		when(revisionC.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		
-		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
-		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
-		when(revisionC.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(0).thenReturn(0).thenReturn(1);
-		when(posteoMock.sizeOpinion(Opinion.IMAGEN_POCO_CLARA)).thenReturn(1).thenReturn(2).thenReturn(0);
-		when(posteoMock.sizeOpinion(Opinion.VINCHUCA_GUASAYANA)).thenReturn(1);
-
-		
-		when(estadoUsuarioBasico.esExperto()).thenReturn(false);
-	
-		verificadorBTest.opinarEnEstadoBasico(revisionA);		
-		
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(2);
-		
-		verificadorBTest.opinarEnEstadoBasico(revisionB);
-		
-		when(estadoUsuarioExperto.esExperto()).thenReturn(true);
-	
-		verificadorBTest.opinarEnEstadoBasico(revisionC);
-		
-		//verificadorBTest.setEstadoPost(estadoPostB);
-		
-		Opinion resultadoDado = verificadorBTest.opinionConMayorVoto();
-		int tamanioImagenPocoClara = opinionesInicial.get(Opinion.IMAGEN_POCO_CLARA).size();
-		
-		assertEquals(tamanioImagenPocoClara, 0);
-		assertEquals(resultadoDado, Opinion.VINCHUCA_GUASAYANA);
-		assertTrue(opinionesInicial.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionC));
-		
-		verify(revisionA, times(2)).getOpinion();
-		verify(revisionB, times(2)).getOpinion();
-		verify(revisionC, times(2)).getOpinion();
-
-	}
-	
-	@Test
-	public void seSubeUnaMuestraYLaOpinanDosBasicosConDistintaOpinion_AlSerLaMismaOpinionElResultadoDeLaMuestraEsNoDefinido() {
-		when(revisionA.getOpinion()).thenReturn(Opinion.CHINCHE_FOLIADA);
-		when(revisionB.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		
-		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
-		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioBasico);
-		
-		when(estadoUsuarioExperto.esExperto()).thenReturn(false);
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(0).thenReturn(1);
-		when(posteoMock.sizeOpinion(Opinion.CHINCHE_FOLIADA)).thenReturn(1);
-		when(posteoMock.sizeOpinion(Opinion.VINCHUCA_GUASAYANA)).thenReturn(1);
-		
-		verificadorBTest.opinarEnEstadoBasico(revisionA);		
-		
-		//verificadorBTest.setEstadoPost(estadoPostB);
-		
-
-		verificadorBTest.opinarEnEstadoBasico(revisionB);
-		
-		
-		//when(posteoMock.getEsPostVerificado()).thenReturn(false);// el post fue opinado por 3 expertos pero 2 coincidieron en su opinion, por lo tanto se verifica el post
-		
+		assertTrue(opinionesInicial.get(Opinion.IMAGEN_POCO_CLARA).contains(revisionB));
 		assertEquals(posteoMock.getResultadoActual(), Optional.empty());
-		assertTrue(opinionesInicial.get(Opinion.CHINCHE_FOLIADA).contains(revisionA));
-		assertTrue(opinionesInicial.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionB));
-		assertFalse(verificadorATest.getPost().getEstadoDePost().esVerificado());
 		
 		verify(revisionA, times(2)).getOpinion();
-		verify(revisionB, times(2)).getOpinion();		
+		verify(revisionB, times(2)).getOpinion();
+		
 	}
 	
-	
 	@Test
-	public void seSubeUnaMuestraYLaOpinanDosExpertosConDistintaOpinion_AlSerLaMismaOpinionElResultadoDeLaMuestraEsNoDefinido() {
-		when(revisionA.getOpinion()).thenReturn(Opinion.CHINCHE_FOLIADA);
-		when(revisionB.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		when(posteoMock.getOpiniones()).thenReturn(opinionesInicial);
+	public void seSubeUnaMuestraYLaOpinanDosPersonasConLaMismaOpiniones() {
+		when(revisionA.getOpinion()).thenReturn(Opinion.PHTIA_CHINCHE);
+		when(revisionB.getOpinion()).thenReturn(Opinion.PHTIA_CHINCHE);
+		
 		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
 		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-
 		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(0).thenReturn(1);
-		when(posteoMock.sizeOpinion(Opinion.CHINCHE_FOLIADA)).thenReturn(1);
-		when(posteoMock.sizeOpinion(Opinion.VINCHUCA_GUASAYANA)).thenReturn(1);
-		when(estadoUsuarioExperto.esExperto()).thenReturn(true);
-		
-	
-		verificadorBTest.opinarEnEstadoBasico(revisionA);		
-		
-		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA));
-		when(posteoMock.getEstadoDePost()).thenReturn(estadoPostB);
-		
-		verificadorBTest.opinarEnEstadoExperto(revisionB);
-		
-		when(posteoMock.getResultadoActual()).thenReturn(Optional.empty());
-		
-		assertEquals(posteoMock.getResultadoActual(), Optional.empty());
-		assertTrue(opinionesInicial.get(Opinion.CHINCHE_FOLIADA).contains(revisionA));
-		assertTrue(opinionesInicial.get(Opinion.VINCHUCA_GUASAYANA).contains(revisionB));
-		assertFalse(verificadorBTest.getPost().getEstadoDePost().esVerificado());
-
-		verify(revisionA, times(2)).getOpinion();
-		verify(revisionB, times(2)).getOpinion();
-	}
-	
-	@Test
-	public void seSubeUnaMuestraYLaOpinanDosExpertosConDistintaOpinion_LuegoOtroExpertoOpinaLoMismoQueUnoDeLosExpertosAnterioresYSeVerificaLaMuestra() {
-		when(revisionA.getOpinion()).thenReturn(Opinion.CHINCHE_FOLIADA);
-		when(revisionB.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		when(revisionC.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		
-		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-		when(revisionC.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-		
-		when(posteoMock.sizeOpinionResultadoActual())
-		.thenReturn(0).thenReturn(1).thenReturn(0).thenReturn(2);		
-		when(posteoMock.sizeOpinion(Opinion.CHINCHE_FOLIADA)).thenReturn(1);
-		when(posteoMock.sizeOpinion(Opinion.VINCHUCA_GUASAYANA)).thenReturn(1).thenReturn(2);
-		
-		when(estadoUsuarioExperto.esExperto()).thenReturn(true);
-		
-		verificadorBTest.opinarEnEstadoBasico(revisionA);		
-		
-		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA));
-		when(posteoMock.getEstadoDePost()).thenReturn(estadoPostB);
-		
-		verificadorBTest.opinarEnEstadoExperto(revisionB);
-		
-		when(posteoMock.getResultadoActual())
-		.thenReturn(Optional.empty())
-		.thenReturn(Optional.of(Opinion.VINCHUCA_GUASAYANA));
+		when(posteoMock.sizeOpinion(Opinion.PHTIA_CHINCHE)).thenReturn(1);
 
 		
-		verificadorBTest.opinarEnEstadoExperto(revisionC);
-		when(posteoMock.getEstadoDePost()).thenReturn(estadoPostC);
 		
+		verificadorATest.actualizarEstadoDePost(revisionA);		
+		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.PHTIA_CHINCHE));
+		verificadorATest.actualizarEstadoDePost(revisionB);
 		
-		assertEquals(opinionesInicial.get(Opinion.VINCHUCA_GUASAYANA).size(), 2);
-		//assertEquals(verificadorBTest.opinionConMayorVoto(), Opinion.VINCHUCA_GUASAYANA);
-		assertTrue(opinionesInicial.get(Opinion.CHINCHE_FOLIADA).contains(revisionA));
-		assertTrue(verificadorBTest.getPost().getEstadoDePost().esVerificado());
+
 		
-		verify(revisionA, times(2)).getOpinion();
-		verify(revisionB, times(2)).getOpinion();
-		verify(revisionC, times(2)).getOpinion();
-	}
-	
-	@Test
-	public void seSubeUnaMuestraYDosExpertosLaOpinanPorLoQueSeVerifica_OtroExpertoQuiereOpinarPeroNoSeSubeSuOpinion() {
-		when(revisionA.getOpinion()).thenReturn(Opinion.CHINCHE_FOLIADA);
-		when(revisionB.getOpinion()).thenReturn(Opinion.CHINCHE_FOLIADA);
-		when(revisionC.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
-		
-		when(revisionA.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-		when(revisionB.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-		when(revisionC.getEstadoDelUsuarioActual()).thenReturn(estadoUsuarioExperto);
-		
-		when(posteoMock.sizeOpinionResultadoActual()).thenReturn(0).thenReturn(1).thenReturn(2);
-		when(posteoMock.sizeOpinion(Opinion.CHINCHE_FOLIADA)).thenReturn(1).thenReturn(2);
-		when(estadoUsuarioExperto.esExperto()).thenReturn(true);
-		
-	
-		verificadorBTest.opinarEnEstadoBasico(revisionA);		
-		
-		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA));
-		when(posteoMock.getEstadoDePost()).thenReturn(estadoPostB);
-		
-		verificadorBTest.opinarEnEstadoExperto(revisionB);
-		when(posteoMock.getResultadoActual()).thenReturn(Optional.of(Opinion.CHINCHE_FOLIADA));
-		when(posteoMock.getEstadoDePost()).thenReturn(estadoPostC);
-		
-		assertEquals(opinionesInicial.get(Opinion.VINCHUCA_GUASAYANA).size(), 0);
-		//assertEquals(verificadorBTest.opinionConMayorVoto(), Opinion.CHINCHE_FOLIADA);
-		assertTrue(verificadorATest.getPost().getEstadoDePost().esVerificado());
+		assertTrue(opinionesInicial.get(Opinion.PHTIA_CHINCHE).contains(revisionA));
+		assertTrue(opinionesInicial.get(Opinion.PHTIA_CHINCHE).contains(revisionB));
+		assertEquals(posteoMock.getResultadoActual().get(), Opinion.PHTIA_CHINCHE);
 		
 		verify(revisionA, times(2)).getOpinion();
 		verify(revisionB, times(2)).getOpinion();
-		verify(revisionC, never()).getOpinion();
+		
 	}
-	
+
+
+
+
 
 
 	

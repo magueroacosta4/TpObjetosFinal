@@ -61,14 +61,14 @@ public class TestPostMuestra {
 		when(revisionC.getOpinion()).thenReturn(Opinion.VINCHUCA_GUASAYANA);
 		
 		
-		posteo = new PostMuestra(ubicacionA, verificadorA, estadoPostBasico, revisionA);		
+		posteo = new PostMuestra(ubicacionA, verificadorA, estadoPostBasico, revisionA, "");		
 	}
 	
 	
 	@Test
 	public void alCrearUnPostMuestraConElConstructorDeParametroUbicacionSeColocanTodosSusColaboradores() {
 		
-		posteo = new PostMuestra(ubicacionA, revisionB);
+		posteo = new PostMuestra(ubicacionA, revisionB, "");
 		
 		assertEquals(posteo.getResultadoActual(), Optional.of(Opinion.VINCHUCA_INFESTANTS));
 		assertEquals(posteo.getUbicacion(), ubicacionA);

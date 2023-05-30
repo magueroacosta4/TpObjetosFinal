@@ -1,5 +1,7 @@
 package muestra;
 
+import usuario.EstadoUsuario;
+
 public class EstadoPostExperto extends EstadoDePost {
 	
 	public EstadoPostExperto(PostMuestra post) {
@@ -8,7 +10,14 @@ public class EstadoPostExperto extends EstadoDePost {
 
 	@Override
 	public void opinar(Revision revision, VerificadorMuestra verificador) {
-		verificador.opinarEnEstadoExperto(revision);
+		if(getEstadoDeUsuarioAlMomentoDeOpinar(revision).esExperto()){
+		verificador.actualizarEstadoDePost(revision);}
+		else {};		
+	}
+	
+	private EstadoUsuario getEstadoDeUsuarioAlMomentoDeOpinar(Revision revision) {
+		EstadoUsuario estadoUsuario = revision.getEstadoDelUsuarioActual();
+		return estadoUsuario;
 	}
 	
 	@Override
@@ -20,4 +29,8 @@ public class EstadoPostExperto extends EstadoDePost {
 	public boolean esVerificado() {
 		return false;
 	}	
+	
+	public void opinarEnEstadoExperto(Revision revision) {
+
+	}
 }

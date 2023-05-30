@@ -12,8 +12,8 @@ public abstract class Usuario {
 	private PaginaWeb pagina;
 	private HistorialEnApp historial;
 	
-	public void publicar(Revision rev, Ubicacion ubicacion) throws Exception {
-		this.getPagina().crearPostMuestra(rev, ubicacion);
+	public void publicar(Revision rev, Ubicacion ubicacion, String foto) throws Exception {
+		this.getPagina().crearPostMuestra(rev, ubicacion, foto);
 		this.getHistorial().addPost();
 		this.actualizarEstado();
 	}

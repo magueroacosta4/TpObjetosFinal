@@ -23,7 +23,7 @@ public class PostMuestra {
 	private EstadoDePost estadoPost;
 	private Usuario usuarioCreador;
 	
-	public PostMuestra(Ubicacion ubicacion, Revision revision) {
+	public PostMuestra(Ubicacion ubicacion, Revision revision, String foto) {
 		VerificadorMuestra ver = new VerificadorMuestra(this);
 		this.setVerificador(ver);
 		this.setearTodo(ubicacion, revision);
@@ -32,7 +32,7 @@ public class PostMuestra {
 		this.setResultadoActual(Optional.of(revision.getOpinion()));	
 	}
 
-	public PostMuestra(Ubicacion u, VerificadorMuestra v, EstadoDePost estadoDePost, Revision revision) {
+	public PostMuestra(Ubicacion u, VerificadorMuestra v, EstadoDePost estadoDePost, Revision revision, String foto) {
 		this.setVerificador(v);		
 		this.setearTodo(u, revision);
 		this.estadoPost = estadoDePost;
@@ -142,9 +142,7 @@ public class PostMuestra {
 		return sizeOp;		
 	}
 
-	public void setOpiniones(HashMap<Opinion, Set<Revision>> map) {
-		this.opiniones = map;		
-	}
+
 
 	public void agregarRevision(Revision revision) {
 		opiniones.get(revision.getOpinion()).add(revision);	

@@ -19,6 +19,7 @@ public class ParticipanteTest {
 	private PaginaWeb pag;
 	private HistorialEnApp historial;
 	private PostMuestra post;
+	private String foto = "";
 	
 	@Before
 	public void setUp() {
@@ -40,9 +41,9 @@ public class ParticipanteTest {
 	@Test
 	public void publicarUnPostTest() throws Exception {
 		
-		participante.publicar(rev, ubi);
+		participante.publicar(rev, ubi, "");
 		
-		verify(pag).crearPostMuestra(rev, ubi);
+		verify(pag).crearPostMuestra(rev, ubi, foto);
 		verify(historial).addPost();
 		verify(estadoB).actualizarEstado(participante);
 	}

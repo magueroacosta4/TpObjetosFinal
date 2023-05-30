@@ -1,10 +1,9 @@
 package muestra;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doNothing;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Before;
@@ -22,7 +21,6 @@ public class TestEstadoPostVerificado {
 		verifiMock = mock(VerificadorMuestra.class);
 		post = mock(PostMuestra.class);
 		
-		doNothing().when(verifiMock).opinarEnEstadoExperto(revisionMock);
 		
 		estadoTest = new EstadoPostVerificado(post);
 	}
@@ -38,10 +36,16 @@ public class TestEstadoPostVerificado {
 	}
 	
 	@Test
-	public void seUtilizaUnEstadoPostExpertoParaOpinar() {
+	public void seUtilizaUnEstadoPostVerificadoParaOpinar() {
 		estadoTest.opinar(revisionMock, verifiMock);
 		
-		verify(verifiMock, times(0)).opinarEnEstadoBasico(revisionMock);
+		verify(verifiMock, never()).actualizarEstadoDePost(revisionMock);
+	}
+	
+	@Test
+	public void sePreguntaAUnEstadoDePostSiEsVerificado() {
+		
+		assertTrue(estadoTest.esVerificado());
 	}
 	
 	@Test

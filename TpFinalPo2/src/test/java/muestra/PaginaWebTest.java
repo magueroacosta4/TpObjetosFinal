@@ -18,6 +18,7 @@ public class PaginaWebTest {
 	private ZonaDeCobertura unaZonaDeC;
 	private Revision unaRevision;
 	private PostMuestra unPostMuestra;
+	private String foto = "";
 	
 	
 	@Before
@@ -67,7 +68,7 @@ public class PaginaWebTest {
 		assertTrue(unaPagina.getMuestras().isEmpty());
 		
 		Ubicacion ubicacion = new Ubicacion(3, 4);		
-		unaPagina.crearPostMuestra(unaRevision, ubicacion);
+		unaPagina.crearPostMuestra(unaRevision, ubicacion, foto);
 		
 		assertEquals(unaPagina.getMuestras().size(), 1);
 		

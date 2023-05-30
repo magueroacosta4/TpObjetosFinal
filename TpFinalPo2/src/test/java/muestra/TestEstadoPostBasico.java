@@ -2,23 +2,19 @@ package muestra;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+
 
 import org.junit.Before;
 import org.junit.Test;
 
 import usuario.EstadoUsuario;
 
-public class TestEstadoPostExperto {
-	
+public class TestEstadoPostBasico {
+
 	Revision revisionMock;
 	VerificadorMuestra verifiMock;
-	EstadoPostExperto estadoTest;
+	EstadoPostBasico estadoTest;
 	private PostMuestra post;
 	private EstadoUsuario estadoUsuario;
 	
@@ -29,12 +25,11 @@ public class TestEstadoPostExperto {
 		post = mock(PostMuestra.class);
 		estadoUsuario = mock(EstadoUsuario.class);
 		
-		
-		estadoTest = new EstadoPostExperto(post);
+		estadoTest = new EstadoPostBasico(post);
 	}
 	
 	@Test
-	public void seInstanciaUnEstadoPostExpertoYSeRevisaSiSeColocaronTodosSusColaboradoresInternos() {
+	public void seInstanciaUnEstadoPostBasicoYSeRevisaSiSeColocaronTodosSusColaboradoresInternos() {
 		
 		PostMuestra resultadoEsperado = post;
 		PostMuestra resultadoDado = estadoTest.getPost();
@@ -44,7 +39,18 @@ public class TestEstadoPostExperto {
 	}
 	
 	@Test
-	public void seUtilizaUnEstadoPostExpertoParaOpinar_UnExpertoLoOpina() {
+	public void seUtilizaUnEstadoPostBasicoParaOpinar_ConUnUsuarioBasico() {
+		doNothing().when(verifiMock).actualizarEstadoDePost(revisionMock);
+		when(revisionMock.getEstadoDelUsuarioActual()).thenReturn(estadoUsuario);
+		when(estadoUsuario.esExperto()).thenReturn(false);
+		estadoTest.opinar(revisionMock, verifiMock);
+		
+		verify(verifiMock, times(1)).actualizarEstadoDePost(revisionMock);
+		verify(revisionMock, times(1)).getEstadoDelUsuarioActual();
+	}
+	
+	@Test
+	public void seUtilizaUnEstadoPostBasicoParaOpinar_ConUnUsuarioExperto() {
 		doNothing().when(verifiMock).actualizarEstadoDePost(revisionMock);
 		when(revisionMock.getEstadoDelUsuarioActual()).thenReturn(estadoUsuario);
 		when(estadoUsuario.esExperto()).thenReturn(true);
@@ -55,29 +61,17 @@ public class TestEstadoPostExperto {
 	}
 	
 	@Test
-	public void seUtilizaUnEstadoPostExpertoParaOpinar_UnBasicoLoOpina() {
-		doNothing().when(verifiMock).actualizarEstadoDePost(revisionMock);
-		when(revisionMock.getEstadoDelUsuarioActual()).thenReturn(estadoUsuario);
-		when(estadoUsuario.esExperto()).thenReturn(false);
-		estadoTest.opinar(revisionMock, verifiMock);
-		
-		verify(verifiMock, never()).actualizarEstadoDePost(revisionMock);
-		verify(revisionMock, times(1)).getEstadoDelUsuarioActual();
-	}
-	
-	@Test
-	public void unEstadoDePostExpertoVerificaElPost() {
-		
-		estadoTest.verificarPost();
-		
-		verify(post, times(1)).verificarPost();
-		
-	}
-	
-	@Test
 	public void sePreguntaAUnEstadoDePostSiEsVerificado() {
 		
 		assertFalse(estadoTest.esVerificado());
 	}
 	
+	@Test
+	public void unEstadoDePostBasicoVerificaElPost() {
+		
+		estadoTest.verificarPost();
+		
+		verify(post, never()).verificarPost();
+		
+	}
 }

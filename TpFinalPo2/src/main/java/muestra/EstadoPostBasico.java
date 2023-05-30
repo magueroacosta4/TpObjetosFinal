@@ -1,5 +1,9 @@
 package muestra;
 
+import java.util.Optional;
+
+import usuario.EstadoUsuario;
+
 public class EstadoPostBasico extends EstadoDePost {
 
 	public EstadoPostBasico(PostMuestra post) {
@@ -8,7 +12,23 @@ public class EstadoPostBasico extends EstadoDePost {
 
 	@Override
 	public void opinar(Revision revision, VerificadorMuestra verificador) {
-		verificador.opinarEnEstadoBasico(revision);
+		if(getEstadoDeUsuarioAlMomentoDeOpinar(revision).esExperto()){
+			this.actualizarEstadoDeVerificadorPorExperto();
+		}
+		verificador.actualizarEstadoDePost(revision);
+		
+	}
+	
+	void actualizarEstadoDeVerificadorPorExperto() {
+		EstadoPostExperto estado = new EstadoPostExperto(post);
+		this.post.setEstadoPost(estado);
+		this.post.setResultadoActual(Optional.empty());
+		this.post.colocarClavesEnHashmap();
+	}
+	
+	private EstadoUsuario getEstadoDeUsuarioAlMomentoDeOpinar(Revision revision) {
+		EstadoUsuario estadoUsuario = revision.getEstadoDelUsuarioActual();
+		return estadoUsuario;
 	}
 
 	@Override
