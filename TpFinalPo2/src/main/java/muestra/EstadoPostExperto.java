@@ -30,7 +30,4 @@ public class EstadoPostExperto extends EstadoDePost {
 		return false;
 	}	
 	
-	public void opinarEnEstadoExperto(Revision revision) {
-
-	}
 }

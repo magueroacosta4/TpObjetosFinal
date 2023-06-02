@@ -1,5 +1,6 @@
 package muestra;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class VerificadorMuestra {
 	
 
 	
-	void actualizarEstadoDePost(Revision revision) {
+	public void actualizarEstadoDePost(Revision revision) {
 		Opinion op = revision.getOpinion();
 		agregarRevisionAlPost(revision);
 		Opinion opinionConMasVotos = this.opinionConMayorVoto();
@@ -31,8 +32,13 @@ public class VerificadorMuestra {
 		}
 		else {
 		this.cambiarResultadoActualPost(Optional.of(opinionConMasVotos));
+		cambiarUltimaFechaDeRevision(revision.getFechaDeCreacion());
 		this.verificarPost();
 		}
+	}
+
+	private void cambiarUltimaFechaDeRevision(LocalDate fecha) {
+		this.post.setFechaUltimaRevision(fecha);
 	}
 	
 	public Opinion opinionConMayorVoto() {		

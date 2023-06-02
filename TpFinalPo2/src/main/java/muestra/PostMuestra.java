@@ -22,6 +22,7 @@ public class PostMuestra {
 	private Set<Usuario> usuariosQueYaOpinaron = new HashSet<Usuario>();
 	private EstadoDePost estadoPost;
 	private Usuario usuarioCreador;
+	private LocalDate fechaUltimaRevision;
 	
 	public PostMuestra(Ubicacion ubicacion, Revision revision, String foto) {
 		VerificadorMuestra ver = new VerificadorMuestra(this);
@@ -51,9 +52,17 @@ public class PostMuestra {
 		this.colocarClavesEnHashmap();
 		this.resultadoActual = Optional.empty();
 		usuariosQueYaOpinaron.add(r.getUser());
+		this.setFechaUltimaRevision(r.getFechaDeCreacion());
 		agregarRevision(r);
 	}
-		
+	
+	public void setFechaUltimaRevision(LocalDate fechaUltimaRevision) {
+		this.fechaUltimaRevision = fechaUltimaRevision;
+	}
+	
+	public LocalDate getFechaUltimaRevision() {
+		return fechaUltimaRevision;
+	}
 	
 	public EstadoDePost getEstadoDePost() {
 		return estadoPost;

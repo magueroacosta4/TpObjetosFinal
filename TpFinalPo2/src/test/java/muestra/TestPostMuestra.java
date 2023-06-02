@@ -72,7 +72,7 @@ public class TestPostMuestra {
 		
 		assertEquals(posteo.getResultadoActual(), Optional.of(Opinion.VINCHUCA_INFESTANTS));
 		assertEquals(posteo.getUbicacion(), ubicacionA);
-		assertEquals(posteo.getFechaDeCreacion(), today); //
+		assertEquals(posteo.getFechaDeCreacion(), today);
 	}
 	
 	
@@ -85,6 +85,7 @@ public class TestPostMuestra {
 		assertEquals(posteo.getOpiniones().size(), 8);
 		assertEquals(posteo.getEstadoDePost(), estadoPostBasico);
 		assertEquals(posteo.getVerificador(), verificadorA);
+		assertEquals(posteo.getFechaUltimaRevision(), today);//
 	}
 	
 	@Test
