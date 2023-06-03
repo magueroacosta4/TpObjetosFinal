@@ -1,12 +1,14 @@
 package filtrosDeBusqueda;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import muestra.PostMuestra;
 import muestra.Opinion;
@@ -30,7 +32,7 @@ public class FiltroTipoInsectoTest {
 	private List<PostMuestra> listaDePosts3;
 	private List<PostMuestra> listaDePosts4;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		cFoliada 	= Optional.of(Opinion.CHINCHE_FOLIADA);
 		pChinche 	= Optional.of(Opinion.PHTIA_CHINCHE);

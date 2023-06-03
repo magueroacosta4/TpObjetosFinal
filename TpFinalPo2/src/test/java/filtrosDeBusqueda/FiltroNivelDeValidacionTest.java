@@ -2,11 +2,12 @@ package filtrosDeBusqueda;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
 
 import muestra.PostMuestra;
 import muestra.EstadoPostBasico;
@@ -27,7 +28,7 @@ public class FiltroNivelDeValidacionTest {
 	private List<PostMuestra> listaDePosts3;
 	private List<PostMuestra> listaDePosts4;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		estadoPB = mock(EstadoPostBasico.class);
 		estadoPE = mock(EstadoPostExperto.class);

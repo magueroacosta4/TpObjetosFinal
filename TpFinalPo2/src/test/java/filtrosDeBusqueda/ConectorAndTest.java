@@ -1,10 +1,13 @@
 package filtrosDeBusqueda;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import org.junit.jupiter.api.*;
 
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.Arrays;
 
 import muestra.PostMuestra;
@@ -21,7 +24,7 @@ public class ConectorAndTest {
 	private List<PostMuestra> listaDePosts2;
 	private List<PostMuestra> listaDePosts3;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		filtroVal = mock(FiltroDeBusqueda.class);
 		filtroOr = mock(FiltroDeBusqueda.class);

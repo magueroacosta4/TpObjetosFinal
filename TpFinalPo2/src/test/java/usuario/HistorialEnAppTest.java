@@ -2,7 +2,9 @@ package usuario;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-import org.junit.jupiter.api.*;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import java.time.LocalDate;
 
@@ -15,7 +17,7 @@ public class HistorialEnAppTest {
 	private Revision rev1;
 	private Revision rev2;
 	
-	@BeforeEach
+	@Before
 	public void setUp() {
 		historial = new HistorialEnApp();
 		rev1 = mock(Revision.class);
