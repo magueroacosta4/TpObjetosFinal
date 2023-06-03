@@ -15,7 +15,7 @@ public class FiltroTipoInsecto extends FiltrosBusqueda {
 	
 	@Override
 	protected void aplicarCriterioDeFiltro(List<PostMuestra> resultadoBusqueda, PostMuestra post) {
-		if(post.getResultadoActual().equals(this.getTipoInsecto())) {
+		if(post.getResultadoActual().get().equals(this.getTipoInsecto())) {
 			resultadoBusqueda.add(post);
 		}
 	}

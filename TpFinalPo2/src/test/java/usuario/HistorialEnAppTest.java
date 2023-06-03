@@ -2,10 +2,10 @@ package usuario;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 
-import org.junit.*;
 
 import muestra.Revision;
 
@@ -15,7 +15,7 @@ public class HistorialEnAppTest {
 	private Revision rev1;
 	private Revision rev2;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		historial = new HistorialEnApp();
 		rev1 = mock(Revision.class);
@@ -31,7 +31,7 @@ public class HistorialEnAppTest {
 	@Test
 	public void seAgregan2ElementosALasColeccionesYCumplenEstarDentroDe30DiasTest() {
 		when(rev1.getFechaDeCreacion()).thenReturn(LocalDate.of(2023, 05, 14));
-		when(rev2.getFechaDeCreacion()).thenReturn(LocalDate.of(2023, 05, 04));
+		when(rev2.getFechaDeCreacion()).thenReturn(LocalDate.of(2023, 05, 24));
 		
 		historial.addPost();
 		historial.addPost();
