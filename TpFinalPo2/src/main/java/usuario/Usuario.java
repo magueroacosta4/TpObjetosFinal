@@ -24,10 +24,12 @@ public abstract class Usuario {
 		// HACE QUE LA OPINION LO HAGA LA PAGINA WEB ---> getPagina().opinarPostMuestra()
 		// ES PARA QUE SE PUEDAN EJECUTAR TODOS LOS METODOS DEL OBSERVER
 		//
-		Revision rev = new Revision(op, this.getEstado(), this);
-		getPagina().opinarPostMuestra(rev, post);
-		this.getHistorial().addOpinion(rev);
-		this.actualizarEstado();
+		if(op.esVinchuca()) {
+			Revision rev = new Revision(op, this.getEstado(), this);
+			getPagina().opinarPostMuestra(rev, post);
+			this.getHistorial().addOpinion(rev);
+			this.actualizarEstado();
+		}
 	}
 
 	public int postsUltimos30Dias(){
