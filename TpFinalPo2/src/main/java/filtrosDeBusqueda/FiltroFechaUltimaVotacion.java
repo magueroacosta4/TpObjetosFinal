@@ -1,15 +1,18 @@
 package filtrosDeBusqueda;
 
-import java.util.List;
+import java.time.LocalDate;
 
 import muestra.PostMuestra;
 
-public class FiltroFechaUltimaVotacion extends FiltrosBusqueda {
+public class FiltroFechaUltimaVotacion extends FiltroDeFecha {
+
+	public FiltroFechaUltimaVotacion(LocalDate fecha, String operador) {
+		super(fecha, operador);
+	}
 
 	@Override
-	protected void aplicarCriterioDeFiltro(List<PostMuestra> resultadoBusqueda, PostMuestra post) {
-		// TODO Auto-generated method stub
-
+	protected LocalDate fechaObjetivoDePost(PostMuestra post) {
+		return post.getFechaUltimaRevision();
 	}
 
 }

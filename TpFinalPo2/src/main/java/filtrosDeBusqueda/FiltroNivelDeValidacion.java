@@ -15,7 +15,7 @@ public class FiltroNivelDeValidacion extends FiltrosBusqueda {
 	
 	@Override
 	protected void aplicarCriterioDeFiltro(List<PostMuestra> resultadoBusqueda, PostMuestra post) {
-		if(true) {
+		if(post.getEstadoDePost().equals(this.getValidacion())) {
 			resultadoBusqueda.add(post);
 		}
 	}
