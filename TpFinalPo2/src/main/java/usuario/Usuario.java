@@ -13,9 +13,11 @@ public abstract class Usuario {
 	private HistorialEnApp historial;
 	
 	public void publicar(Revision rev, Ubicacion ubicacion, String foto) throws Exception {
-		this.getPagina().crearPostMuestra(rev, ubicacion, foto);
-		this.getHistorial().addPost();
-		this.actualizarEstado();
+		if(rev.getOpinion().esVinchuca()) {
+			this.getPagina().crearPostMuestra(rev, ubicacion, foto);
+			this.getHistorial().addPost();
+			this.actualizarEstado();
+		}
 	}
 
 	public void opinar(PostMuestra post, Opinion op) throws Exception {
@@ -24,12 +26,11 @@ public abstract class Usuario {
 		// HACE QUE LA OPINION LO HAGA LA PAGINA WEB ---> getPagina().opinarPostMuestra()
 		// ES PARA QUE SE PUEDAN EJECUTAR TODOS LOS METODOS DEL OBSERVER
 		//
-		if(op.esVinchuca()) {
 			Revision rev = new Revision(op, this.getEstado(), this);
 			getPagina().opinarPostMuestra(rev, post);
 			this.getHistorial().addOpinion(rev);
 			this.actualizarEstado();
-		}
+		
 	}
 
 	public int postsUltimos30Dias(){
