@@ -39,13 +39,25 @@ public class ParticipanteTest {
 	}
 	
 	@Test
-	public void publicarUnPostTest() throws Exception {
+	public void publicarUnPostConVinchucaTest() throws Exception {
+		when(rev.getOpinion()).thenReturn(Opinion.VINCHUCA_INFESTANTS);
 		
 		participante.publicar(rev, ubi, "");
 		
 		verify(pag).crearPostMuestra(rev, ubi, foto);
 		verify(historial).addPost();
 		verify(estadoB).actualizarEstado(participante);
+	}
+	
+	@Test
+	public void publicarUnPostSinVinchucaTest() throws Exception {
+		when(rev.getOpinion()).thenReturn(Opinion.IMAGEN_POCO_CLARA);
+		
+		participante.publicar(rev, ubi, "");
+		
+		verify(pag, never()).crearPostMuestra(rev, ubi, foto);
+		verify(historial, never()).addPost();
+		verify(estadoB, never()).actualizarEstado(participante);
 	}
 	
 	@Test
