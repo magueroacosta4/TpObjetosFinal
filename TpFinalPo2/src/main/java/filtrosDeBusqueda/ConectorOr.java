@@ -1,7 +1,8 @@
 package filtrosDeBusqueda;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import muestra.PostMuestra;
 
@@ -13,18 +14,14 @@ public class ConectorOr extends ConectoresBusqueda {
 	}
 
 	@Override
-	public List<PostMuestra> filtrar(List<PostMuestra> postsAFiltrar) {
-		List <PostMuestra> primerFiltro = new ArrayList<PostMuestra>();
-		List <PostMuestra> segundoFiltro = new ArrayList<PostMuestra>();
-		List <PostMuestra> resultado = new ArrayList<PostMuestra>();
+	protected List<PostMuestra> aplicar(List<PostMuestra> postsAFiltrar, List<PostMuestra> primerFiltro,
+			List<PostMuestra> segundoFiltro) {
+		primerFiltro.addAll(segundoFiltro);
+		Set<PostMuestra> set = new HashSet<>(primerFiltro);
+		primerFiltro.clear();
+		primerFiltro.addAll(set);
 		
-		primerFiltro.addAll(this.getPrimerFiltro().filtrar(postsAFiltrar));
-		segundoFiltro.addAll(this.getSegundoFiltro().filtrar(postsAFiltrar));
-		
-		resultado.addAll(primerFiltro);
-		resultado.addAll(segundoFiltro);
-		//Se queda con los posts de ambas colecciones sin duplicados
-		return this.resultadoBusquedaSinDuplicados(resultado);
+		return primerFiltro;
 	}
 
 }
