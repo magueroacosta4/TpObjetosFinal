@@ -12,8 +12,7 @@ public class ConectorAnd extends ConectoresBusqueda {
 	}
 
 	@Override
-	protected List<PostMuestra> aplicar(List<PostMuestra> postsAFiltrar, List<PostMuestra> primerFiltro,
-			List<PostMuestra> segundoFiltro) {
+	protected List<PostMuestra> aplicar(List<PostMuestra> primerFiltro, List<PostMuestra> segundoFiltro) {
 		primerFiltro.retainAll(segundoFiltro); //Se queda solo con los posts que se repiten en ambas colecciones
 		return primerFiltro;
 	}

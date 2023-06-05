@@ -16,10 +16,10 @@ public abstract class ConectoresBusqueda extends FiltroDeBusqueda {
 		primerFiltro.addAll(this.getPrimerFiltro().filtrar(postsAFiltrar));
 		segundoFiltro.addAll(this.getSegundoFiltro().filtrar(postsAFiltrar));
 		
-		return aplicar(postsAFiltrar, primerFiltro, segundoFiltro);
+		return aplicar(primerFiltro, segundoFiltro);
 	}
 
-	protected abstract List<PostMuestra> aplicar(List<PostMuestra> postsAFiltrar, List<PostMuestra> primerFiltro,
+	protected abstract List<PostMuestra> aplicar(List<PostMuestra> primerFiltro,
 			List<PostMuestra> segundoFiltro);
 	
 	public FiltroDeBusqueda getPrimerFiltro() {
