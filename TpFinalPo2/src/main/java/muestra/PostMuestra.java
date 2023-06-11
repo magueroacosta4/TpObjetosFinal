@@ -23,6 +23,7 @@ public class PostMuestra {
 	private EstadoDePost estadoPost;
 	private Usuario usuarioCreador;
 	private LocalDate fechaUltimaRevision;
+	private String foto;
 	
 	public PostMuestra(Ubicacion ubicacion, Revision revision, String foto) {
 		VerificadorMuestra ver = new VerificadorMuestra(this);
@@ -39,7 +40,7 @@ public class PostMuestra {
 		this.estadoPost = estadoDePost;
 		this.usuarioCreador = revision.getUser();	
 		this.setResultadoActual(Optional.of(revision.getOpinion()));
-
+		
 	}
 	
 	public Usuario getUsuarioCreador() {
@@ -54,6 +55,11 @@ public class PostMuestra {
 		usuariosQueYaOpinaron.add(r.getUser());
 		this.setFechaUltimaRevision(r.getFechaDeCreacion());
 		agregarRevision(r);
+		this.setFoto(foto);
+	}
+	
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 	
 	public void setFechaUltimaRevision(LocalDate fechaUltimaRevision) {

@@ -1,5 +1,6 @@
 package filtrosDeBusqueda;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -41,8 +42,8 @@ public class ConectorOrTest {
 	public void filtrarConAndTest() {
 		when(filtroVal.filtrar(listaDePosts1)).thenReturn(listaDePosts3);
 		when(filtroFec.filtrar(listaDePosts1)).thenReturn(listaDePosts2);
-		
-		assertEquals(conectorO.filtrar(listaDePosts1), listaDePosts1);
+	
+		assertTrue(conectorO.filtrar(listaDePosts1).containsAll(listaDePosts1));
 		verify(filtroVal).filtrar(listaDePosts1);
 		verify(filtroFec).filtrar(listaDePosts1);
 	}

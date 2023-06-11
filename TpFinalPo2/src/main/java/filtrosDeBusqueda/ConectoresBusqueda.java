@@ -9,18 +9,18 @@ public abstract class ConectoresBusqueda extends FiltroDeBusqueda {
 	private FiltroDeBusqueda primerFiltro;
 	private FiltroDeBusqueda segundoFiltro;
 
-	@Override
-	public abstract List<PostMuestra> filtrar(List<PostMuestra> postsAFiltrar);
-
-	protected List<PostMuestra> resultadoBusquedaSinDuplicados(List<PostMuestra> listaDePosts) {
-		List<PostMuestra> listaSinDuplicados = new ArrayList<PostMuestra>();
-		for (PostMuestra proyecto : listaDePosts) {
-			if (!(listaSinDuplicados.contains(proyecto))) {
-				listaSinDuplicados.add(proyecto);
-			}
-		}
-		return listaSinDuplicados;
+	public final List<PostMuestra> filtrar(List<PostMuestra> postsAFiltrar) {
+		List <PostMuestra> primerFiltro = new ArrayList<PostMuestra>();
+		List <PostMuestra> segundoFiltro = new ArrayList<PostMuestra>();
+		
+		primerFiltro.addAll(this.getPrimerFiltro().filtrar(postsAFiltrar));
+		segundoFiltro.addAll(this.getSegundoFiltro().filtrar(postsAFiltrar));
+		
+		return aplicar(primerFiltro, segundoFiltro);
 	}
+
+	protected abstract List<PostMuestra> aplicar(List<PostMuestra> primerFiltro,
+			List<PostMuestra> segundoFiltro);
 	
 	public FiltroDeBusqueda getPrimerFiltro() {
 		return this.primerFiltro;
