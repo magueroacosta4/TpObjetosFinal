@@ -22,7 +22,7 @@ public enum Opinion {
 	CHINCHE_FOLIADA,
 	PHTIA_CHINCHE,
 	IMAGEN_POCO_CLARA,
-	NINGUNA, NO_DEFINIDO;
+	NINGUNA;
 
 	public boolean esVinchuca() {
 		return false;

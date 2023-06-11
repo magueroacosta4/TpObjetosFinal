@@ -22,7 +22,6 @@ public class FiltroTipoInsectoTest {
 	private Optional<Opinion> vSordida;
 	private Optional<Opinion> imPC;
 	private Optional<Opinion> ninguna;
-	private Optional<Opinion> noDef;
 	private PostMuestra muestra1;
 	private PostMuestra muestra2;
 	private PostMuestra muestra3;
@@ -41,7 +40,6 @@ public class FiltroTipoInsectoTest {
 		vSordida 	= Optional.of(Opinion.VINCHUCA_SORDIDA);
 		imPC 		= Optional.of(Opinion.IMAGEN_POCO_CLARA);
 		ninguna 	= Optional.of(Opinion.NINGUNA);
-		noDef 		= Optional.of(Opinion.NO_DEFINIDO);
 		filtroTI = new FiltroTipoInsecto(vInfestants.get());
 		muestra1 = mock(PostMuestra.class);
 		muestra2 = mock(PostMuestra.class);
@@ -61,17 +59,5 @@ public class FiltroTipoInsectoTest {
 		when(muestra4.getResultadoActual()).thenReturn(ninguna);
 
 		assertEquals(filtroTI.filtrar(listaDePosts1), listaDePosts3);
-	}
-	
-	@Test
-	public void filtrarPorTipoNoDefinidoTest() {
-		when(muestra1.getResultadoActual()).thenReturn(vGuasayana);
-		when(muestra2.getResultadoActual()).thenReturn(cFoliada);
-		when(muestra3.getResultadoActual()).thenReturn(imPC);
-		when(muestra4.getResultadoActual()).thenReturn(noDef);
-		
-		filtroTI.setTipoInsecto(noDef.get());
-		
-		assertEquals(filtroTI.filtrar(listaDePosts1), listaDePosts4);
 	}
 }

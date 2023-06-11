@@ -82,7 +82,7 @@ public class TestPostMuestra {
 		assertEquals(posteo.getResultadoActual(), Optional.of(Opinion.VINCHUCA_SORDIDA));
 		assertEquals(posteo.getUbicacion(), ubicacionA);
 		assertEquals(posteo.getFechaDeCreacion(), today); //
-		assertEquals(posteo.getOpiniones().size(), 8);
+		assertEquals(posteo.getOpiniones().size(), 7);
 		assertEquals(posteo.getEstadoDePost(), estadoPostBasico);
 		assertEquals(posteo.getVerificador(), verificadorA);
 		assertEquals(posteo.getFechaUltimaRevision(), today);//
@@ -118,11 +118,11 @@ public class TestPostMuestra {
 	}
 	
 	@Test
-	public void sePidenLasOpinionesActuales() {
+	public void sePidenLasOpinionesActualesCantidadDeOpinionesDiferentesPosibles() {
 		
 		HashMap<Opinion, Set <Revision>> resultadoDado = posteo.getOpiniones();
 		
-		assertEquals(resultadoDado.size(), 8);
+		assertEquals(resultadoDado.size(), 7);
 		
 	}
 	
