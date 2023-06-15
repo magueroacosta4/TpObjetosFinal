@@ -32,8 +32,8 @@ public class HistorialEnAppTest {
 	
 	@Test
 	public void seAgregan2ElementosALasColeccionesYCumplenEstarDentroDe30DiasTest() {
-		when(rev1.getFechaDeCreacion()).thenReturn(LocalDate.of(2023, 05, 14));
-		when(rev2.getFechaDeCreacion()).thenReturn(LocalDate.of(2023, 05, 24));
+		when(rev1.getFechaDeCreacion()).thenReturn(LocalDate.of(2023, 06, 14));
+		when(rev2.getFechaDeCreacion()).thenReturn(LocalDate.of(2023, 06, 24));
 		
 		historial.addPost();
 		historial.addPost();
