@@ -1,2 +1,6 @@
 TpFinalPo2/target
 TpFinalPo2/target/classes/META-INF/maven/TpFinalPo2/TpFinalPo2/pom.properties
+*.class
+TpFinalPo2/.idea/workspace.xml
+TpFinalPo2/.idea/misc.xml
+TpFinalPo2/.idea/workspace.xml
